@@ -29,4 +29,13 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
 
     protected abstract T getFragmentBinding(LayoutInflater inflater, ViewGroup container);
 
+
+    protected void openScreen(Fragment fragment, boolean addToBackStack) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        if (addToBackStack) {
+            transaction.addToBackStack(null);
+        }
+        transaction.commit();
+    }
 }

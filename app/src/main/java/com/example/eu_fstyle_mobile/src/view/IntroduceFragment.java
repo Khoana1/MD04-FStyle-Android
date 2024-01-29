@@ -27,9 +27,7 @@ public class IntroduceFragment extends BaseFragment<FragmentIntroduceBinding> {
         binding.tvSkipIntro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, new SplashFragment());
-                transaction.commit();
+                openScreen(new SplashFragment(), true);
             }
         });
     }
