@@ -9,4 +9,7 @@
     <color name="colorTextSecondary">#757575</color>
     <color name="colorButtonBrown">#C67C4E</color>
     <color name="colorSplash">#D2B48C</color>
+    <color name="colorIntro">#E7C989</color>
+    <color name="colorTextIntro">#2D2B2E</color>
+    <color name="colorDot">#33000000</color>
 </resources>
