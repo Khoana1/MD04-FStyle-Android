@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,5 +24,8 @@ public class SplashFragment extends BaseFragment<FragmentSplashFragmetBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            openScreen(new LoginFragment(), false);
+        }, 3000); // vào ứng dụng sau 3s
     }
 }
