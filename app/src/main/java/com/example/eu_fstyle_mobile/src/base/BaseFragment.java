@@ -32,6 +32,13 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
 
     protected void openScreen(Fragment fragment, boolean addToBackStack) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        transaction.setCustomAnimations(
+                0,
+                R.anim.fade_out,
+                R.anim.fade_in,
+                R.anim.slide_out
+        );
         transaction.replace(R.id.fragment_container, fragment);
         if (addToBackStack) {
             transaction.addToBackStack(null);
