@@ -16,4 +16,6 @@
     <color name="tvForgotPassword">#8B4513</color>
     <color name="tvHello">#8B4513</color>
     <color name="colorRed">#FF0000</color>
+    <color name="colorPofile">#F7F8FA</color>
+    <color name="colorAccount">#F4F4F4</color>
 </resources>

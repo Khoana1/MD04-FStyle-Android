@@ -75,7 +75,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                 }
 
                 doubleBackToExitPressedOnce = true;
-                Toast.makeText(getActivity(), "Nhấn BACK một lần nữa để thoát ứng dụng", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Nhấn BACK một lần nữa để thoát", Toast.LENGTH_SHORT).show();
 
                 new Handler().postDelayed(new Runnable() {
                     @Override

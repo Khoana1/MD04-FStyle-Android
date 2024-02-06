@@ -1,6 +1,9 @@
 package com.example.eu_fstyle_mobile.src.view;
 
 import android.animation.ObjectAnimator;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentSplashFragmetBinding;
@@ -35,7 +39,17 @@ public class SplashFragment extends BaseFragment<FragmentSplashFragmetBinding> {
         Animation animationLogo = AnimationUtils.loadAnimation(getActivity(), R.anim.alpha);
         binding.imgLogo.startAnimation(animationLogo);
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            openScreen(new LoginFragment(), false);
+            if (isNetworkConnected()) {
+                openScreen(new LoginFragment(), false);
+            } else {
+                Toast.makeText(requireActivity(), "Không có kết nối mạng, thử lại sau!", Toast.LENGTH_SHORT).show();
+            }
         }, 3000); // vào ứng dụng sau 3s
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }
