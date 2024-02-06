@@ -44,6 +44,12 @@ public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
                 validateRegister();
             }
         });
+        binding.icGoBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
     }
 
     private void validateRegister() {
@@ -100,7 +106,7 @@ public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
         String helperText = "";
         String phone = binding.edtPhone.getText().toString();
         if (phone.isEmpty()) {
-            helperText = "Không được để trống Số điện thoại";
+            helperText = "Không được để trống số điện thoại";
         } else if (!phone.matches(".*[0-9].*")) {
             helperText = "Số điện thoại phải là số";
         } else if (phone.length() != 10) {

@@ -1,13 +1,18 @@
 package com.example.eu_fstyle_mobile.src.view;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentLoginBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
@@ -16,6 +21,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
+    private boolean doubleBackToExitPressedOnce = false;
+
+    private Dialog loginDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,6 +58,33 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                 openScreen(new RegisterFragment(), true);
             }
         });
+
+        binding.tvForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openScreen(new ForgotPasswordFragment(), true);
+            }
+        });
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (doubleBackToExitPressedOnce) {
+                    setEnabled(false);
+                    requireActivity().onBackPressed();
+                    return;
+                }
+
+                doubleBackToExitPressedOnce = true;
+                Toast.makeText(getActivity(), "Nhấn BACK một lần nữa để thoát ứng dụng", Toast.LENGTH_SHORT).show();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce = false;
+                    }
+                }, 2000);
+            }
+        });
     }
 
     private void setStatusHelperText() {
@@ -60,6 +95,20 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
     private void validateLogin() {
         validateEmail();
         validatePassword();
+        if ((binding.emailLayout.getHelperText() == null || binding.emailLayout.getHelperText().toString().isEmpty()) &&
+                (binding.passwordLayout.getHelperText() == null || binding.passwordLayout.getHelperText().toString().isEmpty()) &&
+                !binding.edtEmail.getText().toString().isEmpty() &&
+                !binding.edtPass.getText().toString().isEmpty()) {
+            showLoginLoadingAnimation();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    hideLoginLoadingAnimation();
+                    openScreenHome(new ProfileFragment(), false);
+                    Toast.makeText(getActivity(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                }
+            }, 3000);
+        }
     }
 
 
@@ -99,5 +148,21 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
 
     }
 
+
+    private void showLoginLoadingAnimation() {
+        loginDialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+        loginDialog.setContentView(R.layout.dialog_login_loading);
+        LottieAnimationView animationView = loginDialog.findViewById(R.id.ltAnimationView);
+        animationView.setAnimation(R.raw.lottile_loading);
+        animationView.setSpeed(4f);
+        animationView.playAnimation();
+        loginDialog.show();
+    }
+
+    private void hideLoginLoadingAnimation() {
+        if (loginDialog != null && loginDialog.isShowing()) {
+            loginDialog.dismiss();
+        }
+    }
 
 }
