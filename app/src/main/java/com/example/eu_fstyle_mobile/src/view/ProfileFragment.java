@@ -34,6 +34,12 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
     }
 
     private void initView() {
+        binding.llYourOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openScreen(new YourOrderFragment(), true);
+            }
+        });
         binding.llLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
