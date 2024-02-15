@@ -104,7 +104,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                 @Override
                 public void run() {
                     hideLoginLoadingAnimation();
-                    openScreenHome(new ProfileFragment(), false);
+                    openScreenHome(new ProfileFragment(), false); // Thay bằng home fragment sau khi làm xong
                     Toast.makeText(getActivity(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                 }
             }, 3000);
