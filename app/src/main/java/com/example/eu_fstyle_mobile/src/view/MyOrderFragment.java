@@ -3,31 +3,27 @@ package com.example.eu_fstyle_mobile.src.view;
 import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+
 import com.example.eu_fstyle_mobile.R;
-import com.example.eu_fstyle_mobile.databinding.FragmentProfileBinding;
-import com.example.eu_fstyle_mobile.databinding.FragmentRegisterBinding;
-import com.example.eu_fstyle_mobile.databinding.FragmentYourOrderBinding;
+import com.example.eu_fstyle_mobile.databinding.FragmentMyOrderBinding;
 import com.example.eu_fstyle_mobile.src.adapter.OrderStatusAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-public class YourOrderFragment extends BaseFragment<FragmentYourOrderBinding> {
+public class MyOrderFragment extends BaseFragment<FragmentMyOrderBinding> {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentYourOrderBinding.inflate(inflater, container, false);
+        binding = FragmentMyOrderBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -114,7 +110,7 @@ public class YourOrderFragment extends BaseFragment<FragmentYourOrderBinding> {
     }
 
     @Override
-    protected FragmentYourOrderBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
-        return FragmentYourOrderBinding.inflate(inflater, container, false);
+    protected FragmentMyOrderBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
+        return FragmentMyOrderBinding.inflate(inflater, container, false);
     }
 }

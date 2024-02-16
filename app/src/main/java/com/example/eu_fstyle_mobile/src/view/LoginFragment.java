@@ -16,6 +16,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentLoginBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
+import com.example.eu_fstyle_mobile.ultilties.SharedPrefManager;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -99,6 +100,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                 (binding.passwordLayout.getHelperText() == null || binding.passwordLayout.getHelperText().toString().isEmpty()) &&
                 !binding.edtEmail.getText().toString().isEmpty() &&
                 !binding.edtPass.getText().toString().isEmpty()) {
+            SharedPrefManager.getInstance(getActivity()).setLoggedIn(true);
             showLoginLoadingAnimation();
             new Handler().postDelayed(new Runnable() {
                 @Override
