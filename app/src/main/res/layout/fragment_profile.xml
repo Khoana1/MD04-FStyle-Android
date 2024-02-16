@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/colorAccount"
-    tools:context=".src.view.ProfileFragment">
+    tools:context=".src.view.user.ProfileFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:fontFamily="@font/poppins_semi_bold"
-            android:text="Trang cá nhân"
+            android:text="@string/tv_profile"
             android:textSize="18sp"
             android:textStyle="bold" />
     </RelativeLayout>
@@ -48,6 +48,7 @@
                 app:civ_border_width="1dp" />
 
             <TextView
+                android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -58,6 +59,7 @@
                 android:text="Nguyễn Mua Giày" />
 
             <TextView
+                android:id="@+id/tv_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -67,7 +69,7 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/btn_change_pass"
+                android:id="@+id/tv_edit_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -75,7 +77,7 @@
                 android:background="@drawable/rounder_edit_text_brown"
                 android:fontFamily="@font/poppins_bold"
                 android:padding="15dp"
-                android:text="Sửa thông tin cá nhân"
+                android:text="@string/tv_edit_info"
                 android:textColor="@color/colorWhite"
                 android:textSize="15sp" />
 
@@ -122,7 +124,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="Đơn hàng của bạn"
+                            android:text="@string/tv_my_order"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
@@ -130,7 +132,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="Xem danh sách đơn hàng của bạn"
+                            android:text="@string/tv_view_order"
                             android:textSize="14sp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -160,7 +162,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="Yêu thích"
+                            android:text="@string/tv_favourite_profile"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
@@ -168,12 +170,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="Xem danh sách sản phẩm yêu thích"
+                            android:text="@string/tv_view_favourite"
                             android:textSize="14sp" />
                     </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -197,7 +200,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="Địa chỉ"
+                            android:text="@string/tv_address"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
@@ -206,7 +209,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
-                            android:text="Xem thông tin địa chỉ giao hàng"
+                            android:text="@string/tv_view_address"
                             android:textSize="14sp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -233,6 +236,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/ll_contact"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -289,7 +293,7 @@
                         android:layout_gravity="center_vertical"
                         android:fontFamily="@font/poppins_medium"
                         android:paddingStart="13dp"
-                        android:text="Đăng xuất"
+                        android:text="@string/tv_log_out"
                         android:textSize="18sp"
                         android:textStyle="bold" />
                 </LinearLayout>

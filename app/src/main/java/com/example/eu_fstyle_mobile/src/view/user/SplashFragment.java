@@ -1,14 +1,10 @@
-package com.example.eu_fstyle_mobile.src.view;
+package com.example.eu_fstyle_mobile.src.view.user;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
@@ -17,6 +13,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentSplashFragmetBinding;

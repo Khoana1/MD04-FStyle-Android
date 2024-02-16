@@ -5,17 +5,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.Toast;
 
-import com.example.eu_fstyle_mobile.src.view.IntroFragment;
-import com.example.eu_fstyle_mobile.src.view.LoginFragment;
-import com.example.eu_fstyle_mobile.src.view.SplashFragment;
+import com.example.eu_fstyle_mobile.src.view.user.IntroFragment;
+import com.example.eu_fstyle_mobile.src.view.user.SplashFragment;
 
 public class MainActivity extends AppCompatActivity {
 

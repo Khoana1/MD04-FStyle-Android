@@ -1,19 +1,18 @@
-package com.example.eu_fstyle_mobile.src.view;
+package com.example.eu_fstyle_mobile.src.view.user;
 
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.ChooseAvatarBottomsheetBinding;
@@ -47,6 +46,12 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
                 showAvatarBottomSheet();
             }
         });
+        binding.tvEditInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openScreen(new EditInfoFragment(), true);
+            }
+        });
         binding.llYourOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,6 +62,18 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
             @Override
             public void onClick(View v) {
                 openScreen(new MyFavouriteFragment(), true);
+            }
+        });
+        binding.llAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openScreen(new EditAddressFragment(), true);
+            }
+        });
+        binding.llContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openScreen(new ContactFragment(), true);
             }
         });
         binding.llLogOut.setOnClickListener(new View.OnClickListener() {
