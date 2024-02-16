@@ -21,4 +21,8 @@
     <string name="tv_re_new_pass">Xác nhận mật khẩu mới</string>
     <string name="tv_new_pass">Xác nhận đổi mật khẩu mới</string>
     <string name="tv_your_order">Đơn hàng của bạn</string>
+    <string name="tv_camera">Chụp ảnh</string>
+    <string name="tv_image_from_gallery">Chọn ảnh từ thư viện</string>
+    <string name="tv_choose_picture">Chọn ảnh</string>
+    <string name="tv_favourite">Sản phẩm yêu thích</string>
 </resources>

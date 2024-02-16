@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentSplashFragmetBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
+import com.example.eu_fstyle_mobile.ultilties.SharedPrefManager;
 
 public class SplashFragment extends BaseFragment<FragmentSplashFragmetBinding> {
 
@@ -40,7 +41,11 @@ public class SplashFragment extends BaseFragment<FragmentSplashFragmetBinding> {
         binding.imgLogo.startAnimation(animationLogo);
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             if (isNetworkConnected()) {
-                openScreen(new LoginFragment(), false);
+                if (SharedPrefManager.getInstance(getActivity()).isLoggedIn()) {
+                    openScreen(new ProfileFragment(), false); // Thay bằng home fragment sau khi làm xong
+                } else {
+                    openScreen(new LoginFragment(), false);
+                }
             } else {
                 Toast.makeText(requireActivity(), "Không có kết nối mạng, thử lại sau!", Toast.LENGTH_SHORT).show();
             }
