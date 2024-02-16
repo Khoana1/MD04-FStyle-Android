@@ -1,4 +1,4 @@
-package com.example.eu_fstyle_mobile.src.view
+package com.example.eu_fstyle_mobile.src.view.user
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -73,13 +73,17 @@ class IntroFragment : Fragment() {
                 }
             } else {
                 val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-                fragmentTransaction.replace(R.id.fragment_container, SplashFragment())
+                fragmentTransaction.replace(R.id.fragment_container,
+                    SplashFragment()
+                )
                 fragmentTransaction.commit()
             }
         }
         binding.tvSkipIntro.setOnClickListener {
             val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.fragment_container, SplashFragment())
+            fragmentTransaction.replace(R.id.fragment_container,
+                SplashFragment()
+            )
             fragmentTransaction.commit()
         }
     }

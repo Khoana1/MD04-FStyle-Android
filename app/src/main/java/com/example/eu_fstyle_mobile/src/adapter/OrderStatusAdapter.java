@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.eu_fstyle_mobile.src.view.OrderStatusFragment;
+import com.example.eu_fstyle_mobile.src.view.user.OrderStatusFragment;
 
 public class OrderStatusAdapter extends FragmentStateAdapter {
     private final String[] titles = new String[]{"Tất cả", "Chờ xác nhận", "Xác nhận", "Đang giao", "Đã giao", "Đã hủy"};

@@ -1,4 +1,4 @@
-package com.example.eu_fstyle_mobile.src.view;
+package com.example.eu_fstyle_mobile.src.view.user;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -18,7 +18,6 @@ import com.example.eu_fstyle_mobile.databinding.FragmentLoginBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.ultilties.SharedPrefManager;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoginFragment extends BaseFragment<FragmentLoginBinding> {

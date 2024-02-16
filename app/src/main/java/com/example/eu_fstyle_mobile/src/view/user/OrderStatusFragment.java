@@ -1,16 +1,13 @@
-package com.example.eu_fstyle_mobile.src.view;
+package com.example.eu_fstyle_mobile.src.view.user;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.eu_fstyle_mobile.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.example.eu_fstyle_mobile.databinding.FragmentOrderStatusBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 

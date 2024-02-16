@@ -1,4 +1,4 @@
-package com.example.eu_fstyle_mobile.src.view;
+package com.example.eu_fstyle_mobile.src.view.user;
 
 import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;

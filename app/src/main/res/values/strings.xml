@@ -25,4 +25,17 @@
     <string name="tv_image_from_gallery">Chọn ảnh từ thư viện</string>
     <string name="tv_choose_picture">Chọn ảnh</string>
     <string name="tv_favourite">Sản phẩm yêu thích</string>
+    <string name="tv_edit_info">Sửa thông tin cá nhân</string>
+    <string name="tv_log_out">Đăng xuất</string>
+    <string name="tv_view_order">Xem danh sách đơn hàng của bạn</string>
+    <string name="tv_view_favourite">Xem danh sách sản phẩm yêu thích</string>
+    <string name="tv_view_address">Xem thông tin địa chỉ giao hàng</string>
+    <string name="tv_address">Địa chỉ</string>
+    <string name="tv_favourite_profile">Yêu thích</string>
+    <string name="tv_my_order">Đơn hàng của bạn</string>
+    <string name="tv_profile">Trang cá nhân</string>
+    <string name="tv_new_address">Địa chỉ mới</string>
+    <string name="tv_edit_address">Sửa địa chỉ</string>
+    <string name="tv_contact_fstyle">Liên hệ FStyle</string>
+    <string name="tv_my_address">Địa chỉ của tôi</string>
 </resources>
