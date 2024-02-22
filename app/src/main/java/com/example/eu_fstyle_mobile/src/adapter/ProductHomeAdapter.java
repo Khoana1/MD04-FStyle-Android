@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.ItemProductHomeBinding;
 import com.example.eu_fstyle_mobile.src.model.Product;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -38,7 +37,7 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
     @Override
     public void onBindViewHolder(@NonNull Viewholder holder, int position) {
         Product product = arrayList.get(position);
-        Picasso.get().load(product.getImage()).into(holder.imageView);
+//        Picasso.get().load(product.getImage()).into(holder.imageView);
         holder.txtPrice.setText(product.getPrice()+" VNĐ");
         holder.txtName.setText(product.getName());
         holder.btn_add.setOnClickListener(new View.OnClickListener() {

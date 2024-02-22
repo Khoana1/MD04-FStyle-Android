@@ -20,6 +20,7 @@ import com.example.eu_fstyle_mobile.databinding.FragmentLoginBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.view.user.ForgotPasswordFragment;
+import com.example.eu_fstyle_mobile.src.view.user.home.HomeFragment;
 import com.example.eu_fstyle_mobile.src.view.user.profile.ProfileFragment;
 import com.example.eu_fstyle_mobile.src.view.user.register.RegisterFragment;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
@@ -59,7 +60,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                     @Override
                     public void run() {
                         hideLoginLoadingAnimation();
-                        openScreenHome(new ProfileFragment(), false); // Thay bằng home fragment sau khi làm xong
+                        openScreenHome(new HomeFragment(), false);
                         Toast.makeText(getActivity(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                     }
                 }, 3000);

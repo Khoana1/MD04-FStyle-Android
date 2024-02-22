@@ -18,6 +18,7 @@ import com.example.eu_fstyle_mobile.src.adapter.ProductHomeAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.Category;
 import com.example.eu_fstyle_mobile.src.model.Product;
+import com.example.eu_fstyle_mobile.src.view.user.profile.ProfileFragment;
 
 import java.util.ArrayList;
 
@@ -35,6 +36,12 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         getCategory();
         getProduct();
+        binding.avatarHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openScreen(new ProfileFragment(), true); // Thay bằng home fragment sau khi làm xong
+            }
+        });
         return binding.getRoot();
     }
 
