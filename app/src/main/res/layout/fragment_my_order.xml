@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorWhite"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".src.view.user.MyOrderFragment">
 
@@ -34,6 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         app:tabIndicatorAnimationMode="fade"
+        android:background="@color/colorWhite"
         app:tabMode="scrollable" />
 
     <androidx.viewpager2.widget.ViewPager2

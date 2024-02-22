@@ -1,6 +1,8 @@
 package com.example.eu_fstyle_mobile.src.view.user;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -18,7 +20,15 @@ import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.ChooseAvatarBottomsheetBinding;
 import com.example.eu_fstyle_mobile.databinding.FragmentProfileBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
-import com.example.eu_fstyle_mobile.ultilties.SharedPrefManager;
+import com.example.eu_fstyle_mobile.src.model.User;
+import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
+import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
+import com.example.eu_fstyle_mobile.src.view.user.login.LoginFragment;
+import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
 
@@ -36,10 +46,40 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initData();
         initView();
     }
 
+    private void initData() {
+        User user = UserPrefManager.getInstance(getActivity()).getUser();
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        Call<User> call = apiService.getUser(user.get_id());
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    hideLoadingDialog();
+                    User user = response.body();
+                    binding.tvName.setText(user.getName());
+                    binding.tvPhone.setText(user.getPhone());
+                } else {
+                    showLoadingDialog();
+                }
+            }
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(getActivity(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void initView() {
+        binding.icBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
         binding.icAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +122,10 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
                 showDialog("Đăng xuất", "Bạn có chắc chắn muốn đăng xuất không?", new Runnable() {
                     @Override
                     public void run() {
-                        SharedPrefManager.getInstance(getActivity()).setLoggedIn(false);
+                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginPreferences", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("isLoggedIn", false);
+                        editor.apply();
                         openScreen(new LoginFragment(), false);
                     }
                 });
@@ -114,7 +157,7 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
             }
         });
         dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogBottomSheetAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
