@@ -21,7 +21,6 @@ import androidx.annotation.Nullable;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentSplashFragmetBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
-import com.example.eu_fstyle_mobile.src.view.user.login.LoginFragment;
 
 public class SplashFragment extends BaseFragment<FragmentSplashFragmetBinding> {
 

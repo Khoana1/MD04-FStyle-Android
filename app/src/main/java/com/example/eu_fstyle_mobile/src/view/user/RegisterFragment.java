@@ -15,7 +15,6 @@ import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateUser;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
-import com.example.eu_fstyle_mobile.src.view.user.login.LoginFragment;
 
 import java.util.regex.Pattern;
 

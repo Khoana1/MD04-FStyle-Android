@@ -1,8 +1,6 @@
-package com.example.eu_fstyle_mobile.src.view.user.login;
+package com.example.eu_fstyle_mobile.src.view.user;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -13,7 +11,6 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.eu_fstyle_mobile.R;
@@ -23,9 +20,6 @@ import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.request.RequestLoginUser;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
-import com.example.eu_fstyle_mobile.src.view.user.ForgotPasswordFragment;
-import com.example.eu_fstyle_mobile.src.view.user.ProfileFragment;
-import com.example.eu_fstyle_mobile.src.view.user.RegisterFragment;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 
 import java.util.regex.Pattern;
@@ -43,8 +37,6 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
 
     private String password;
 
-    private LoginViewModel loginViewModel;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,7 +47,6 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         initView();
 
     }
@@ -75,27 +66,36 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                         (binding.passwordLayout.getHelperText() == null || binding.passwordLayout.getHelperText().toString().isEmpty()) &&
                         !binding.edtEmail.getText().toString().isEmpty() &&
                         !binding.edtPass.getText().toString().isEmpty()) {
-                    loginViewModel.loginUser(email, password);
-                    loginViewModel.getUserMutableLiveData().observe(getViewLifecycleOwner(), user -> {
-                        if (user != null) {
-                            UserPrefManager.getInstance(getActivity()).saveUser(user);
-                            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginPreferences", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putBoolean("isLoggedIn", true);
-                            editor.apply();
-                            showLoginLoadingAnimation();
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    hideLoginLoadingAnimation();
-                                    openScreenHome(new ProfileFragment(), false); // Thay bằng home fragment sau khi làm xong
-                                    Toast.makeText(getActivity(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                                }
-                            }, 3000);
-                        } else {
-                            Toast.makeText(getActivity(), "Đăng nhập thất bại, kiểm tra lại tài khoản mật khẩu", Toast.LENGTH_SHORT).show();
+                    ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                    RequestLoginUser requestLoginUser = new RequestLoginUser(email, password);
+                    Call<User> call = apiService.signin(requestLoginUser);
+                    call.enqueue(new Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, Response<User> response) {
+                            if (response.isSuccessful()) {
+//                                SharedPrefManager.getInstance(getActivity()).setLoggedIn(true);
+                                User user = response.body();
+                                UserPrefManager.getInstance(getActivity()).saveUser(user);
+                                showLoginLoadingAnimation();
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hideLoginLoadingAnimation();
+                                        openScreenHome(new ProfileFragment(), false); // Thay bằng home fragment sau khi làm xong
+                                        Toast.makeText(getActivity(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                    }
+                                }, 3000);
+                            } else {
+                                Toast.makeText(getActivity(), "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+                            Toast.makeText(getActivity(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
+
                 }
             }
         });

@@ -23,7 +23,6 @@ import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
-import com.example.eu_fstyle_mobile.src.view.user.login.LoginFragment;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 
 import retrofit2.Call;
