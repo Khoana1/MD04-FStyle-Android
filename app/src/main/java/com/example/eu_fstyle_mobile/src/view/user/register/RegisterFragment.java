@@ -1,6 +1,7 @@
-package com.example.eu_fstyle_mobile.src.view.user;
+package com.example.eu_fstyle_mobile.src.view.user.register;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.eu_fstyle_mobile.databinding.FragmentRegisterBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
@@ -15,6 +19,10 @@ import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateUser;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
+import com.example.eu_fstyle_mobile.src.view.user.login.LoginFragment;
+import com.example.eu_fstyle_mobile.src.view.user.login.LoginViewModel;
+import com.example.eu_fstyle_mobile.src.view.user.register.RegisterViewModel;
+import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 
 import java.util.regex.Pattern;
 
@@ -28,6 +36,7 @@ public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
     private String password;
     private String rePassword;
     private String name;
+    private RegisterViewModel registerViewModel;
 
     @Override
     protected FragmentRegisterBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
@@ -44,12 +53,30 @@ public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
+        observeViewModel();
         initView();
+    }
+
+    private void observeViewModel() {
+        registerViewModel.getUserLiveData().observe(getViewLifecycleOwner(), new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                Toast.makeText(getActivity(), "Đăng ký thành công, vui lòng đăng nhập lại", Toast.LENGTH_SHORT).show();
+                openScreen(new LoginFragment(), false);
+            }
+        });
+
+        registerViewModel.getErrorLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String error) {
+                Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initView() {
         setStatusHelperText();
-        ApiService apiService = ApiClient.getClient().create(ApiService.class);
         binding.btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,25 +89,8 @@ public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
                                 (binding.phoneLayout.getHelperText() == null || binding.phoneLayout.getHelperText().toString().isEmpty()) &&
                                 (binding.passwordLayout.getHelperText() == null || binding.passwordLayout.getHelperText().toString().isEmpty()) &&
                                 (binding.newPassLayout.getHelperText() == null || binding.newPassLayout.getHelperText().toString().isEmpty() &&
-                                binding.nameLayout.getHelperText() == null || binding.nameLayout.getHelperText().toString().isEmpty())) {
-                            RequestCreateUser requestCreateUser = new RequestCreateUser(name, email, password, phone);
-                            Call<User> call = apiService.createUser(requestCreateUser);
-                            call.enqueue(new Callback<User>() {
-                                @Override
-                                public void onResponse(Call<User> call, Response<User> response) {
-                                    if (response.isSuccessful()) {
-                                        Toast.makeText(getActivity(), "Đăng ký thành công, vui lòng đăng nhập lại", Toast.LENGTH_SHORT).show();
-                                        openScreen(new LoginFragment(), false);
-                                    } else {
-                                        Toast.makeText(getActivity(), "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<User> call, Throwable t) {
-                                    Toast.makeText(getActivity(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                                        binding.nameLayout.getHelperText() == null || binding.nameLayout.getHelperText().toString().isEmpty())) {
+                            registerViewModel.registerUser(name, email, password, phone);
                         }
                     }
                 });

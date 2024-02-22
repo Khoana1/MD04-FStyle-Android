@@ -24,7 +24,6 @@
             android:id="@+id/avatar_home"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/avatar_home"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.015"
             app:layout_constraintStart_toStartOf="parent"
@@ -84,8 +83,7 @@
                 android:id="@+id/search_home"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:src="@drawable/search_home" />
+                android:layout_gravity="center" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -101,8 +99,7 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:src="@drawable/notifi_home" />
+                android:layout_gravity="center" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -118,8 +115,7 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:src="@drawable/cart_home" />
+                android:layout_gravity="center" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -134,8 +130,7 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:src="@drawable/filter_home" />
+                android:layout_gravity="center" />
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -144,7 +139,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="140dp"
-        android:src="@drawable/home1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

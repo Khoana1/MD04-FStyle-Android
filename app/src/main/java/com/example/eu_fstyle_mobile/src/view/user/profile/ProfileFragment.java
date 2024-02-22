@@ -1,4 +1,4 @@
-package com.example.eu_fstyle_mobile.src.view.user;
+package com.example.eu_fstyle_mobile.src.view.user.profile;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -15,21 +15,24 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.ChooseAvatarBottomsheetBinding;
 import com.example.eu_fstyle_mobile.databinding.FragmentProfileBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.User;
-import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
-import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
+import com.example.eu_fstyle_mobile.src.view.user.ContactFragment;
+import com.example.eu_fstyle_mobile.src.view.user.EditAddressFragment;
+import com.example.eu_fstyle_mobile.src.view.user.EditInfoFragment;
+import com.example.eu_fstyle_mobile.src.view.user.MyFavouriteFragment;
+import com.example.eu_fstyle_mobile.src.view.user.MyOrderFragment;
+import com.example.eu_fstyle_mobile.src.view.user.login.LoginFragment;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
+    private ProfileViewModel profileViewModel;
 
     @Override
     protected FragmentProfileBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
@@ -45,31 +48,29 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initData();
+        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        observeViewModel();
         initView();
     }
 
-    private void initData() {
-        User user = UserPrefManager.getInstance(getActivity()).getUser();
-        ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        Call<User> call = apiService.getUser(user.get_id());
-        call.enqueue(new Callback<User>() {
+    private void observeViewModel() {
+        profileViewModel.getUserData().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()) {
-                    hideLoadingDialog();
-                    User user = response.body();
-                    binding.tvName.setText(user.getName());
-                    binding.tvPhone.setText(user.getPhone());
-                } else {
-                    showLoadingDialog();
-                }
-            }
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(getActivity(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onChanged(User user) {
+                binding.tvName.setText(user.getName());
+                binding.tvPhone.setText(user.getPhone());
             }
         });
+
+        profileViewModel.getErrorData().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String error) {
+                Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        User user = UserPrefManager.getInstance(getActivity()).getUser();
+        profileViewModel.fetchUserData(user.get_id());
     }
 
     private void initView() {
