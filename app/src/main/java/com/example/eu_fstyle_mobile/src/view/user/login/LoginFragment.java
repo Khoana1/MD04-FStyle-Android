@@ -1,6 +1,8 @@
-package com.example.eu_fstyle_mobile.src.view.user;
+package com.example.eu_fstyle_mobile.src.view.user.login;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -11,19 +13,37 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentLoginBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
-import com.example.eu_fstyle_mobile.ultilties.SharedPrefManager;
+import com.example.eu_fstyle_mobile.src.model.User;
+import com.example.eu_fstyle_mobile.src.request.RequestLoginUser;
+import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
+import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
+import com.example.eu_fstyle_mobile.src.view.user.ForgotPasswordFragment;
+import com.example.eu_fstyle_mobile.src.view.user.ProfileFragment;
+import com.example.eu_fstyle_mobile.src.view.user.RegisterFragment;
+import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 
 import java.util.regex.Pattern;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
     private boolean doubleBackToExitPressedOnce = false;
 
     private Dialog loginDialog;
+
+    private String email;
+
+    private String password;
+
+    private LoginViewModel loginViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,6 +55,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         initView();
 
     }
@@ -50,6 +71,32 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
             @Override
             public void onClick(View v) {
                 validateLogin();
+                if ((binding.emailLayout.getHelperText() == null || binding.emailLayout.getHelperText().toString().isEmpty()) &&
+                        (binding.passwordLayout.getHelperText() == null || binding.passwordLayout.getHelperText().toString().isEmpty()) &&
+                        !binding.edtEmail.getText().toString().isEmpty() &&
+                        !binding.edtPass.getText().toString().isEmpty()) {
+                    loginViewModel.loginUser(email, password);
+                    loginViewModel.getUserMutableLiveData().observe(getViewLifecycleOwner(), user -> {
+                        if (user != null) {
+                            UserPrefManager.getInstance(getActivity()).saveUser(user);
+                            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginPreferences", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putBoolean("isLoggedIn", true);
+                            editor.apply();
+                            showLoginLoadingAnimation();
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    hideLoginLoadingAnimation();
+                                    openScreenHome(new ProfileFragment(), false); // Thay bằng home fragment sau khi làm xong
+                                    Toast.makeText(getActivity(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                }
+                            }, 3000);
+                        } else {
+                            Toast.makeText(getActivity(), "Đăng nhập thất bại, kiểm tra lại tài khoản mật khẩu", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
         binding.edtRegister.setOnClickListener(new View.OnClickListener() {
@@ -95,27 +142,12 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
     private void validateLogin() {
         validateEmail();
         validatePassword();
-        if ((binding.emailLayout.getHelperText() == null || binding.emailLayout.getHelperText().toString().isEmpty()) &&
-                (binding.passwordLayout.getHelperText() == null || binding.passwordLayout.getHelperText().toString().isEmpty()) &&
-                !binding.edtEmail.getText().toString().isEmpty() &&
-                !binding.edtPass.getText().toString().isEmpty()) {
-            SharedPrefManager.getInstance(getActivity()).setLoggedIn(true);
-            showLoginLoadingAnimation();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    hideLoginLoadingAnimation();
-                    openScreenHome(new ProfileFragment(), false); // Thay bằng home fragment sau khi làm xong
-                    Toast.makeText(getActivity(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                }
-            }, 3000);
-        }
     }
 
 
     private void validateEmail() {
         String helperText = "";
-        String email = binding.edtEmail.getText().toString();
+        email = binding.edtEmail.getText().toString();
 
         if (email.isEmpty()) {
             helperText = "Không được để trống Email";
@@ -128,7 +160,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
 
     private void validatePassword() {
         String helperText = "";
-        String password = binding.edtPass.getText().toString();
+        password = binding.edtPass.getText().toString();
         Pattern upperCasePattern = Pattern.compile(".*[A-Z].*");
         Pattern lowerCasePattern = Pattern.compile(".*[a-z].*");
         Pattern specialCharPattern = Pattern.compile(".*[@#\\$%^&+=].*");

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/colorAccount"
+    android:orientation="vertical"
     tools:context=".src.view.user.ProfileFragment">
 
     <RelativeLayout
@@ -13,6 +13,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/icBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="20dp"
@@ -56,7 +57,7 @@
                 android:fontFamily="@font/poppins_semi_bold"
                 android:textColor="@color/colorBlack"
                 android:textSize="22sp"
-                android:text="Nguyễn Mua Giày" />
+                tools:text="Nguyễn Mua Giày" />
 
             <TextView
                 android:id="@+id/tv_phone"
@@ -64,9 +65,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="@font/poppins_medium"
-                android:text="0123456789"
                 android:textColor="@color/colorBlack"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                tools:text="0123456789" />
 
             <TextView
                 android:id="@+id/tv_edit_info"
@@ -84,10 +85,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:text="Giỏ hàng"
-                android:fontFamily="@font/poppins_medium"
                 android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="40dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Giỏ hàng"
                 android:textColor="@color/colorBlack"
                 android:textSize="18dp" />
 
@@ -219,10 +220,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:text="Khác"
                 android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="40dp"
                 android:fontFamily="@font/poppins_medium"
+                android:text="Khác"
                 android:textColor="@color/colorBlack"
                 android:textSize="18dp" />
 
@@ -230,8 +231,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginBottom="30dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="30dp"
                 android:background="@drawable/round_back_white"
                 android:orientation="vertical">
 
@@ -261,8 +262,8 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
                             android:text="Liên hệ"
-                            android:textStyle="bold"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
