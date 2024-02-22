@@ -21,6 +21,7 @@ import androidx.annotation.Nullable;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentSplashFragmetBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
+import com.example.eu_fstyle_mobile.src.view.user.home.HomeFragment;
 import com.example.eu_fstyle_mobile.src.view.user.login.LoginFragment;
 import com.example.eu_fstyle_mobile.src.view.user.profile.ProfileFragment;
 
@@ -46,7 +47,7 @@ public class SplashFragment extends BaseFragment<FragmentSplashFragmetBinding> {
                 boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
                 if (isLoggedIn) {
                     showLoadingDialog();
-                    openScreen(new ProfileFragment(), false); // Thay bằng homeFragment sau khi làm xong
+                    openScreenHome(new HomeFragment(), false);
                     new Handler().postDelayed(() -> hideLoadingDialog(), 2000);
                     Toast.makeText(requireActivity(), "Đã đăng nhập! Chào mừng trở lại", Toast.LENGTH_SHORT).show();
                 } else {
