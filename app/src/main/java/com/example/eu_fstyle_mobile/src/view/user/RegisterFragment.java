@@ -4,16 +4,32 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.eu_fstyle_mobile.databinding.FragmentRegisterBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
+import com.example.eu_fstyle_mobile.src.model.User;
+import com.example.eu_fstyle_mobile.src.request.RequestCreateUser;
+import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
+import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
+import com.example.eu_fstyle_mobile.src.view.user.login.LoginFragment;
 
 import java.util.regex.Pattern;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
+    private String email;
+    private String phone;
+    private String password;
+    private String rePassword;
+    private String name;
+
     @Override
     protected FragmentRegisterBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
         return FragmentRegisterBinding.inflate(inflater, container, false);
@@ -34,10 +50,41 @@ public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
 
     private void initView() {
         setStatusHelperText();
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
         binding.btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 validateRegister();
+                binding.btnRegister.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        validateRegister();
+                        if ((binding.emailLayout.getHelperText() == null || binding.emailLayout.getHelperText().toString().isEmpty()) &&
+                                (binding.phoneLayout.getHelperText() == null || binding.phoneLayout.getHelperText().toString().isEmpty()) &&
+                                (binding.passwordLayout.getHelperText() == null || binding.passwordLayout.getHelperText().toString().isEmpty()) &&
+                                (binding.newPassLayout.getHelperText() == null || binding.newPassLayout.getHelperText().toString().isEmpty() &&
+                                binding.nameLayout.getHelperText() == null || binding.nameLayout.getHelperText().toString().isEmpty())) {
+                            RequestCreateUser requestCreateUser = new RequestCreateUser(name, email, password, phone);
+                            Call<User> call = apiService.createUser(requestCreateUser);
+                            call.enqueue(new Callback<User>() {
+                                @Override
+                                public void onResponse(Call<User> call, Response<User> response) {
+                                    if (response.isSuccessful()) {
+                                        Toast.makeText(getActivity(), "Đăng ký thành công, vui lòng đăng nhập lại", Toast.LENGTH_SHORT).show();
+                                        openScreen(new LoginFragment(), false);
+                                    } else {
+                                        Toast.makeText(getActivity(), "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<User> call, Throwable t) {
+                                    Toast.makeText(getActivity(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
         binding.icGoBack.setOnClickListener(new View.OnClickListener() {
@@ -53,6 +100,7 @@ public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
         validatePhone();
         validatePassword();
         validateRePass();
+        validateName();
     }
 
     private void setStatusHelperText() {
@@ -60,11 +108,12 @@ public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
         binding.phoneLayout.setHelperText("");
         binding.passwordLayout.setHelperText("");
         binding.newPassLayout.setHelperText("");
+        binding.nameLayout.setHelperText("");
     }
 
     private void validateEmail() {
         String helperText = "";
-        String email = binding.edtEmail.getText().toString();
+        email = binding.edtEmail.getText().toString();
 
         if (email.isEmpty()) {
             helperText = "Không được để trống Email";
@@ -77,7 +126,7 @@ public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
 
     private void validatePassword() {
         String helperText = "";
-        String password = binding.edtPass.getText().toString();
+        password = binding.edtPass.getText().toString();
         Pattern upperCasePattern = Pattern.compile(".*[A-Z].*");
         Pattern lowerCasePattern = Pattern.compile(".*[a-z].*");
         Pattern specialCharPattern = Pattern.compile(".*[@#\\$%^&+=].*");
@@ -100,7 +149,7 @@ public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
 
     private void validatePhone() {
         String helperText = "";
-        String phone = binding.edtPhone.getText().toString();
+        phone = binding.edtPhone.getText().toString();
         if (phone.isEmpty()) {
             helperText = "Không được để trống số điện thoại";
         } else if (!phone.matches(".*[0-9].*")) {
@@ -115,8 +164,8 @@ public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
 
     private void validateRePass() {
         String helperText = "";
-        String rePassword = binding.edtNewPass.getText().toString();
-        String password = binding.edtPass.getText().toString();
+        rePassword = binding.edtNewPass.getText().toString();
+        password = binding.edtPass.getText().toString();
         Pattern upperCasePattern = Pattern.compile(".*[A-Z].*");
         Pattern lowerCasePattern = Pattern.compile(".*[a-z].*");
         Pattern specialCharPattern = Pattern.compile(".*[@#\\$%^&+=].*");
@@ -138,4 +187,12 @@ public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
         binding.newPassLayout.setHelperText(helperText);
     }
 
+    private void validateName() {
+        String helperText = "";
+        name = binding.edtName.getText().toString();
+        if (name.isEmpty()) {
+            helperText = "Không được để trống tên";
+        }
+        binding.nameLayout.setHelperText(helperText);
+    }
 }

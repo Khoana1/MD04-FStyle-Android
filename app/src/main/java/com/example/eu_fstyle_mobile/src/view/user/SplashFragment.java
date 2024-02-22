@@ -2,6 +2,7 @@ package com.example.eu_fstyle_mobile.src.view.user;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -20,7 +21,7 @@ import androidx.annotation.Nullable;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentSplashFragmetBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
-import com.example.eu_fstyle_mobile.ultilties.SharedPrefManager;
+import com.example.eu_fstyle_mobile.src.view.user.login.LoginFragment;
 
 public class SplashFragment extends BaseFragment<FragmentSplashFragmetBinding> {
 
@@ -40,8 +41,13 @@ public class SplashFragment extends BaseFragment<FragmentSplashFragmetBinding> {
         binding.imgLogo.startAnimation(animationLogo);
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             if (isNetworkConnected()) {
-                if (SharedPrefManager.getInstance(getActivity()).isLoggedIn()) {
-                    openScreen(new ProfileFragment(), false); // Thay bằng home fragment sau khi làm xong
+                SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("loginPreferences", Context.MODE_PRIVATE);
+                boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+                if (isLoggedIn) {
+                    showLoadingDialog();
+                    openScreen(new ProfileFragment(), false); // Thay bằng homeFragment sau khi làm xong
+                    new Handler().postDelayed(() -> hideLoadingDialog(), 2000);
+                    Toast.makeText(requireActivity(), "Đã đăng nhập! Chào mừng trở lại", Toast.LENGTH_SHORT).show();
                 } else {
                     openScreen(new LoginFragment(), false);
                 }

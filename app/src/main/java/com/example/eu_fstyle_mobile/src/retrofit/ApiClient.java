@@ -4,10 +4,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    private static final String BASE_URL = "https://pokeapi.co/"; //API mẫu
     private static Retrofit retrofit;
+    private static final String BASE_URL = "http://10.64.5.110:3000"; // thay IPv4 của máy tính chạy server vào đây để test
 
-    public static Retrofit getRetrofitInstance() {
+    public static Retrofit getClient() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
