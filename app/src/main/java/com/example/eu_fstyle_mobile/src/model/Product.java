@@ -1,22 +1,50 @@
 package com.example.eu_fstyle_mobile.src.model;
 
-import com.google.gson.annotations.SerializedName;
-
 public class Product {
-    @SerializedName("name")
+    private int id;
     private String name;
-    @SerializedName("brand")
-    private String brand;
-    @SerializedName("price")
-    private String price;
-    @SerializedName("size")
-    private String size;
-    @SerializedName("color")
-    private String color;
-    @SerializedName("status")
-    private String status;
-    @SerializedName("type")
-    private String type;
-    @SerializedName("description")
-    private String description;
+    private String image;
+    private int price;
+
+    public Product(int id, String name, String image, int price) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.price = price;
+    }
+
+    public Product() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
 }

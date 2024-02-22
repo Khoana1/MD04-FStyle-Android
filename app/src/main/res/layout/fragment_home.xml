@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".src.view.home.HomeFragment">
-   <ScrollView
-       android:layout_width="match_parent"
-       android:layout_height="match_parent">
+    tools:context=".src.view.user.home.HomeFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-   </ScrollView>
+    </ScrollView>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
@@ -24,6 +24,7 @@
             android:id="@+id/avatar_home"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:src="@drawable/avatar_home"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.015"
             app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +84,8 @@
                 android:id="@+id/search_home"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:src="@drawable/search_home" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -99,7 +101,8 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:src="@drawable/notifi_home" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -115,7 +118,8 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:src="@drawable/cart_home" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -130,7 +134,8 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:src="@drawable/filter_home" />
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -139,6 +144,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="140dp"
+        android:src="@drawable/home1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -162,9 +168,9 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycle_category_home"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
+
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2"
             android:layout_marginTop="5dp"/>
@@ -182,11 +188,12 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycle_product_hame"
-            android:layout_marginTop="5dp"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/textView3"
-            />
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
