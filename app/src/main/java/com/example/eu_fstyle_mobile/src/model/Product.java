@@ -24,13 +24,14 @@ public class Product {
     @SerializedName("description")
     private String description;
 
-    public Product(String name, String image64, String brand, Number price, Number size, String color, String status, String type, String description) {
+    public Product(String name, String image64, String brand, Number price, Number size, String color, String quantity, String status, String type, String description) {
         this.name = name;
         this.image64 = image64;
         this.brand = brand;
         this.price = price;
         this.size = size;
         this.color = color;
+        this.quantity = quantity;
         this.status = status;
         this.type = type;
         this.description = description;
@@ -82,6 +83,14 @@ public class Product {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 
     public String getStatus() {
