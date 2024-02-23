@@ -24,8 +24,8 @@ import com.example.eu_fstyle_mobile.databinding.FragmentProfileBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.view.user.ContactFragment;
-import com.example.eu_fstyle_mobile.src.view.user.EditAddressFragment;
 import com.example.eu_fstyle_mobile.src.view.user.EditInfoFragment;
+import com.example.eu_fstyle_mobile.src.view.user.MyAddressFragment;
 import com.example.eu_fstyle_mobile.src.view.user.MyFavouriteFragment;
 import com.example.eu_fstyle_mobile.src.view.user.MyOrderFragment;
 import com.example.eu_fstyle_mobile.src.view.user.login.LoginFragment;
@@ -107,7 +107,7 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
         binding.llAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openScreen(new EditAddressFragment(), true);
+                openScreen(new MyAddressFragment(), true);
             }
         });
         binding.llContact.setOnClickListener(new View.OnClickListener() {

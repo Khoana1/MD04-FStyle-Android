@@ -32,6 +32,12 @@ public class MyAddressFragment extends BaseFragment<FragmentMyAddressBinding> {
                 getActivity().onBackPressed();
             }
         });
+        binding.tvAddAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openScreen(new AddAddressFragment(), true);
+            }
+        });
     }
 
     @Override

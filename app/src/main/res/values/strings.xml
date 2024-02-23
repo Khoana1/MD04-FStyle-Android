@@ -39,4 +39,5 @@
     <string name="tv_contact_fstyle">Liên hệ FStyle</string>
     <string name="tv_my_address">Địa chỉ của tôi</string>
     <string name="tv_user_name">Tên người dùng</string>
+    <string name="tv_add_address">Thêm địa chỉ</string>
 </resources>

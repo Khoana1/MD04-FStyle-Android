@@ -107,7 +107,7 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
         binding.llAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openScreen(new EditAddressFragment(), true);
+                openScreen(new MyAddressFragment() , true);
             }
         });
         binding.llContact.setOnClickListener(new View.OnClickListener() {
