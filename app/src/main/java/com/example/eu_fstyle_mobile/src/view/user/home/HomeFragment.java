@@ -18,7 +18,9 @@ import com.example.eu_fstyle_mobile.src.adapter.ProductHomeAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.Category;
 import com.example.eu_fstyle_mobile.src.model.Product;
+import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.view.user.profile.ProfileFragment;
+import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 
 import java.util.ArrayList;
 
@@ -32,7 +34,6 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         getCategory();
         getProduct();
@@ -42,7 +43,19 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
                 openScreen(new ProfileFragment(), true); // Thay bằng home fragment sau khi làm xong
             }
         });
+        initView();
         return binding.getRoot();
+    }
+
+    private void initView() {
+        User user = UserPrefManager.getInstance(getActivity()).getUser();
+        String lastName = getLastName(user.getName());
+        binding.textviewNameUser.setText(lastName);
+    }
+
+    public String getLastName(String fullName) {
+        String[] nameParts = fullName.split(" ");
+        return nameParts[nameParts.length - 1];
     }
 
     @Override
