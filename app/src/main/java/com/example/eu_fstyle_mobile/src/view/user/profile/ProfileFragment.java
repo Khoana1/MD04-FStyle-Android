@@ -25,7 +25,7 @@ import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.view.user.ContactFragment;
 import com.example.eu_fstyle_mobile.src.view.user.EditInfoFragment;
-import com.example.eu_fstyle_mobile.src.view.user.MyAddressFragment;
+import com.example.eu_fstyle_mobile.src.view.user.address.MyAddressFragment;
 import com.example.eu_fstyle_mobile.src.view.user.MyFavouriteFragment;
 import com.example.eu_fstyle_mobile.src.view.user.MyOrderFragment;
 import com.example.eu_fstyle_mobile.src.view.user.login.LoginFragment;

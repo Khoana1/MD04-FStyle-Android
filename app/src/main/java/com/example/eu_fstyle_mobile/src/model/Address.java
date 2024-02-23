@@ -1,31 +1,46 @@
 package com.example.eu_fstyle_mobile.src.model;
 
+import com.airbnb.lottie.L;
 import com.google.gson.annotations.SerializedName;
 
-public class Address {
+import java.io.Serializable;
+
+public class Address implements Serializable {
+    @SerializedName("_id")
+    private String _id;
     @SerializedName("idUser")
     private String idUser;
     @SerializedName("consigneeName")
     private String consigneeName;
     @SerializedName("homeNumber")
     private String homeNumber;
-    @SerializedName("stress")
-    private String stress;
+    @SerializedName("street")
+    private String street;
     @SerializedName("district")
     private String district;
     @SerializedName("city")
     private String city;
     @SerializedName("phoneNumber")
     private String phoneNumber;
-
-    public Address(String idUser, String consigneeName, String homeNumber, String stress, String district, String city, String phoneNumber) {
+    @SerializedName("__v")
+    private int __v;
+    public Address(String _id,String idUser, String consigneeName, String homeNumber, String street, String district, String city, String phoneNumber) {
+        this._id= _id;
         this.idUser = idUser;
         this.consigneeName = consigneeName;
         this.homeNumber = homeNumber;
-        this.stress = stress;
+        this.street = street;
         this.district = district;
         this.city = city;
         this.phoneNumber = phoneNumber;
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public String getIdUser() {
@@ -52,12 +67,12 @@ public class Address {
         this.homeNumber = homeNumber;
     }
 
-    public String getStress() {
-        return stress;
+    public String getStreet() {
+        return street;
     }
 
-    public void setStress(String stress) {
-        this.stress = stress;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
     public String getDistrict() {
