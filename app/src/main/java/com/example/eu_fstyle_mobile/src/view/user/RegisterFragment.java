@@ -71,6 +71,7 @@ public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
                                 public void onResponse(Call<User> call, Response<User> response) {
                                     if (response.isSuccessful()) {
                                         Toast.makeText(getActivity(), "Đăng ký thành công, vui lòng đăng nhập lại", Toast.LENGTH_SHORT).show();
+                                        clearForm();
                                         openScreen(new LoginFragment(), false);
                                     } else {
                                         Toast.makeText(getActivity(), "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
@@ -194,5 +195,13 @@ public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
             helperText = "Không được để trống tên";
         }
         binding.nameLayout.setHelperText(helperText);
+    }
+
+    private void clearForm() {
+        binding.edtEmail.setText("");
+        binding.edtPhone.setText("");
+        binding.edtPass.setText("");
+        binding.edtNewPass.setText("");
+        binding.edtName.setText("");
     }
 }

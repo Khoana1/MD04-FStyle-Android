@@ -29,4 +29,28 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvMyAddress"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:padding="10dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <TextView
+        android:id="@+id/tvAddAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/tv_add_address"
+        android:drawableLeft="@drawable/ic_add_address"
+        android:gravity="center"
+        android:drawablePadding="5dp"
+        android:textSize="15sp"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:padding="10dp"
+        android:textColor="@color/colorButtonBrown" />
+
 </LinearLayout>
