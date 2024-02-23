@@ -15,6 +15,8 @@ public class Product {
     private Number size;
     @SerializedName("color")
     private String color;
+    @SerializedName("quantity")
+    private String quantity;
     @SerializedName("status")
     private String status;
     @SerializedName("type")
