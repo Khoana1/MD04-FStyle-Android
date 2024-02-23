@@ -53,8 +53,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
 
     private void getProduct() {
         listProduct = new ArrayList<>();
-        listProduct.add(new Product(1,"Nike SB Dunk","https://i.pinimg.com/564x/87/e7/b1/87e7b1ecc2ef1580841e7a0d23ed49a0.jpg",50000));
-        listProduct.add(new Product(2,"Men's National Trendy","https://i.pinimg.com/564x/01/9e/a4/019ea44da5222ed4e5f838fd3d11e77f.jpg",20000));
+//        listProduct.add(new Product(1,"Nike SB Dunk",,"https://i.pinimg.com/564x/87/e7/b1/87e7b1ecc2ef1580841e7a0d23ed49a0.jpg",50000));
+//        listProduct.add(new Product(2,"Men's National Trendy","https://i.pinimg.com/564x/01/9e/a4/019ea44da5222ed4e5f838fd3d11e77f.jpg",20000));
         productAdapter = new ProductHomeAdapter(getActivity(), listProduct);
         binding.recycleProductHame.setLayoutManager(new GridLayoutManager(getActivity(),2));
         binding.recycleProductHame.setAdapter(productAdapter);
