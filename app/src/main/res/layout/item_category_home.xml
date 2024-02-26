@@ -9,12 +9,13 @@
     android:layout_marginRight="10dp"
     android:layout_marginLeft="10dp">
     <com.google.android.material.imageview.ShapeableImageView
+        app:shapeAppearanceOverlay="@style/shapeImage"
         android:id="@+id/item_category_image_home"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:src="@drawable/giay1"
-        app:strokeWidth="0.5dp"
-        app:strokeColor="@color/colorBlack"
+        app:strokeWidth="1dp"
+        app:strokeColor="#DEB887"
         />
     <TextView
         android:id="@+id/item_category_name_home"

@@ -1,9 +1,13 @@
 package com.example.eu_fstyle_mobile.src.retrofit;
 
+import com.example.eu_fstyle_mobile.src.model.ListProduct;
+import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateUser;
 import com.example.eu_fstyle_mobile.src.request.RequestLoginUser;
 import com.example.eu_fstyle_mobile.ultilties.ApiEndpoint;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -20,4 +24,6 @@ public interface ApiService {
     Call<User> getUser(@Path("id") String id);
     @GET(ApiEndpoint.updateUser)
     Call<User> updateUser(@Path("id") int id);
+    @GET(ApiEndpoint.getAllProducts)
+    Call<ListProduct> getAllProducts();
 }

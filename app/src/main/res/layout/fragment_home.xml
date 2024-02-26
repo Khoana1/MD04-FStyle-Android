@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="5dp"
-            android:text="Hello"
+            android:text="Hello, "
             android:textColor="@color/colorWhite"
             android:textSize="18dp"
             app:layout_constraintStart_toEndOf="@+id/avatar_home"
@@ -132,25 +132,51 @@
             app:layout_constraintTop_toBottomOf="@+id/cardView3">
 
             <ImageView
-                android:layout_width="30dp"
+                android:layout_width="24dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:id="@+id/filter_home"
+                android:src="@drawable/filter_home"/>
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/shapeableImageView"
-        android:layout_width="300dp"
-        android:layout_height="140dp"
-        android:layout_marginTop="140dp"
+        android:id="@+id/constraintLayout20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.viewpager.widget.ViewPager
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/border_banner"
+            android:id="@+id/viewpager_home"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <me.relex.circleindicator.CircleIndicator
+            android:id="@+id/circleIndicator_home"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="130dp"
+            app:ci_drawable="@drawable/circle_inditor"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/shapeableImageView"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout20"
         android:layout_marginTop="10dp"
         android:padding="10dp">
 
