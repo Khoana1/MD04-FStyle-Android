@@ -1,6 +1,8 @@
 package com.example.eu_fstyle_mobile.src.view.user.login;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -56,6 +58,10 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
             @Override
             public void onChanged(User user) {
                 UserPrefManager.getInstance(getActivity()).saveUser(user);
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginPreferences", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("isLoggedIn", true);
+                editor.apply();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -70,6 +76,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
         loginViewModel.getErrorLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String error) {
+
                 if (error.startsWith("Server error: ")) {
                     hideLoginLoadingAnimation();
                     Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();

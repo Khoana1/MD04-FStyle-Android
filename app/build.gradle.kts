@@ -61,6 +61,8 @@ dependencies {
     implementation ("com.airbnb.android:lottie:6.0.0")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
     implementation ("com.squareup.picasso:picasso:2.71828")
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     implementation ("me.relex:circleindicator:2.1.6")
 
 }
