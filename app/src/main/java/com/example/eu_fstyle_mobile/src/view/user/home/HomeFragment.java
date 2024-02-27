@@ -44,6 +44,8 @@ import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
 import com.example.eu_fstyle_mobile.src.view.user.profile.ProfileFragment;
 import com.example.eu_fstyle_mobile.ultilties.SearchUltils;
+import com.example.eu_fstyle_mobile.src.model.User;
+import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +74,6 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         Banner();
         openSearch(Gravity.CENTER);
@@ -84,6 +85,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
                 openScreen(new ProfileFragment(), true); // Thay bằng home fragment sau khi làm xong
             }
         });
+        initView();
         return binding.getRoot();
     }
 
@@ -108,6 +110,15 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
         binding.viewpagerHome.setAdapter(bannerAdapter);
         binding.circleIndicatorHome.setViewPager(binding.viewpagerHome);
 
+    private void initView() {
+        User user = UserPrefManager.getInstance(getActivity()).getUser();
+        String lastName = getLastName(user.getName());
+        binding.textviewNameUser.setText(lastName);
+    }
+
+    public String getLastName(String fullName) {
+        String[] nameParts = fullName.split(" ");
+        return nameParts[nameParts.length - 1];
     }
 
     @Override

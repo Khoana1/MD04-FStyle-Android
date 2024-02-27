@@ -1,11 +1,21 @@
 package com.example.eu_fstyle_mobile.src.view.user.profile;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,21 +28,37 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.ChooseAvatarBottomsheetBinding;
 import com.example.eu_fstyle_mobile.databinding.FragmentProfileBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.User;
+import com.example.eu_fstyle_mobile.src.request.RequestCreateUser;
+import com.example.eu_fstyle_mobile.src.request.RequestUpdateUser;
+import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
+import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
 import com.example.eu_fstyle_mobile.src.view.user.ContactFragment;
 import com.example.eu_fstyle_mobile.src.view.user.EditInfoFragment;
-import com.example.eu_fstyle_mobile.src.view.user.MyAddressFragment;
 import com.example.eu_fstyle_mobile.src.view.user.MyFavouriteFragment;
 import com.example.eu_fstyle_mobile.src.view.user.MyOrderFragment;
+import com.example.eu_fstyle_mobile.src.view.user.address.MyAddressFragment;
 import com.example.eu_fstyle_mobile.src.view.user.login.LoginFragment;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
+import com.squareup.picasso.Picasso;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+import retrofit2.Call;
 
 public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
     private ProfileViewModel profileViewModel;
+    private static final int MY_REQUEST_CODE = 1;
+    private String base64Image;
+    private User currentUser;
 
     @Override
     protected FragmentProfileBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
@@ -59,6 +85,7 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
             public void onChanged(User user) {
                 binding.tvName.setText(user.getName());
                 binding.tvPhone.setText(user.getPhone());
+                currentUser = user;
             }
         });
 
@@ -153,7 +180,7 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
         binding.lnTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(requireContext(), "Take Photo", Toast.LENGTH_SHORT).show();
+                onClickRequestPermission();
             }
         });
         dialog.show();
@@ -161,5 +188,78 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogBottomSheetAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+    private void onClickRequestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (requireActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                openImagePicker();
+            } else {
+//                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_REQUEST_CODE);
+                openImagePicker();
+            }
+        } else {
+            openImagePicker();
+        }
+    }
+
+    private void openImagePicker() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, MY_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == MY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            Uri selectedImage = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), selectedImage);
+                base64Image = convertBitmapToBase64(bitmap);
+                ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                RequestUpdateUser requestUpdateUser = new RequestUpdateUser(base64Image, currentUser.getName(), currentUser.getEmail(), currentUser.getPassword(), currentUser.getPhone());
+                Call<User> call = apiService.updateUser(currentUser.get_id(), requestUpdateUser);
+                call.enqueue(new retrofit2.Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, retrofit2.Response<User> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(getActivity(), "Cập nhật ảnh đại diện thành công", Toast.LENGTH_SHORT).show();
+                            User updatedUser = response.body();
+//                            Picasso.get().load(updatedUser.getAvatar()).into(binding.icAvatar);
+//                            RequestOptions requestOptions = new RequestOptions()
+//                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                                    .placeholder(R.drawable.ic_avatar);
+//                            Bitmap avatarBitmap = convertBase64ToBitmap(updatedUser.getAvatar());
+//                            Glide.with(requireContext()).
+//                                    asBitmap().
+//                                    load(avatarBitmap).
+//                                    apply(requestOptions).
+//                                    into(binding.icAvatar);
+
+                        } else {
+                            Toast.makeText(getActivity(), "Cập nhật ảnh đại diện thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private String convertBitmapToBase64(Bitmap bitmap) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 10, outputStream);
+        byte[] byteArray = outputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+
+    public Bitmap convertBase64ToBitmap(String base64String) {
+        byte[] decodedString = Base64.decode(base64String, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
 }

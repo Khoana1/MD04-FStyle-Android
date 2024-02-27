@@ -1,11 +1,13 @@
 package com.example.eu_fstyle_mobile.src.base;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -109,5 +111,17 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
         });
 
         dialog.show();
+    }
+
+    protected void hideKeyboard() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            View view = activity.getCurrentFocus();
+            if (view == null) {
+                view = new View(activity);
+            }
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

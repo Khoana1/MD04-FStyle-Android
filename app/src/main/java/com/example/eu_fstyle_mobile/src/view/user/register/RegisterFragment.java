@@ -1,10 +1,12 @@
 package com.example.eu_fstyle_mobile.src.view.user.register;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -100,6 +102,14 @@ public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
             @Override
             public void onClick(View v) {
                 getActivity().onBackPressed();
+            }
+        });
+        binding.parentLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, android.view.MotionEvent event) {
+                hideKeyboard();
+                clearFocusEditText();
+                return false;
             }
         });
     }
@@ -203,5 +213,13 @@ public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
             helperText = "Không được để trống tên";
         }
         binding.nameLayout.setHelperText(helperText);
+    }
+
+    private void clearFocusEditText() {
+        binding.edtEmail.clearFocus();
+        binding.edtPass.clearFocus();
+        binding.edtNewPass.clearFocus();
+        binding.edtPhone.clearFocus();
+        binding.edtName.clearFocus();
     }
 }
