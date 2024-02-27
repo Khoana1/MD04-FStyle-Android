@@ -35,7 +35,7 @@ public class SplashFragment extends BaseFragment<FragmentSplashFragmetBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ObjectAnimator animator = ObjectAnimator.ofFloat(binding.imgLogo,"translationY",-100f,0f);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(binding.imgLogo, "translationY", -100f, 0f);
         animator.setDuration(2000);
         animator.setRepeatCount(0);
         animator.start();

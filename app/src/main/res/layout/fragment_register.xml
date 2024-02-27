@@ -8,6 +8,7 @@
     tools:context=".src.view.user.register.RegisterFragment">
 
     <RelativeLayout
+        android:id="@+id/parent_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
