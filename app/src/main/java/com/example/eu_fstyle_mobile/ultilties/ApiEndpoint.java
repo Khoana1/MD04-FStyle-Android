@@ -9,5 +9,5 @@ public class ApiEndpoint {
     public static final String updateAddress = "/api/user/address/update/{id}/{id_address}";
     public static final String getAddress = "/api/user/address/list/{id}";
     public static final String getAvatar = "/api/user/avatar/image/{id}";
-
+    public static final String getAllProducts = "/api/products";
 }
