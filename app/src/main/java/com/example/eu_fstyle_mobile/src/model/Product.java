@@ -6,7 +6,7 @@ public class Product {
     @SerializedName("name")
     private String name;
     @SerializedName("image64")
-    private String image64;
+    private String[] image64;
     @SerializedName("brand")
     private String brand;
     @SerializedName("price")
@@ -24,7 +24,7 @@ public class Product {
     @SerializedName("description")
     private String description;
 
-    public Product(String name, String image64, String brand, Number price, Number size, String color, String quantity, String status, String type, String description) {
+    public Product(String name, String[] image64, String brand, Number price, Number size, String color, String quantity, String status, String type, String description) {
         this.name = name;
         this.image64 = image64;
         this.brand = brand;
@@ -45,11 +45,11 @@ public class Product {
         this.name = name;
     }
 
-    public String getImage64() {
+    public String[] getImage64() {
         return image64;
     }
 
-    public void setImage64(String image64) {
+    public void setImage64(String[] image64) {
         this.image64 = image64;
     }
 

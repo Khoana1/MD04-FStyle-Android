@@ -19,17 +19,15 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.Viewholder> {
-    private Context context;
-    private ArrayList<Product> arrayList;
-    private onClickItem onClickItem;
-    public ProductHomeAdapter(Context context, ArrayList<Product> arrayList) {
+public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Viewholder> {
+    Context context;
+    ArrayList<Product> arrayList;
+
+    public SearchAdapter(Context context, ArrayList<Product> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
     }
-    public void setOnClickItem(onClickItem onClickItem){
-        this.onClickItem = onClickItem;
-    }
+
     @NonNull
     @Override
     public Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -53,19 +51,16 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
 
             }
         });
-        holder.itemView.setOnClickListener(v -> {
-            if(onClickItem != null){
-                onClickItem.onClick(product);
-            }
-        });
     }
 
     @Override
     public int getItemCount() {
         return arrayList.size();
     }
-    public interface onClickItem{
-        void onClick(Product product);
+    public void updateData(ArrayList<Product> newData) {
+        arrayList.clear(); // Xóa dữ liệu cũ
+        arrayList.addAll(newData); // Thêm dữ liệu mới
+        notifyDataSetChanged(); // Thông báo cho RecyclerView cập nhật lại giao diện
     }
     public class Viewholder extends RecyclerView.ViewHolder{
         ImageView imageView;
