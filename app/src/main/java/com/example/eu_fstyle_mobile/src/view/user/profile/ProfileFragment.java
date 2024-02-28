@@ -92,7 +92,7 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
             binding.shimmerViewContainer.stopShimmer();
             binding.shimmerViewContainer.setVisibility(View.GONE);
             binding.rltProfile.setVisibility(View.VISIBLE);
-        }, 3000);
+        }, 2000);
     }
 
     private void observeViewModel() {
@@ -265,7 +265,7 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
     }
 
     private void getAvatar() {
-        String avatarUrl = "http://10.64.5.110:3000/api/user/avatar/image/%s";
+        String avatarUrl = "http://10.64.5.110:3000/api/user/avatar/image/%s"; // thay IPv4 của máy tính chạy server vào đây để test
         user = UserPrefManager.getInstance(getActivity()).getUser();
         String userId = user.get_id();
         String apiUrl = String.format(avatarUrl, userId);
