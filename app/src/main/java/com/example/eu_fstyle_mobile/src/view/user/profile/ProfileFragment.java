@@ -76,23 +76,10 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        showShimmerLoading();
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         observeViewModel();
         initView();
         getAvatar();
-    }
-
-    public void showShimmerLoading() {
-        binding.shimmerViewContainer.setVisibility(View.VISIBLE);
-        binding.rltProfile.setVisibility(View.GONE);
-        binding.shimmerViewContainer.startShimmer();
-        Handler handler = new Handler();
-        handler.postDelayed(() -> {
-            binding.shimmerViewContainer.stopShimmer();
-            binding.shimmerViewContainer.setVisibility(View.GONE);
-            binding.rltProfile.setVisibility(View.VISIBLE);
-        }, 2000);
     }
 
     private void observeViewModel() {
@@ -278,7 +265,7 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
         } else {
             Glide.with(getActivity())
                     .load(apiUrl)
-                    .placeholder(R.drawable.ic_avatar)
+                    .placeholder(R.drawable.avatar_home)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(binding.icAvatar);

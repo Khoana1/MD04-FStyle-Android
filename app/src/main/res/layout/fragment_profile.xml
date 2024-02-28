@@ -8,15 +8,6 @@
     android:orientation="vertical"
     tools:context=".src.view.user.profile.ProfileFragment">
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/shimmer_view_container"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        >
-        <include layout="@layout/fragment_profile_placeholder"/>
-    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <RelativeLayout
         android:id="@+id/rlt_profile"
@@ -55,9 +46,9 @@
                 android:layout_height="100dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                tools:src="@drawable/ic_avatar"
                 app:civ_border_color="@color/colorDot"
-                app:civ_border_width="1dp" />
+                app:civ_border_width="1dp"
+                tools:src="@drawable/ic_avatar" />
 
             <TextView
                 android:id="@+id/tv_name"
