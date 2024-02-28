@@ -1,5 +1,6 @@
 package com.example.eu_fstyle_mobile.src.view.user.login;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -27,6 +30,7 @@ import com.example.eu_fstyle_mobile.src.view.user.profile.ProfileFragment;
 import com.example.eu_fstyle_mobile.src.view.user.register.RegisterFragment;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 
+import java.util.concurrent.Executor;
 import java.util.regex.Pattern;
 
 public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
@@ -35,7 +39,9 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
     private String email;
     private String password;
     private LoginViewModel loginViewModel;
-
+    private Executor executor;
+    private BiometricPrompt biometricPrompt;
+    private BiometricPrompt.PromptInfo promptInfo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,7 +56,31 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         observeViewModel();
         initView();
+        executor = ContextCompat.getMainExecutor(getActivity());
+        biometricPrompt = new BiometricPrompt(LoginFragment.this, executor, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+            }
 
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                showLoginLoadingAnimation();
+                loginViewModel.loginUser(UserPrefManager.getInstance(getActivity()).getUser().getEmail(), UserPrefManager.getInstance(getActivity()).getUser().getPassword());
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                Toast.makeText(getActivity(), "Xác thực vân tay thất bại", Toast.LENGTH_SHORT).show();
+            }
+        });
+        promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Xác thực vân tay")
+                .setSubtitle("Sử dụng vân tay để đăng nhập")
+                .setNegativeButtonText("Hủy")
+                .build();
     }
 
     private void observeViewModel() {
@@ -92,6 +122,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
             }
         });
     }
+
     @Override
     protected FragmentLoginBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
         return FragmentLoginBinding.inflate(inflater, container, false);
@@ -143,6 +174,20 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                         doubleBackToExitPressedOnce = false;
                     }
                 }, 2000);
+            }
+        });
+        binding.icFingerprint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginPreferences", Context.MODE_PRIVATE);
+                boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+                if (isLoggedIn) {
+                    biometricPrompt.authenticate(promptInfo);
+                } else {
+                    String title = "Vui lòng đăng nhập lại trước khi sử dụng xác thực vân tay";
+                    showAlertDialog(title);
+                }
+
             }
         });
     }
