@@ -4,17 +4,7 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.viewmodel.CreationExtras;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.os.Handler;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -27,10 +17,13 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.viewmodel.CreationExtras;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eu_fstyle_mobile.R;
-import com.example.eu_fstyle_mobile.databinding.DialogSearchBinding;
 import com.example.eu_fstyle_mobile.databinding.FragmentHomeBinding;
 import com.example.eu_fstyle_mobile.src.adapter.BannerAdapter;
 import com.example.eu_fstyle_mobile.src.adapter.CategoryHomeAdapter;
@@ -44,21 +37,17 @@ import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
 import com.example.eu_fstyle_mobile.src.view.user.profile.ProfileFragment;
-import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 import com.example.eu_fstyle_mobile.ultilties.SearchUltils;
+import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 
-public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
+public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements ProductHomeAdapter.onClickItem{
     FragmentHomeBinding binding;
     ArrayList<Category> arrayList;
     ArrayList<Product> listProduct;
@@ -101,15 +90,6 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
         return nameParts[nameParts.length - 1];
     }
 
-    private void onClickItem() {
-        productAdapter.setOnClickItem(new ProductHomeAdapter.onClickItem() {
-            @Override
-            public void onClick(Product product) {
-               openScreen(new DetailProductFragment(), true);
-            }
-        });
-    }
-
     private void Banner() {
         listBanner = new String[]{
                 "https://i.pinimg.com/564x/ac/ac/a8/acaca828b541e302b54e99bdd1bf855d.jpg",
@@ -137,10 +117,9 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
             public void onResponse(Call<ListProduct> call, Response<ListProduct> response) {
                 if(response.isSuccessful()&& response.body()!= null){
                     listProduct = response.body().getArrayList();
-                    productAdapter = new ProductHomeAdapter(getActivity(), listProduct);
+                    productAdapter = new ProductHomeAdapter(getActivity(), listProduct,HomeFragment.this);
                     binding.recycleProductHame.setLayoutManager(new GridLayoutManager(getActivity(),2));
                     binding.recycleProductHame.setAdapter(productAdapter);
-                    onClickItem();
                 }
             }
 
@@ -184,7 +163,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
             });
             RecyclerView recyclerView = dialogSearch.findViewById(R.id.recycle_search_home);
             LinearLayout layout = dialogSearch.findViewById(R.id.view_not_found);
-            productAdapter = new ProductHomeAdapter(getActivity(), listProduct);
+            productAdapter = new ProductHomeAdapter(getActivity(), listProduct, HomeFragment.this);
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
             recyclerView.setAdapter(productAdapter);
             dialogSearch.show();
@@ -268,5 +247,11 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
     public void onPause() {
         super.onPause();
         stopAutoViewPager();
+    }
+
+    @Override
+    public void onClick(Product product) {
+          DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
+          openScreen(detailProductFragment, true);
     }
 }
