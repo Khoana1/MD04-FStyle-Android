@@ -24,6 +24,8 @@ import androidx.lifecycle.viewmodel.CreationExtras;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentHomeBinding;
 import com.example.eu_fstyle_mobile.src.adapter.BannerAdapter;
@@ -70,6 +72,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         Banner();
         openSearch(Gravity.CENTER);
+        getAvatar();
         getCategory();
         getProduct();
         binding.avatarHome.setOnClickListener(new View.OnClickListener() {
@@ -256,5 +259,26 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     public void onClick(Product product) {
         DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
         openScreen(detailProductFragment, true);
+    }
+
+    private void getAvatar() {
+        String avatarUrl = "http://10.64.5.110:3000/api/user/avatar/image/%s"; // thay IPv4 của máy tính chạy server vào đây để test
+        User user = UserPrefManager.getInstance(getActivity()).getUser();
+        String userId = user.get_id();
+        String apiUrl = String.format(avatarUrl, userId);
+        if (apiUrl != null && !apiUrl.isEmpty()) {
+            Glide.with(getActivity())
+                    .load(apiUrl)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(binding.avatarHome);
+        } else {
+            Glide.with(getActivity())
+                    .load(apiUrl)
+                    .placeholder(R.drawable.ic_avatar)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(binding.avatarHome);
+        }
     }
 }
