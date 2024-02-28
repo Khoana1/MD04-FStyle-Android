@@ -78,7 +78,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         binding.avatarHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openScreen(new ProfileFragment(), true); // Thay bằng home fragment sau khi làm xong
+                openScreenHome(new ProfileFragment(), true); // Thay bằng home fragment sau khi làm xong
             }
         });
         initView();
