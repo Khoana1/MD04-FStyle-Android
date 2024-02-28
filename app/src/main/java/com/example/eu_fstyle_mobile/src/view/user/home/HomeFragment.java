@@ -4,17 +4,7 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.viewmodel.CreationExtras;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.os.Handler;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -27,12 +17,15 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.viewmodel.CreationExtras;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.eu_fstyle_mobile.R;
-import com.example.eu_fstyle_mobile.databinding.DialogSearchBinding;
 import com.example.eu_fstyle_mobile.databinding.FragmentHomeBinding;
 import com.example.eu_fstyle_mobile.src.adapter.BannerAdapter;
 import com.example.eu_fstyle_mobile.src.adapter.CategoryHomeAdapter;
@@ -42,22 +35,18 @@ import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.Category;
 import com.example.eu_fstyle_mobile.src.model.ListProduct;
 import com.example.eu_fstyle_mobile.src.model.Product;
+import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
 import com.example.eu_fstyle_mobile.src.view.user.profile.ProfileFragment;
 import com.example.eu_fstyle_mobile.ultilties.SearchUltils;
-import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 
 public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
@@ -73,18 +62,20 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
     private final long PERIOD_MS = 5000;
     private Handler handler;
     private Runnable runnable;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         Banner();
         openSearch(Gravity.CENTER);
+        getAvatar();
         getCategory();
         getProduct();
         binding.avatarHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openScreen(new ProfileFragment(), true);
+                openScreen(new ProfileFragment(), true); // Thay bằng home fragment sau khi làm xong
             }
         });
         initView();
@@ -95,7 +86,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
         productAdapter.setOnClickItem(new ProductHomeAdapter.onClickItem() {
             @Override
             public void onClick(Product product) {
-               openScreen(new DetailProductFragment(), true);
+                openScreen(new DetailProductFragment(), true);
             }
         });
     }
@@ -112,8 +103,9 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
         binding.viewpagerHome.setAdapter(bannerAdapter);
         binding.circleIndicatorHome.setViewPager(binding.viewpagerHome);
 
+    }
+
     private void initView() {
-        getAvatar();
         User user = UserPrefManager.getInstance(getActivity()).getUser();
         String lastName = getLastName(user.getName());
         binding.textviewNameUser.setText(lastName);
@@ -126,11 +118,12 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
 
     @Override
     protected FragmentHomeBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
-        return FragmentHomeBinding.inflate(inflater,container,false);
+        return FragmentHomeBinding.inflate(inflater, container, false);
     }
 
 
-    private void getProduct() {ApiService apiService = ApiClient.getClient().create(ApiService.class);
+    private void getProduct() {
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
         Call<ListProduct> call = apiService.getAllProducts();
         call.enqueue(new Callback<ListProduct>() {
             @Override
@@ -154,19 +147,20 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
 
     private void getCategory() {
         arrayList = new ArrayList<>();
-        arrayList.add(new Category(1, "https://i.pinimg.com/564x/70/6d/1e/706d1e17ddb9188407952985c83c4ab7.jpg","shoes"));
+        arrayList.add(new Category(1, "https://i.pinimg.com/564x/70/6d/1e/706d1e17ddb9188407952985c83c4ab7.jpg", "shoes"));
         arrayList.add(new Category(2, "https://i.pinimg.com/564x/87/e7/b1/87e7b1ecc2ef1580841e7a0d23ed49a0.jpg", "shoes2"));
         adapter = new CategoryHomeAdapter(getActivity(), arrayList);
-        binding.recycleCategoryHome.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        binding.recycleCategoryHome.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         binding.recycleCategoryHome.setAdapter(adapter);
     }
-    private void openSearch(int gravity){
+
+    private void openSearch(int gravity) {
         binding.searchHome.setOnClickListener(v -> {
             Dialog dialogSearch = new Dialog(getActivity());
             dialogSearch.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialogSearch.setContentView(R.layout.dialog_search);
             Window window = dialogSearch.getWindow();
-            if(window == null)
+            if (window == null)
                 return;
             WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
             layoutParams.copyFrom(window.getAttributes());
@@ -185,7 +179,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
             RecyclerView recyclerView = dialogSearch.findViewById(R.id.recycle_search_home);
             LinearLayout layout = dialogSearch.findViewById(R.id.view_not_found);
             productAdapter = new ProductHomeAdapter(getActivity(), listProduct);
-            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
             recyclerView.setAdapter(productAdapter);
             dialogSearch.show();
             EditText editText = dialogSearch.findViewById(R.id.edit_search_home);
@@ -197,60 +191,41 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                  String str = s.toString().toLowerCase();
-                  String queryWithoutAccents = SearchUltils.removeAccents(str); // Loại bỏ dấu từ chuỗi tìm kiếm
+                    String str = s.toString().toLowerCase();
+                    String queryWithoutAccents = SearchUltils.removeAccents(str); // Loại bỏ dấu từ chuỗi tìm kiếm
 
                     ArrayList<Product> list = new ArrayList<>();
-                  for (Product product : listProduct){
-                      String productName = product.getName().toLowerCase();
-                      String productNameWithoutAccents = SearchUltils.removeAccents(productName);
-                      if (productNameWithoutAccents.contains(queryWithoutAccents)) {
-                          list.add(product);
-                      }
-                      if (list.isEmpty()) {
-                          recyclerView.setVisibility(View.GONE);
-                          layout.setVisibility(View.VISIBLE);
-                      } else {
-                          recyclerView.setVisibility(View.VISIBLE);
-                          layout.setVisibility(View.GONE);
-                          searchAdapter = new SearchAdapter(getActivity(), list);
-                          recyclerView.setAdapter(searchAdapter);
-                          recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-                      }
+                    for (Product product : listProduct) {
+                        String productName = product.getName().toLowerCase();
+                        String productNameWithoutAccents = SearchUltils.removeAccents(productName);
+                        if (productNameWithoutAccents.contains(queryWithoutAccents)) {
+                            list.add(product);
+                        }
+                        if (list.isEmpty()) {
+                            recyclerView.setVisibility(View.GONE);
+                            layout.setVisibility(View.VISIBLE);
+                        } else {
+                            recyclerView.setVisibility(View.VISIBLE);
+                            layout.setVisibility(View.GONE);
+                            searchAdapter = new SearchAdapter(getActivity(), list);
+                            recyclerView.setAdapter(searchAdapter);
+                            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                        }
 
-                  }
+                    }
 
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
 
-    private void getAvatar() {
-        String avatarUrl = "http://10.64.5.110:3000/api/user/avatar/image/%s";
-        User user = UserPrefManager.getInstance(getActivity()).getUser();
-        String userId = user.get_id();
-        String apiUrl = String.format(avatarUrl, userId);
-        if (apiUrl != null && !apiUrl.isEmpty()) {
-            Glide.with(getActivity())
-                    .load(apiUrl)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(binding.avatarHome);
-        } else {
-            Glide.with(getActivity())
-                    .load(apiUrl)
-                    .placeholder(R.drawable.ic_avatar)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(binding.avatarHome);
-        }
-    }
 
                 }
             });
         });
 
     }
+
     @NonNull
     @Override
     public CreationExtras getDefaultViewModelCreationExtras() {
@@ -278,6 +253,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
             handler.removeCallbacks(runnable);
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -288,5 +264,26 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
     public void onPause() {
         super.onPause();
         stopAutoViewPager();
+    }
+
+    private void getAvatar() {
+        String avatarUrl = "http://10.64.5.110:3000/api/user/avatar/image/%s"; // thay IPv4 của máy tính chạy server vào đây để test
+        User user = UserPrefManager.getInstance(getActivity()).getUser();
+        String userId = user.get_id();
+        String apiUrl = String.format(avatarUrl, userId);
+        if (apiUrl != null && !apiUrl.isEmpty()) {
+            Glide.with(getActivity())
+                    .load(apiUrl)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(binding.avatarHome);
+        } else {
+            Glide.with(getActivity())
+                    .load(apiUrl)
+                    .placeholder(R.drawable.ic_avatar)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(binding.avatarHome);
+        }
     }
 }
