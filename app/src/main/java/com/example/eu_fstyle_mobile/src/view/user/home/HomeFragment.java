@@ -1,3 +1,4 @@
+
 package com.example.eu_fstyle_mobile.src.view.user.home;
 
 import android.app.Dialog;
@@ -23,8 +24,6 @@ import androidx.lifecycle.viewmodel.CreationExtras;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentHomeBinding;
 import com.example.eu_fstyle_mobile.src.adapter.BannerAdapter;
@@ -41,6 +40,8 @@ import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
 import com.example.eu_fstyle_mobile.src.view.user.profile.ProfileFragment;
 import com.example.eu_fstyle_mobile.ultilties.SearchUltils;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
+import com.example.eu_fstyle_mobile.src.model.User;
+import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 
 import java.util.ArrayList;
 
@@ -49,7 +50,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
+public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements ProductHomeAdapter.onClickItem{
     FragmentHomeBinding binding;
     ArrayList<Category> arrayList;
     ArrayList<Product> listProduct;
@@ -62,14 +63,13 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
     private final long PERIOD_MS = 5000;
     private Handler handler;
     private Runnable runnable;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         Banner();
         openSearch(Gravity.CENTER);
-        getAvatar();
         getCategory();
         getProduct();
         binding.avatarHome.setOnClickListener(new View.OnClickListener() {
@@ -82,13 +82,15 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
         return binding.getRoot();
     }
 
-    private void onClickItem() {
-        productAdapter.setOnClickItem(new ProductHomeAdapter.onClickItem() {
-            @Override
-            public void onClick(Product product) {
-                openScreen(new DetailProductFragment(), true);
-            }
-        });
+    private void initView() {
+        User user = UserPrefManager.getInstance(getActivity()).getUser();
+        String lastName = getLastName(user.getName());
+        binding.textviewNameUser.setText(lastName);
+    }
+
+    public String getLastName(String fullName) {
+        String[] nameParts = fullName.split(" ");
+        return nameParts[nameParts.length - 1];
     }
 
     private void Banner() {
@@ -105,35 +107,22 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
 
     }
 
-    private void initView() {
-        User user = UserPrefManager.getInstance(getActivity()).getUser();
-        String lastName = getLastName(user.getName());
-        binding.textviewNameUser.setText(lastName);
-    }
-
-    public String getLastName(String fullName) {
-        String[] nameParts = fullName.split(" ");
-        return nameParts[nameParts.length - 1];
-    }
-
     @Override
     protected FragmentHomeBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
-        return FragmentHomeBinding.inflate(inflater, container, false);
+        return FragmentHomeBinding.inflate(inflater,container,false);
     }
 
 
-    private void getProduct() {
-        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+    private void getProduct() {ApiService apiService = ApiClient.getClient().create(ApiService.class);
         Call<ListProduct> call = apiService.getAllProducts();
         call.enqueue(new Callback<ListProduct>() {
             @Override
             public void onResponse(Call<ListProduct> call, Response<ListProduct> response) {
                 if(response.isSuccessful()&& response.body()!= null){
                     listProduct = response.body().getArrayList();
-                    productAdapter = new ProductHomeAdapter(getActivity(), listProduct);
+                    productAdapter = new ProductHomeAdapter(getActivity(), listProduct,HomeFragment.this);
                     binding.recycleProductHame.setLayoutManager(new GridLayoutManager(getActivity(),2));
                     binding.recycleProductHame.setAdapter(productAdapter);
-                    onClickItem();
                 }
             }
 
@@ -147,20 +136,19 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
 
     private void getCategory() {
         arrayList = new ArrayList<>();
-        arrayList.add(new Category(1, "https://i.pinimg.com/564x/70/6d/1e/706d1e17ddb9188407952985c83c4ab7.jpg", "shoes"));
+        arrayList.add(new Category(1, "https://i.pinimg.com/564x/70/6d/1e/706d1e17ddb9188407952985c83c4ab7.jpg","shoes"));
         arrayList.add(new Category(2, "https://i.pinimg.com/564x/87/e7/b1/87e7b1ecc2ef1580841e7a0d23ed49a0.jpg", "shoes2"));
         adapter = new CategoryHomeAdapter(getActivity(), arrayList);
-        binding.recycleCategoryHome.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        binding.recycleCategoryHome.setLayoutManager(new GridLayoutManager(getActivity(),2));
         binding.recycleCategoryHome.setAdapter(adapter);
     }
-
-    private void openSearch(int gravity) {
+    private void openSearch(int gravity){
         binding.searchHome.setOnClickListener(v -> {
             Dialog dialogSearch = new Dialog(getActivity());
             dialogSearch.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialogSearch.setContentView(R.layout.dialog_search);
             Window window = dialogSearch.getWindow();
-            if (window == null)
+            if(window == null)
                 return;
             WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
             layoutParams.copyFrom(window.getAttributes());
@@ -178,8 +166,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
             });
             RecyclerView recyclerView = dialogSearch.findViewById(R.id.recycle_search_home);
             LinearLayout layout = dialogSearch.findViewById(R.id.view_not_found);
-            productAdapter = new ProductHomeAdapter(getActivity(), listProduct);
-            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+            productAdapter = new ProductHomeAdapter(getActivity(), listProduct, HomeFragment.this);
+            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
             recyclerView.setAdapter(productAdapter);
             dialogSearch.show();
             EditText editText = dialogSearch.findViewById(R.id.edit_search_home);
@@ -195,7 +183,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
                     String queryWithoutAccents = SearchUltils.removeAccents(str); // Loại bỏ dấu từ chuỗi tìm kiếm
 
                     ArrayList<Product> list = new ArrayList<>();
-                    for (Product product : listProduct) {
+                    for (Product product : listProduct){
                         String productName = product.getName().toLowerCase();
                         String productNameWithoutAccents = SearchUltils.removeAccents(productName);
                         if (productNameWithoutAccents.contains(queryWithoutAccents)) {
@@ -209,7 +197,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
                             layout.setVisibility(View.GONE);
                             searchAdapter = new SearchAdapter(getActivity(), list);
                             recyclerView.setAdapter(searchAdapter);
-                            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
                         }
 
                     }
@@ -225,7 +213,6 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
         });
 
     }
-
     @NonNull
     @Override
     public CreationExtras getDefaultViewModelCreationExtras() {
@@ -253,7 +240,6 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
             handler.removeCallbacks(runnable);
         }
     }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -266,24 +252,9 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
         stopAutoViewPager();
     }
 
-    private void getAvatar() {
-        String avatarUrl = "http://10.64.5.110:3000/api/user/avatar/image/%s"; // thay IPv4 của máy tính chạy server vào đây để test
-        User user = UserPrefManager.getInstance(getActivity()).getUser();
-        String userId = user.get_id();
-        String apiUrl = String.format(avatarUrl, userId);
-        if (apiUrl != null && !apiUrl.isEmpty()) {
-            Glide.with(getActivity())
-                    .load(apiUrl)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(binding.avatarHome);
-        } else {
-            Glide.with(getActivity())
-                    .load(apiUrl)
-                    .placeholder(R.drawable.ic_avatar)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(binding.avatarHome);
-        }
+    @Override
+    public void onClick(Product product) {
+        DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
+        openScreen(detailProductFragment, true);
     }
 }
