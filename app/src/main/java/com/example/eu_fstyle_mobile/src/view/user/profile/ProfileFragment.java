@@ -8,12 +8,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.Gravity;
@@ -36,7 +36,7 @@ import com.example.eu_fstyle_mobile.databinding.ChooseAvatarBottomsheetBinding;
 import com.example.eu_fstyle_mobile.databinding.FragmentProfileBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.User;
-import com.example.eu_fstyle_mobile.src.request.RequestCreateUser;
+import com.example.eu_fstyle_mobile.src.model.UserRespone;
 import com.example.eu_fstyle_mobile.src.request.RequestUpdateUser;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
@@ -60,6 +60,8 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
     private String base64Image;
     private User currentUser;
 
+    private User user;
+
     @Override
     protected FragmentProfileBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
         return FragmentProfileBinding.inflate(inflater, container, false);
@@ -74,9 +76,23 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        showShimmerLoading();
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         observeViewModel();
         initView();
+        getAvatar();
+    }
+
+    public void showShimmerLoading() {
+        binding.shimmerViewContainer.setVisibility(View.VISIBLE);
+        binding.rltProfile.setVisibility(View.GONE);
+        binding.shimmerViewContainer.startShimmer();
+        Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            binding.shimmerViewContainer.stopShimmer();
+            binding.shimmerViewContainer.setVisibility(View.GONE);
+            binding.rltProfile.setVisibility(View.VISIBLE);
+        }, 3000);
     }
 
     private void observeViewModel() {
@@ -96,7 +112,7 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
             }
         });
 
-        User user = UserPrefManager.getInstance(getActivity()).getUser();
+        user = UserPrefManager.getInstance(getActivity()).getUser();
         profileViewModel.fetchUserData(user.get_id());
     }
 
@@ -189,6 +205,7 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogBottomSheetAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
+
     private void onClickRequestPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (requireActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -222,19 +239,8 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
                     @Override
                     public void onResponse(Call<User> call, retrofit2.Response<User> response) {
                         if (response.isSuccessful()) {
+                            getAvatar();
                             Toast.makeText(getActivity(), "Cập nhật ảnh đại diện thành công", Toast.LENGTH_SHORT).show();
-                            User updatedUser = response.body();
-//                            Picasso.get().load(updatedUser.getAvatar()).into(binding.icAvatar);
-//                            RequestOptions requestOptions = new RequestOptions()
-//                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-//                                    .placeholder(R.drawable.ic_avatar);
-//                            Bitmap avatarBitmap = convertBase64ToBitmap(updatedUser.getAvatar());
-//                            Glide.with(requireContext()).
-//                                    asBitmap().
-//                                    load(avatarBitmap).
-//                                    apply(requestOptions).
-//                                    into(binding.icAvatar);
-
                         } else {
                             Toast.makeText(getActivity(), "Cập nhật ảnh đại diện thất bại", Toast.LENGTH_SHORT).show();
                         }
@@ -258,8 +264,24 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 
-    public Bitmap convertBase64ToBitmap(String base64String) {
-        byte[] decodedString = Base64.decode(base64String, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+    private void getAvatar() {
+        String avatarUrl = "http://10.64.5.110:3000/api/user/avatar/image/%s";
+        user = UserPrefManager.getInstance(getActivity()).getUser();
+        String userId = user.get_id();
+        String apiUrl = String.format(avatarUrl, userId);
+        if (apiUrl != null && !apiUrl.isEmpty()) {
+            Glide.with(getActivity())
+                    .load(apiUrl)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(binding.icAvatar);
+        } else {
+            Glide.with(getActivity())
+                    .load(apiUrl)
+                    .placeholder(R.drawable.ic_avatar)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(binding.icAvatar);
+        }
     }
 }

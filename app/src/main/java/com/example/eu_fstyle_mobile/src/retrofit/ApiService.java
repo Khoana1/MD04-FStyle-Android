@@ -5,6 +5,7 @@ import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.Address;
 import com.example.eu_fstyle_mobile.src.model.AddressRespone;
 import com.example.eu_fstyle_mobile.src.model.User;
+import com.example.eu_fstyle_mobile.src.model.UserRespone;
 import com.example.eu_fstyle_mobile.src.request.RequestAddAddress;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateUser;
 import com.example.eu_fstyle_mobile.src.request.RequestLoginUser;
@@ -32,9 +33,6 @@ public interface ApiService {
 
     @PUT(ApiEndpoint.updateUser)
     Call<User> updateUser(@Path("id") String id, @Body RequestUpdateUser requestUpdateUser);
-
-    @GET(ApiEndpoint.getAvatar)
-    Call<User> getAvatar(@Path("id") String id);
 
     @POST(ApiEndpoint.addAddress)
     Call<Address> addAddress(@Body RequestAddAddress requestAddAddress, @Path("id") String id);

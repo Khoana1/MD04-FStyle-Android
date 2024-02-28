@@ -29,6 +29,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.DialogSearchBinding;
 import com.example.eu_fstyle_mobile.databinding.FragmentHomeBinding;
@@ -82,7 +84,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
         binding.avatarHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openScreen(new ProfileFragment(), true); // Thay bằng home fragment sau khi làm xong
+                openScreen(new ProfileFragment(), true);
             }
         });
         initView();
@@ -111,6 +113,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
         binding.circleIndicatorHome.setViewPager(binding.viewpagerHome);
 
     private void initView() {
+        getAvatar();
         User user = UserPrefManager.getInstance(getActivity()).getUser();
         String lastName = getLastName(user.getName());
         binding.textviewNameUser.setText(lastName);
@@ -222,6 +225,26 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> {
                 @Override
                 public void afterTextChanged(Editable s) {
 
+    private void getAvatar() {
+        String avatarUrl = "http://10.64.5.110:3000/api/user/avatar/image/%s";
+        User user = UserPrefManager.getInstance(getActivity()).getUser();
+        String userId = user.get_id();
+        String apiUrl = String.format(avatarUrl, userId);
+        if (apiUrl != null && !apiUrl.isEmpty()) {
+            Glide.with(getActivity())
+                    .load(apiUrl)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(binding.avatarHome);
+        } else {
+            Glide.with(getActivity())
+                    .load(apiUrl)
+                    .placeholder(R.drawable.ic_avatar)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(binding.avatarHome);
+        }
+    }
 
                 }
             });
