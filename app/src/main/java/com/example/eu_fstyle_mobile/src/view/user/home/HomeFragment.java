@@ -39,6 +39,8 @@ import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
 import com.example.eu_fstyle_mobile.src.view.user.profile.ProfileFragment;
 import com.example.eu_fstyle_mobile.ultilties.SearchUltils;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
+import com.example.eu_fstyle_mobile.src.model.User;
+import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 
 import java.util.ArrayList;
 
