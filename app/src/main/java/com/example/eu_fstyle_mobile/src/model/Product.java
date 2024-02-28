@@ -2,7 +2,9 @@ package com.example.eu_fstyle_mobile.src.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Product {
+import java.io.Serializable;
+
+public class Product implements Serializable {
     @SerializedName("name")
     private String name;
     @SerializedName("image64")

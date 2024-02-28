@@ -23,11 +23,9 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
     private Context context;
     private ArrayList<Product> arrayList;
     private onClickItem onClickItem;
-    public ProductHomeAdapter(Context context, ArrayList<Product> arrayList) {
+    public ProductHomeAdapter(Context context, ArrayList<Product> arrayList,onClickItem onClickItem) {
         this.context = context;
         this.arrayList = arrayList;
-    }
-    public void setOnClickItem(onClickItem onClickItem){
         this.onClickItem = onClickItem;
     }
     @NonNull
