@@ -20,11 +20,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/avatar_home"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/avatar_home"
+            tools:src="@drawable/avatar_home"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.015"
             app:layout_constraintStart_toStartOf="parent"
