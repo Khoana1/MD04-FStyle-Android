@@ -23,8 +23,6 @@ public class EditAddressFragment extends BaseFragment<FragmentEditAddressBinding
     private String city;
     private String phoneNumber;
 
-    private Serializable address;
-
     public static EditAddressFragment newInstance(Address address) {
         EditAddressFragment fragment = new EditAddressFragment();
         Bundle args = new Bundle();
@@ -42,7 +40,6 @@ public class EditAddressFragment extends BaseFragment<FragmentEditAddressBinding
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        address = getArguments().getSerializable(ADDRESS);
         intiView();
         fillData();
     }
