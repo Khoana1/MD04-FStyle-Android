@@ -7,8 +7,6 @@
     android:background="@color/colorAccount"
     android:orientation="vertical"
     tools:context=".src.view.user.profile.ProfileFragment">
-
-
     <RelativeLayout
         android:id="@+id/rlt_profile"
         android:layout_width="match_parent"
@@ -84,6 +82,59 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="15sp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/round_back_white"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/rlt_finger_print"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_alignParentStart="true"
+                        android:padding="13dp">
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:padding="12dp"
+                            android:src="@drawable/ic_finger_profile" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_medium"
+                            android:layout_gravity="center_vertical"
+                            android:text="Đăng nhập bằng vân tay"
+                            android:layout_marginRight="20dp"
+                            android:textStyle="bold"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+                    <Switch
+                        android:id="@+id/sw_finger_print"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="25dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="16dp"
+                        android:thumb="@drawable/thumb_switch"
+                        app:track="@drawable/track_switch"
+                        />
+                </RelativeLayout>
+
+            </LinearLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -132,11 +183,11 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
                             android:text="@string/tv_view_order"
-                            android:textSize="14sp" />
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -170,11 +221,11 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
                             android:text="@string/tv_view_favourite"
-                            android:textSize="14sp" />
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -209,11 +260,11 @@
 
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
                             android:text="@string/tv_view_address"
-                            android:textSize="14sp" />
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -268,11 +319,11 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_medium"
                             android:text="Xem cách liên hệ với cửa hàng"
-                            android:textSize="14sp" />
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
 

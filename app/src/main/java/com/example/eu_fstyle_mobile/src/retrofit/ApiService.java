@@ -1,18 +1,14 @@
 package com.example.eu_fstyle_mobile.src.retrofit;
 
-import com.example.eu_fstyle_mobile.src.model.ListProduct;
-import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.Address;
 import com.example.eu_fstyle_mobile.src.model.AddressRespone;
+import com.example.eu_fstyle_mobile.src.model.ListProduct;
 import com.example.eu_fstyle_mobile.src.model.User;
-import com.example.eu_fstyle_mobile.src.model.UserRespone;
 import com.example.eu_fstyle_mobile.src.request.RequestAddAddress;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateUser;
 import com.example.eu_fstyle_mobile.src.request.RequestLoginUser;
 import com.example.eu_fstyle_mobile.src.request.RequestUpdateUser;
 import com.example.eu_fstyle_mobile.ultilties.ApiEndpoint;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

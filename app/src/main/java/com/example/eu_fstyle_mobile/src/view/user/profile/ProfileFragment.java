@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,24 +31,21 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.ChooseAvatarBottomsheetBinding;
 import com.example.eu_fstyle_mobile.databinding.FragmentProfileBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.User;
-import com.example.eu_fstyle_mobile.src.model.UserRespone;
 import com.example.eu_fstyle_mobile.src.request.RequestUpdateUser;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
 import com.example.eu_fstyle_mobile.src.view.user.ContactFragment;
-import com.example.eu_fstyle_mobile.src.view.user.EditInfoFragment;
 import com.example.eu_fstyle_mobile.src.view.user.MyFavouriteFragment;
 import com.example.eu_fstyle_mobile.src.view.user.MyOrderFragment;
+import com.example.eu_fstyle_mobile.src.view.user.address.EditAddressFragment;
 import com.example.eu_fstyle_mobile.src.view.user.address.MyAddressFragment;
 import com.example.eu_fstyle_mobile.src.view.user.login.LoginFragment;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
-import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -79,7 +77,38 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         observeViewModel();
         initView();
+        switchFingerPrint();
         getAvatar();
+    }
+
+    private void switchFingerPrint() {
+        binding.swFingerPrint.setTrackResource(R.drawable.track_switch);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginPreferences", Context.MODE_PRIVATE);
+        boolean savedSwitchState = sharedPreferences.getBoolean("isFingerprintEnabled", false);
+
+        binding.swFingerPrint.setChecked(savedSwitchState);
+        binding.swFingerPrint.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginPreferences", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("isFingerprintEnabled", isChecked);
+                editor.apply();
+                if (isChecked) {
+                    showLoadingDialog();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getActivity(), "Bật xác thực vân tay thành công", Toast.LENGTH_SHORT).show();
+                            hideLoadingDialog();
+                        }
+                    }, 1000);
+                } else {
+                    Toast.makeText(getActivity(), "Xác thực vân tay đã bị hủy", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void observeViewModel() {
@@ -89,6 +118,7 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
                 binding.tvName.setText(user.getName());
                 binding.tvPhone.setText(user.getPhone());
                 currentUser = user;
+                openEdit();
             }
         });
 
@@ -101,9 +131,21 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
 
         user = UserPrefManager.getInstance(getActivity()).getUser();
         profileViewModel.fetchUserData(user.get_id());
+
+    }
+
+    private void openEdit() {
+        binding.tvEditInfo.setOnClickListener(new View.OnClickListener() {
+            EditInfoFragment editInfoFragment = EditInfoFragment.newInstance(currentUser);
+            @Override
+            public void onClick(View v) {
+                openScreen(editInfoFragment, true);
+            }
+        });
     }
 
     private void initView() {
+        setSwitchState();
         binding.icBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,12 +156,6 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
             @Override
             public void onClick(View v) {
                 showAvatarBottomSheet();
-            }
-        });
-        binding.tvEditInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openScreen(new EditInfoFragment(), true);
             }
         });
         binding.llYourOrder.setOnClickListener(new View.OnClickListener() {
@@ -155,6 +191,7 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
                         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginPreferences", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean("isLoggedIn", false);
+                        editor.putBoolean("isFingerprintEnabled", false);
                         editor.apply();
                         openScreen(new LoginFragment(), false);
                     }
@@ -269,6 +306,16 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(binding.icAvatar);
+        }
+    }
+
+    private void setSwitchState() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginPreferences", Context.MODE_PRIVATE);
+        boolean savedSwitchState = sharedPreferences.getBoolean("isVisibleSwitch", false);
+        if (!savedSwitchState) {
+            binding.rltFingerPrint.setVisibility(View.GONE);
+        } else {
+            binding.rltFingerPrint.setVisibility(View.VISIBLE);
         }
     }
 }

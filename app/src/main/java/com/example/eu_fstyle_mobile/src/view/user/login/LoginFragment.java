@@ -77,7 +77,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
             }
         });
         promptInfo = new BiometricPrompt.PromptInfo.Builder()
-                .setTitle("Xác thực vân tay")
+                .setTitle("FStyle Mobile")
                 .setSubtitle("Sử dụng vân tay để đăng nhập")
                 .setNegativeButtonText("Hủy")
                 .build();
@@ -91,6 +91,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginPreferences", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean("isLoggedIn", true);
+                editor.putBoolean("isVisibleSwitch", true);
                 editor.apply();
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -115,7 +116,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                         @Override
                         public void run() {
                             hideLoginLoadingAnimation();
-                            Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                            showAlertDialog(error);
                         }
                     }, 2000);
                 }
@@ -176,13 +177,19 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                 }, 2000);
             }
         });
-        binding.icFingerprint.setOnClickListener(new View.OnClickListener() {
+        binding.tvFingerLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginPreferences", Context.MODE_PRIVATE);
                 boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+                boolean isFingerprintEnabled = sharedPreferences.getBoolean("isFingerprintEnabled", false);
                 if (isLoggedIn) {
-                    biometricPrompt.authenticate(promptInfo);
+                    if (isFingerprintEnabled) {
+                        biometricPrompt.authenticate(promptInfo);
+                    } else {
+                        String title = "Vui lòng bật xác thực vân tay trong cài đặt trước khi sử dụng tính năng này";
+                        showAlertDialog(title);
+                    }
                 } else {
                     String title = "Vui lòng đăng nhập lại trước khi sử dụng xác thực vân tay";
                     showAlertDialog(title);
