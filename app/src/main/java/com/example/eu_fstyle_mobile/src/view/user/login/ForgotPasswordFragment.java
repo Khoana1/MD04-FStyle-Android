@@ -1,19 +1,37 @@
-package com.example.eu_fstyle_mobile.src.view.user;
+package com.example.eu_fstyle_mobile.src.view.user.login;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.eu_fstyle_mobile.databinding.FragmentForgotPasswordBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
+import com.example.eu_fstyle_mobile.src.model.User;
+import com.example.eu_fstyle_mobile.src.request.RequestUpdateUser;
+import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
+import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
+import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 
 import java.util.regex.Pattern;
 
+import retrofit2.Call;
+import retrofit2.Response;
+
 public class ForgotPasswordFragment extends BaseFragment<FragmentForgotPasswordBinding> {
+    private String email;
+
+    private String phone;
+
+    private String password;
+
+    private String rePassword;
+
+    private User user;
 
     @Override
     protected FragmentForgotPasswordBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
@@ -23,6 +41,7 @@ public class ForgotPasswordFragment extends BaseFragment<FragmentForgotPasswordB
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        user = UserPrefManager.getInstance(getActivity()).getUser();
         initView();
     }
 
@@ -38,6 +57,33 @@ public class ForgotPasswordFragment extends BaseFragment<FragmentForgotPasswordB
             @Override
             public void onClick(View v) {
                 validateChangePass();
+                if ((binding.emailLayout.getHelperText() == null || binding.emailLayout.getHelperText().toString().isEmpty()) &&
+                        (binding.phoneLayout.getHelperText() == null || binding.phoneLayout.getHelperText().toString().isEmpty()) &&
+                        (binding.passwordLayout.getHelperText() == null || binding.passwordLayout.getHelperText().toString().isEmpty()) &&
+                        (binding.newPassLayout.getHelperText() == null || binding.newPassLayout.getHelperText().toString().isEmpty())) {
+                    ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                    if (phone != user.getPhone()) {
+                        showAlertDialog("Vui lòng nhập đúng số điện thoại đã đăng ký cùng email để đổi mật khẩu");
+                    } else {
+                        RequestUpdateUser requestUpdateUser = new RequestUpdateUser(user.getAvatar(), user.getName(), email, password, phone);
+                        Call<User> call = apiService.updateUser(user.get_id(), requestUpdateUser);
+                        call.enqueue(new retrofit2.Callback<User>() {
+                            @Override
+                            public void onResponse(Call<User> call, Response<User> response) {
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(getActivity(), "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
+                                    openScreenHome(new LoginFragment(), false);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<User> call, Throwable t) {
+                                showAlertDialog("Có lỗi xảy ra, vui lòng thử lại sau");
+                            }
+                        });
+                    }
+
+                }
             }
         });
     }
@@ -64,7 +110,7 @@ public class ForgotPasswordFragment extends BaseFragment<FragmentForgotPasswordB
 
     private void validateEmail() {
         String helperText = "";
-        String email = binding.edtEmail.getText().toString();
+        email = binding.edtEmail.getText().toString();
 
         if (email.isEmpty()) {
             helperText = "Không được để trống Email";
@@ -77,7 +123,7 @@ public class ForgotPasswordFragment extends BaseFragment<FragmentForgotPasswordB
 
     private void validatePassword() {
         String helperText = "";
-        String password = binding.edtPass.getText().toString();
+        password = binding.edtPass.getText().toString();
         Pattern upperCasePattern = Pattern.compile(".*[A-Z].*");
         Pattern lowerCasePattern = Pattern.compile(".*[a-z].*");
         Pattern specialCharPattern = Pattern.compile(".*[@#\\$%^&+=].*");
@@ -100,7 +146,7 @@ public class ForgotPasswordFragment extends BaseFragment<FragmentForgotPasswordB
 
     private void validatePhone() {
         String helperText = "";
-        String phone = binding.edtPhone.getText().toString();
+        phone = binding.edtPhone.getText().toString();
         if (phone.isEmpty()) {
             helperText = "Không được để trống số điện thoại";
         } else if (!phone.matches(".*[0-9].*")) {
@@ -115,8 +161,8 @@ public class ForgotPasswordFragment extends BaseFragment<FragmentForgotPasswordB
 
     private void validateRePass() {
         String helperText = "";
-        String rePassword = binding.edtNewPass.getText().toString();
-        String password = binding.edtPass.getText().toString();
+        rePassword = binding.edtNewPass.getText().toString();
+        password = binding.edtPass.getText().toString();
         Pattern upperCasePattern = Pattern.compile(".*[A-Z].*");
         Pattern lowerCasePattern = Pattern.compile(".*[a-z].*");
         Pattern specialCharPattern = Pattern.compile(".*[@#\\$%^&+=].*");

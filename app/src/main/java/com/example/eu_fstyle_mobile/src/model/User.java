@@ -107,4 +107,5 @@ public class User implements Serializable {
     public void setAdmin(Boolean admin) {
         isAdmin = admin;
     }
+
 }

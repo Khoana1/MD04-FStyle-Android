@@ -7,6 +7,7 @@ import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.request.RequestAddAddress;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateUser;
 import com.example.eu_fstyle_mobile.src.request.RequestLoginUser;
+import com.example.eu_fstyle_mobile.src.request.RequestUpdateAddress;
 import com.example.eu_fstyle_mobile.src.request.RequestUpdateUser;
 import com.example.eu_fstyle_mobile.ultilties.ApiEndpoint;
 
@@ -37,7 +38,13 @@ public interface ApiService {
 //    Call<Address> updateAddress(@Path("id") String id, @Path("id_address") String id_address);
     @POST(ApiEndpoint.getAddress)
     Call<AddressRespone> getAddress(@Path("id") String id);
-  
+
+    @PUT(ApiEndpoint.updateAddress)
+    Call<Address> updateAddress(@Path("id") String id, @Path("id_address") String id_address, @Body RequestUpdateAddress requestUpdateAddress);
+
+    @PUT(ApiEndpoint.deleteAddress)
+    Call<Address> deleteAddress(@Path("id") String id, @Path("id_address") String id_address);
+
     @GET(ApiEndpoint.getAllProducts)
     Call<ListProduct> getAllProducts();
 }

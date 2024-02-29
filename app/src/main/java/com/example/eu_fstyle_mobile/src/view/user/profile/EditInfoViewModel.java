@@ -33,7 +33,7 @@ public class EditInfoViewModel extends ViewModel {
                 if (response.isSuccessful()) {
                     user.setValue(response.body());
                 } else {
-                    error.setValue("Cập nhật thất bại, vui lòng thử lại sau");
+                    error.setValue("Cập nhật thông tin thất bại, vui lòng thử lại sau");
                 }
             }
 

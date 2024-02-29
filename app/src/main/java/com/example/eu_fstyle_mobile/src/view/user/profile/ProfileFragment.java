@@ -1,5 +1,7 @@
 package com.example.eu_fstyle_mobile.src.view.user.profile;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
@@ -26,6 +28,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -57,8 +61,10 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
     private static final int MY_REQUEST_CODE = 1;
     private String base64Image;
     private User currentUser;
-
     private User user;
+
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_CAMERA_PERMISSION = 200;
 
     @Override
     protected FragmentProfileBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
@@ -79,6 +85,31 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
         initView();
         switchFingerPrint();
         getAvatar();
+    }
+
+    private void showTakePictureIntent() {
+        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+        } else {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CAMERA_PERMISSION: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    showTakePictureIntent();
+                } else {
+                    Toast.makeText(getActivity(), "Camera permission is needed to use this feature", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            }
+        }
     }
 
     private void switchFingerPrint() {
@@ -137,6 +168,7 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
     private void openEdit() {
         binding.tvEditInfo.setOnClickListener(new View.OnClickListener() {
             EditInfoFragment editInfoFragment = EditInfoFragment.newInstance(currentUser);
+
             @Override
             public void onClick(View v) {
                 openScreen(editInfoFragment, true);
@@ -214,7 +246,7 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
         binding.lnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(requireContext(), "Camera", Toast.LENGTH_SHORT).show();
+                showTakePictureIntent();
             }
         });
         binding.lnTakePhoto.setOnClickListener(new View.OnClickListener() {
@@ -251,33 +283,65 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == MY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == MY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             Uri selectedImage = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), selectedImage);
-                base64Image = convertBitmapToBase64(bitmap);
-                ApiService apiService = ApiClient.getClient().create(ApiService.class);
-                RequestUpdateUser requestUpdateUser = new RequestUpdateUser(base64Image, currentUser.getName(), currentUser.getEmail(), currentUser.getPassword(), currentUser.getPhone());
-                Call<User> call = apiService.updateUser(currentUser.get_id(), requestUpdateUser);
-                call.enqueue(new retrofit2.Callback<User>() {
-                    @Override
-                    public void onResponse(Call<User> call, retrofit2.Response<User> response) {
-                        if (response.isSuccessful()) {
-                            getAvatar();
-                            Toast.makeText(getActivity(), "Cập nhật ảnh đại diện thành công", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getActivity(), "Cập nhật ảnh đại diện thất bại", Toast.LENGTH_SHORT).show();
+            if (selectedImage != null) {
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), selectedImage);
+                    base64Image = convertBitmapToBase64(bitmap);
+                    ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                    RequestUpdateUser requestUpdateUser = new RequestUpdateUser(base64Image, currentUser.getName(), currentUser.getEmail(), currentUser.getPassword(), currentUser.getPhone());
+                    Call<User> call = apiService.updateUser(currentUser.get_id(), requestUpdateUser);
+                    call.enqueue(new retrofit2.Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, retrofit2.Response<User> response) {
+                            if (response.isSuccessful()) {
+                                getAvatar();
+                                Toast.makeText(getActivity(), "Cập nhật ảnh đại diện thành công", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getActivity(), "Cập nhật ảnh đại diện thất bại", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<User> call, Throwable t) {
-                        Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+                            Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+
+        }
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data != null ? data.getExtras() : null;
+            if (extras != null) {
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                if (imageBitmap != null) {
+                    base64Image = convertBitmapToBase64(imageBitmap);
+                    ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                    RequestUpdateUser requestUpdateUser = new RequestUpdateUser(base64Image, currentUser.getName(), currentUser.getEmail(), currentUser.getPassword(), currentUser.getPhone());
+                    Call<User> call = apiService.updateUser(currentUser.get_id(), requestUpdateUser);
+                    call.enqueue(new retrofit2.Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, retrofit2.Response<User> response) {
+                            if (response.isSuccessful()) {
+                                getAvatar();
+                                Toast.makeText(getActivity(), "Cập nhật ảnh đại diện thành công", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getActivity(), "Cập nhật ảnh đại diện thất bại", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+                            Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+
         }
     }
 
@@ -318,4 +382,5 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
             binding.rltFingerPrint.setVisibility(View.VISIBLE);
         }
     }
+
 }

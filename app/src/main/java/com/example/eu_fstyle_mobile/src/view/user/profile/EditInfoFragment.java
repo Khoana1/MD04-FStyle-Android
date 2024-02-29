@@ -116,7 +116,7 @@ public class EditInfoFragment extends BaseFragment<FragmentEditInfoBinding> {
                                 editor.putBoolean("isVisibleSwitch", false);
                                 editor.apply();
                                 openScreen(new ProfileFragment(), false);
-                                showSuccessDialog("Cập nhật thông tin thành công, Vân tay bị vô hiệu hóa sau khi đổi thông tin. Vui lòng đăng nhập lại để sử dụng");
+                                showSuccessDialog("Cập nhật thông tin thành công, Vân tay bị vô hiệu hóa tạm thời sau khi đổi thông tin. Vui lòng đăng nhập lại để sử dụng");
                             }
                         }, 2000);
                     }
