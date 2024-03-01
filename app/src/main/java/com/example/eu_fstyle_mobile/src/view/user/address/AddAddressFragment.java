@@ -89,6 +89,14 @@ public class AddAddressFragment extends BaseFragment<FragmentAddAddressBinding> 
                 }
             }
         });
+        binding.parentLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, android.view.MotionEvent event) {
+                hideKeyboard();
+                clearFocusEditText();
+                return false;
+            }
+        });
     }
 
     private void setStatusHelperText() {
@@ -152,5 +160,14 @@ public class AddAddressFragment extends BaseFragment<FragmentAddAddressBinding> 
     @Override
     protected FragmentAddAddressBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
         return FragmentAddAddressBinding.inflate(inflater, container, false);
+    }
+
+    private void clearFocusEditText() {
+        binding.edtConsineeName.clearFocus();
+        binding.edtHomeNumber.clearFocus();
+        binding.edtStreet.clearFocus();
+        binding.edtDistrict.clearFocus();
+        binding.edtCity.clearFocus();
+        binding.edtPhone.clearFocus();
     }
 }

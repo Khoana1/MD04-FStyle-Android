@@ -27,9 +27,9 @@ public class LoginViewModel extends ViewModel {
         return errorMessage;
     }
 
-    public void loginUser(String email, String password) {
+    public void loginUser(String email, String password, String token) {
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        RequestLoginUser requestLoginUser = new RequestLoginUser(email, password);
+        RequestLoginUser requestLoginUser = new RequestLoginUser(email, password, token);
         Call<User> call = apiService.signin(requestLoginUser);
         call.enqueue(new Callback<User>() {
             @Override

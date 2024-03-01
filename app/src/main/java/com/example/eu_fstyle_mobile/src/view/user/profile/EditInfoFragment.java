@@ -79,9 +79,10 @@ public class EditInfoFragment extends BaseFragment<FragmentEditInfoBinding> {
     private void initView() {
         setStatusHelperText();
         if (currentUser != null) {
+            binding.edtEmail.setText(currentUser.getEmail());
             binding.edtName.setText(currentUser.getName());
             binding.edtPhoneNumber.setText(currentUser.getPhone());
-        }
+        };
     }
 
     private void initListener() {
@@ -122,6 +123,14 @@ public class EditInfoFragment extends BaseFragment<FragmentEditInfoBinding> {
                     }
 
                 }
+            }
+        });
+        binding.parentLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, android.view.MotionEvent event) {
+                hideKeyboard();
+                clearFocusEditText();
+                return false;
             }
         });
     }
@@ -233,6 +242,14 @@ public class EditInfoFragment extends BaseFragment<FragmentEditInfoBinding> {
         }
 
         binding.renewPassContainer.setHelperText(helperText);
+    }
+
+    private void clearFocusEditText() {
+        binding.edtName.clearFocus();
+        binding.edtPhoneNumber.clearFocus();
+        binding.edtOldPass.clearFocus();
+        binding.edtNewPass.clearFocus();
+        binding.edtReNewPass.clearFocus();
     }
 
 }

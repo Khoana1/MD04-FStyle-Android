@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import com.example.eu_fstyle_mobile.src.view.admin.HomeAdminFragment;
 import com.example.eu_fstyle_mobile.src.view.user.home.HomeFragment;
 import com.example.eu_fstyle_mobile.src.view.user.register.RegisterFragment;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.concurrent.Executor;
 import java.util.regex.Pattern;
@@ -40,6 +42,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
     private Executor executor;
     private BiometricPrompt biometricPrompt;
     private BiometricPrompt.PromptInfo promptInfo;
+    private String tokenDevice;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,6 +54,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getTokenDevice();
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         observeViewModel();
         initView();
@@ -65,7 +69,8 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
                 showLoginLoadingAnimation();
-                loginViewModel.loginUser(UserPrefManager.getInstance(getActivity()).getUser().getEmail(), UserPrefManager.getInstance(getActivity()).getUser().getPassword());
+                loginViewModel.loginUser(UserPrefManager.getInstance(getActivity()).getUser().getEmail(), UserPrefManager.getInstance(getActivity()).getUser().getPassword(), tokenDevice
+                );
             }
 
             @Override
@@ -79,6 +84,18 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                 .setSubtitle("Sử dụng vân tay để đăng nhập")
                 .setNegativeButtonText("Hủy")
                 .build();
+    }
+
+    private void getTokenDevice() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("Login", "Quá trình lấy mã đăng ký FCM thất bại", task.getException());
+                        return;
+                    }
+                    tokenDevice = task.getResult();
+                    Log.d("Login", "FCM Token: " + tokenDevice);
+                });
     }
 
     private void observeViewModel() {
@@ -143,7 +160,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                         !binding.edtEmail.getText().toString().isEmpty() &&
                         !binding.edtPass.getText().toString().isEmpty()) {
                     showLoginLoadingAnimation();
-                    loginViewModel.loginUser(email, password);
+                    loginViewModel.loginUser(email, password, tokenDevice);
                 }
             }
         });
