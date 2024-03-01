@@ -32,6 +32,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -150,13 +151,15 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
                 binding.tvPhone.setText(user.getPhone());
                 currentUser = user;
                 openEdit();
+                hideLoadingDialog();
             }
         });
 
         profileViewModel.getErrorData().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String error) {
-                Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                showAlertDialog(error);
+                hideLoadingDialog();
             }
         });
 
@@ -228,6 +231,16 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
                         openScreen(new LoginFragment(), false);
                     }
                 });
+            }
+        });
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                binding.swipeRefreshLayout.setRefreshing(false);
+                user = UserPrefManager.getInstance(getActivity()).getUser();
+                profileViewModel.fetchUserData(user.get_id());
+                showLoadingDialog();
+                getAvatar();
             }
         });
     }
@@ -357,20 +370,12 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
         user = UserPrefManager.getInstance(getActivity()).getUser();
         String userId = user.get_id();
         String apiUrl = String.format(avatarUrl, userId);
-        if (apiUrl != null && !apiUrl.isEmpty()) {
-            Glide.with(getActivity())
-                    .load(apiUrl)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(binding.icAvatar);
-        } else {
-            Glide.with(getActivity())
-                    .load(apiUrl)
-                    .placeholder(R.drawable.avatar_home)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(binding.icAvatar);
-        }
+        Glide.with(getActivity())
+                .load(apiUrl)
+                .placeholder(R.drawable.avatar_home)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(binding.icAvatar);
     }
 
     private void setSwitchState() {

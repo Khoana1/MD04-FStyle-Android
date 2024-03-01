@@ -266,19 +266,11 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         User user = UserPrefManager.getInstance(getActivity()).getUser();
         String userId = user.get_id();
         String apiUrl = String.format(avatarUrl, userId);
-        if (apiUrl != null && !apiUrl.isEmpty()) {
-            Glide.with(getActivity())
-                    .load(apiUrl)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(binding.avatarHome);
-        } else {
-            Glide.with(getActivity())
-                    .load(apiUrl)
-                    .placeholder(R.drawable.ic_avatar)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(binding.avatarHome);
-        }
+        Glide.with(getActivity())
+                .load(apiUrl)
+                .placeholder(R.drawable.avatar_home)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(binding.avatarHome);
     }
 }
