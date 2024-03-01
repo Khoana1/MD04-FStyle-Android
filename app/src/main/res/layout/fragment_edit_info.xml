@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/parent_layout"
     android:background="@color/colorWhite"
     android:orientation="vertical">
 
@@ -38,6 +39,25 @@
         android:fontFamily="@font/inter_medium"
         android:background="@drawable/bg_tv_with_border"
         />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/email_container"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="text"
+            android:lines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
     android:orientation="vertical"
+    android:id="@+id/parent_layout"
     tools:context=".src.view.user.address.AddAddressFragment">
 
     <RelativeLayout

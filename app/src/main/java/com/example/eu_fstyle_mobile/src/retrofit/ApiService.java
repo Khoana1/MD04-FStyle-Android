@@ -34,8 +34,6 @@ public interface ApiService {
     @POST(ApiEndpoint.addAddress)
     Call<Address> addAddress(@Body RequestAddAddress requestAddAddress, @Path("id") String id);
 
-    //    @PUT(ApiEndpoint.updateAddress)
-//    Call<Address> updateAddress(@Path("id") String id, @Path("id_address") String id_address);
     @POST(ApiEndpoint.getAddress)
     Call<AddressRespone> getAddress(@Path("id") String id);
 
