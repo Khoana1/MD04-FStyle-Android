@@ -22,7 +22,7 @@
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_semi_bold"
+            android:fontFamily="@font/inter_semi_bold"
             android:gravity="center"
             android:layout_centerVertical="true"
             android:layout_marginTop="5dp"
@@ -54,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:fontFamily="@font/poppins_medium"
+            android:fontFamily="@font/inter_medium"
             android:gravity="center_vertical"
             android:text="@string/tv_camera"
             android:textSize="18sp" />
@@ -78,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:fontFamily="@font/poppins_medium"
+            android:fontFamily="@font/inter_medium"
             android:gravity="center_vertical"
             android:text="@string/tv_image_from_gallery"
             android:textSize="18sp" />
