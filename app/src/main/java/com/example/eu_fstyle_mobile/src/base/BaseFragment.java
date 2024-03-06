@@ -17,6 +17,7 @@ import androidx.viewbinding.ViewBinding;
 
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.src.dialog.LoadingDialog;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
     protected T binding;
@@ -70,6 +71,59 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
         }
         transaction.commit();
     }
+
+
+    protected void openScreenAddAdmin(Fragment fragment, boolean addToBackStack) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        transaction.setCustomAnimations(
+                R.anim.slide_in,
+                R.anim.fade_out,
+                R.anim.fade_in,
+                R.anim.slide_out
+        );
+        transaction.replace(R.id.container, fragment);
+        if (addToBackStack) {
+            transaction.addToBackStack(null);
+        }
+        transaction.commit();
+        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigation);
+        bottomNavigationView.setVisibility(View.GONE);
+    }
+
+
+    protected void openScreenForAdmin(Fragment fragment, boolean addToBackStack) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        transaction.setCustomAnimations(
+                R.anim.slide_in,
+                R.anim.fade_out,
+                R.anim.fade_in,
+                R.anim.slide_out
+        );
+        transaction.replace(R.id.container, fragment);
+        if (addToBackStack) {
+            transaction.addToBackStack(null);
+        }
+        transaction.commit();
+    }
+
+    protected void openScreenAdmin(Fragment fragment, boolean addToBackStack) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        transaction.setCustomAnimations(
+                0,
+                R.anim.fade_out,
+                R.anim.fade_in,
+                R.anim.slide_out
+        );
+        transaction.replace(R.id.container, fragment);
+        if (addToBackStack) {
+            transaction.addToBackStack(null);
+        }
+        transaction.commit();
+    }
+
 
     protected void showLoadingDialog() {
         loadingDialog = new LoadingDialog(getContext());

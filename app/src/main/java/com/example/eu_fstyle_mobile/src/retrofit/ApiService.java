@@ -3,8 +3,10 @@ package com.example.eu_fstyle_mobile.src.retrofit;
 import com.example.eu_fstyle_mobile.src.model.Address;
 import com.example.eu_fstyle_mobile.src.model.AddressRespone;
 import com.example.eu_fstyle_mobile.src.model.ListProduct;
+import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.request.RequestAddAddress;
+import com.example.eu_fstyle_mobile.src.request.RequestCreateProduct;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateUser;
 import com.example.eu_fstyle_mobile.src.request.RequestLoginUser;
 import com.example.eu_fstyle_mobile.src.request.RequestUpdateAddress;
@@ -45,4 +47,7 @@ public interface ApiService {
 
     @GET(ApiEndpoint.getAllProducts)
     Call<ListProduct> getAllProducts();
+
+    @POST(ApiEndpoint.createProduct)
+    Call<Product> createProduct(@Body RequestCreateProduct requestCreateProduct, @Path("id") String id);
 }

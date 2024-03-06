@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <NumberPicker
+        android:id="@+id/number_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_date_picker"
+        android:layout_gravity="center_horizontal"
+        android:theme="@style/NumberPickerTheme"/>
+
+    <Button
+        android:id="@+id/btn_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@color/colorButtonBrown"
+        android:textColor="@color/colorBlack"
+        android:layout_gravity="center_horizontal"
+        android:text="Chọn cỡ giày" />
+
+</LinearLayout>
