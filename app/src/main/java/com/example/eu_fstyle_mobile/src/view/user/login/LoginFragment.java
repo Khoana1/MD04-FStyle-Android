@@ -2,6 +2,7 @@ package com.example.eu_fstyle_mobile.src.view.user.login;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +21,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.eu_fstyle_mobile.AdminActivity;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentLoginBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
@@ -27,6 +29,7 @@ import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.view.admin.HomeAdminFragment;
 import com.example.eu_fstyle_mobile.src.view.user.home.HomeFragment;
 import com.example.eu_fstyle_mobile.src.view.user.register.RegisterFragment;
+import com.example.eu_fstyle_mobile.ultilties.AdminPreManager;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -103,6 +106,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
             @Override
             public void onChanged(User user) {
                 UserPrefManager.getInstance(getActivity()).saveUser(user);
+                AdminPreManager.getInstance(getActivity()).saveAdminData(user);
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginPreferences", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean("isLoggedIn", true);
@@ -113,7 +117,8 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                     public void run() {
                         if (user.getAdmin().equals(true)) {
                             hideLoginLoadingAnimation();
-                            openScreenHome(new HomeAdminFragment(), false);
+                            Intent intent = new Intent(getActivity(), AdminActivity.class);
+                            startActivity(intent);
                         } else {
                             hideLoginLoadingAnimation();
                             openScreenHome(new HomeFragment(), false);

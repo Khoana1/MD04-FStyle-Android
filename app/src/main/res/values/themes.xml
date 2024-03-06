@@ -17,4 +17,13 @@
         <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
         <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
     </style>
+    
+    <style name="NumberPickerTheme" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/colorWhite</item>
+        <item name="colorControlNormal">@android:color/transparent</item>
+        <item name="android:textColorPrimary">@color/colorBlack</item>
+        <item name="android:background">@color/colorWhite</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+
 </resources>

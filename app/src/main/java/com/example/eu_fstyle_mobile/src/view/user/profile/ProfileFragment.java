@@ -3,7 +3,6 @@ package com.example.eu_fstyle_mobile.src.view.user.profile;
 import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
