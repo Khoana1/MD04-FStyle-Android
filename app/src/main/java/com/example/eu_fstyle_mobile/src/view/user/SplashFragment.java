@@ -43,18 +43,9 @@ public class SplashFragment extends BaseFragment<FragmentSplashFragmetBinding> {
         binding.imgLogo.startAnimation(animationLogo);
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             if (isNetworkConnected()) {
-                SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("loginPreferences", Context.MODE_PRIVATE);
-                boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
-                if (isLoggedIn) {
-                    showLoadingDialog();
-                    openScreenHome(new HomeFragment(), false);
-                    new Handler().postDelayed(() -> hideLoadingDialog(), 2000);
-                    Toast.makeText(requireActivity(), "Đã đăng nhập! Chào mừng trở lại", Toast.LENGTH_SHORT).show();
-                } else {
-                    openScreen(new LoginFragment(), false);
-                }
+                openScreen(new LoginFragment(), false);
             } else {
-                Toast.makeText(requireActivity(), "Không có kết nối mạng, thử lại sau!", Toast.LENGTH_SHORT).show();
+                showAlertDialog("Không có kết nối mạng, Vui lòng thử lại sau!");
             }
         }, 3000); // vào ứng dụng sau 3s
     }

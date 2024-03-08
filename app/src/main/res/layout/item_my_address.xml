@@ -18,7 +18,7 @@
             tools:text="Nguyễn Văn A"
             android:textSize="16sp"
             android:textColor="@color/color30336"
-            android:fontFamily="@font/poppins_semi_bold"
+            android:fontFamily="@font/inter_semi_bold"
             />
         <TextView
             android:id="@+id/tv_phone"
@@ -28,7 +28,7 @@
             tools:text="0987654321"
             android:textSize="14sp"
             android:textColor="@color/color808080"
-            android:fontFamily="@font/poppins_regular"
+            android:fontFamily="@font/inter_regular"
             />
         <TextView
             android:id="@+id/tv_address"
@@ -37,7 +37,7 @@
             tools:text="Tòa nhà FPT Polytechnic, đường Trịnh Văn Bô, Phương Canh, Nam Từ Liêm, Hà Nội"
             android:textSize="14sp"
             android:textColor="@color/color808080"
-            android:fontFamily="@font/poppins_regular"
+            android:fontFamily="@font/inter_regular"
             />
         <TextView
             android:id="@+id/tv_edit_item_address"
@@ -50,7 +50,7 @@
             android:paddingHorizontal="13dp"
             android:drawableLeft="@drawable/ic_edit_address"
             android:textColor="@color/color30336"
-            android:fontFamily="@font/poppins_medium"
+            android:fontFamily="@font/inter_medium"
             android:text="@string/tv_edit_item_address"
             />
     </LinearLayout>

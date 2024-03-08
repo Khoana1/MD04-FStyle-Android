@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:fontFamily="@font/poppins_semi_bold"
+            android:fontFamily="@font/inter_semi_bold"
             android:text="@string/tv_favourite"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -37,7 +37,7 @@
         android:textSize="15sp"
         android:gravity="center"
         android:padding="5dp"
-        android:fontFamily="@font/poppins_semi_bold"
+        android:fontFamily="@font/inter_semi_bold"
         android:background="@color/colorButtonBrown" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -45,6 +45,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        app:spanCount="2"
+        tools:listitem="@layout/item_favourite"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         />
 
 </LinearLayout>

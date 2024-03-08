@@ -3,10 +3,13 @@ package com.example.eu_fstyle_mobile.src.retrofit;
 import com.example.eu_fstyle_mobile.src.model.Address;
 import com.example.eu_fstyle_mobile.src.model.AddressRespone;
 import com.example.eu_fstyle_mobile.src.model.ListProduct;
+import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.request.RequestAddAddress;
+import com.example.eu_fstyle_mobile.src.request.RequestCreateProduct;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateUser;
 import com.example.eu_fstyle_mobile.src.request.RequestLoginUser;
+import com.example.eu_fstyle_mobile.src.request.RequestUpdateAddress;
 import com.example.eu_fstyle_mobile.src.request.RequestUpdateUser;
 import com.example.eu_fstyle_mobile.ultilties.ApiEndpoint;
 
@@ -30,18 +33,21 @@ public interface ApiService {
     @PUT(ApiEndpoint.updateUser)
     Call<User> updateUser(@Path("id") String id, @Body RequestUpdateUser requestUpdateUser);
 
-    @GET(ApiEndpoint.getAvatar)
-    Call<User> getAvatar(@Path("id") String id);
-
     @POST(ApiEndpoint.addAddress)
     Call<Address> addAddress(@Body RequestAddAddress requestAddAddress, @Path("id") String id);
 
-    //    @PUT(ApiEndpoint.updateAddress)
-//    Call<Address> updateAddress(@Path("id") String id, @Path("id_address") String id_address);
     @POST(ApiEndpoint.getAddress)
     Call<AddressRespone> getAddress(@Path("id") String id);
-    @GET(ApiEndpoint.updateUser)
-    Call<User> updateUser(@Path("id") int id);
+
+    @PUT(ApiEndpoint.updateAddress)
+    Call<Address> updateAddress(@Path("id") String id, @Path("id_address") String id_address, @Body RequestUpdateAddress requestUpdateAddress);
+
+    @PUT(ApiEndpoint.deleteAddress)
+    Call<Address> deleteAddress(@Path("id") String id, @Path("id_address") String id_address);
+
     @GET(ApiEndpoint.getAllProducts)
     Call<ListProduct> getAllProducts();
+
+    @POST(ApiEndpoint.createProduct)
+    Call<Product> createProduct(@Body RequestCreateProduct requestCreateProduct, @Path("id") String id);
 }

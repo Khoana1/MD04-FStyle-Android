@@ -25,6 +25,8 @@ import androidx.lifecycle.viewmodel.CreationExtras;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.BottomDialogFilterBinding;
 import com.example.eu_fstyle_mobile.databinding.FragmentHomeBinding;
@@ -82,6 +84,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         Banner();
         openSearch(Gravity.CENTER);
         openFilter();
+        getAvatar();
         getCategory();
         getProduct();
         binding.avatarHome.setOnClickListener(new View.OnClickListener() {
@@ -378,6 +381,19 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     @Override
     public CreationExtras getDefaultViewModelCreationExtras() {
         return super.getDefaultViewModelCreationExtras();
+    }
+  
+      private void getAvatar() {
+        String avatarUrl = "http://10.64.5.110:3000/api/user/avatar/image/%s"; // thay IPv4 của máy tính chạy server vào đây để test
+        User user = UserPrefManager.getInstance(getActivity()).getUser();
+        String userId = user.get_id();
+        String apiUrl = String.format(avatarUrl, userId);
+        Glide.with(getActivity())
+                .load(apiUrl)
+                .placeholder(R.drawable.avatar_home)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(binding.avatarHome);
     }
 
     private void startAutoViewPager() {

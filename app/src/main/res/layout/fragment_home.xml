@@ -12,14 +12,14 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="#C67C4E"
+            android:layout_height="230dp"
+            android:background="@drawable/gradient_bg"
             android:padding="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/avatar_home"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
@@ -63,6 +63,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="3dp"
                 android:text="Xem sản phẩm "
+                android:drawableRight="@drawable/ic_arrow_down"
                 android:textColor="@color/colorWhite"
                 android:textSize="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
