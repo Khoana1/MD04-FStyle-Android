@@ -10,33 +10,39 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Base64;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.NumberPicker;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import android.util.Base64;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.NumberPicker;
-import android.widget.Toast;
-
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentAddProductBinding;
+import com.example.eu_fstyle_mobile.src.adapter.CategorySpinnerAdapter;
 import com.example.eu_fstyle_mobile.src.adapter.ImageAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
+import com.example.eu_fstyle_mobile.src.model.Category;
+import com.example.eu_fstyle_mobile.src.model.DataCategory;
 import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.User;
+import com.example.eu_fstyle_mobile.src.view.custom.CustomSpinner;
+import com.example.eu_fstyle_mobile.src.view.custom.NumberTextWatcherForThousand;
 import com.example.eu_fstyle_mobile.ultilties.AdminPreManager;
-import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.ByteArrayOutputStream;
@@ -45,7 +51,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 
-public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> {
+public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> implements CustomSpinner.OnSpinnerEventsListener {
     ArrayList<Uri> uriArrayList = new ArrayList<>();
     ImageAdapter imageAdapter;
     private static final int READ_PERMISSION = 101;
@@ -57,6 +63,8 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
     private String productQuantity;
     private String productType;
     private String productDescription;
+
+    private CategorySpinnerAdapter adapter;
 
     private AddProductViewModel addProductViewModel;
 
@@ -71,9 +79,16 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), onBackPressedCallback);
+        spinnerCategory();
         initView();
         addProductViewModel = new ViewModelProvider(this).get(AddProductViewModel.class);
         observeViewModel();
+    }
+
+    private void spinnerCategory() {
+        binding.spinnerType.setSpinnerEventsListener(this);
+        adapter = new CategorySpinnerAdapter(requireContext(), DataCategory.getDataCategory());
+        binding.spinnerType.setAdapter(adapter);
     }
 
     private void observeViewModel() {
@@ -86,7 +101,6 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
                 binding.edtSize.setText("");
                 binding.edtColor.setText("");
                 binding.edtQuantity.setText("");
-                binding.edtType.setText("");
                 binding.edtDes.setText("");
                 uriArrayList.clear();
                 imageAdapter.notifyDataSetChanged();
@@ -111,10 +125,22 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
                 requireActivity().onBackPressed();
             }
         });
+        binding.edtPrice.addTextChangedListener(new NumberTextWatcherForThousand(binding.edtPrice));
         binding.edtSize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showNumberPicker();
+            }
+        });
+        binding.spinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Category selectedCategory = (Category) parent.getItemAtPosition(position);
+                productType = selectedCategory.getName();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
         imageAdapter = new ImageAdapter(uriArrayList);
@@ -147,11 +173,13 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
                 validateAddProduct();
                 if (binding.productNameContainer.getHelperText() == null && binding.brandContainer.getHelperText() == null &&
                         binding.priceContainer.getHelperText() == null && binding.colorContainer.getHelperText() == null &&
-                        binding.quantityContainer.getHelperText() == null && binding.typeContainer.getHelperText() == null &&
                         binding.desContainer.getHelperText() == null && uriArrayList.size() >= 2) {
+                    productType = ((Category) binding.spinnerType.getSelectedItem()).getName();
+
                     base64Images = convertImagesToBase64(uriArrayList);
+                    int productPriceNumber = Integer.parseInt(binding.edtPrice.getText().toString().replace(",", ""));
                     User user = AdminPreManager.getInstance(getActivity()).getAdminData();
-                    addProductViewModel.createProduct(user.get_id(), productName, base64Images.toArray(new String[0]), productBrand, Double.parseDouble(productPrice), Double.parseDouble(binding.edtSize.getText().toString()), productColor, productQuantity, productType, productDescription);
+                    addProductViewModel.createProduct(user.get_id(), productName, base64Images.toArray(new String[0]), productBrand, productPriceNumber, Double.parseDouble(binding.edtSize.getText().toString()), productColor, productQuantity, productType , productDescription);
                 }
             }
         });
@@ -164,7 +192,6 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
         productPrice = binding.edtPrice.getText().toString();
         productColor = binding.edtColor.getText().toString();
         productQuantity = binding.edtQuantity.getText().toString();
-        productType = binding.edtType.getText().toString();
         productDescription = binding.edtDes.getText().toString();
         if (productName.isEmpty()) {
             helperText = "Không được để trốn tên giày";
@@ -196,12 +223,6 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
         } else {
             binding.quantityContainer.setHelperText("");
         }
-        if (productType.isEmpty()) {
-            helperText = "Không để trống loại giày";
-            binding.typeContainer.setHelperText(helperText);
-        } else {
-            binding.typeContainer.setHelperText("");
-        }
         if (productDescription.isEmpty()) {
             helperText = "Không để trống mô tả";
             binding.desContainer.setHelperText(helperText);
@@ -225,7 +246,6 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
         binding.priceContainer.setHelperText("");
         binding.colorContainer.setHelperText("");
         binding.quantityContainer.setHelperText("");
-        binding.typeContainer.setHelperText("");
         binding.desContainer.setHelperText("");
     }
 
@@ -304,5 +324,15 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
             }
         }
         return base64Images;
+    }
+
+    @Override
+    public void onPopupWindowOpened(Spinner spinner) {
+        binding.spinnerType.setBackground(getResources().getDrawable(R.drawable.bg_spinner_down));
+    }
+
+    @Override
+    public void onPopupWindowClosed(Spinner spinner) {
+        binding.spinnerType.setBackground(getResources().getDrawable(R.drawable.bg_spinner_up));
     }
 }

@@ -5,6 +5,9 @@ public class Category {
     private String image;
     private String name;
 
+    public Category() {
+    }
+
     public Category(int id, String image, String name) {
         this.id = id;
         this.image = image;
