@@ -110,7 +110,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Giá sản phẩm (VND)"
-                        android:inputType="text"
+                        android:inputType="number"
                         android:lines="1" />
 
 
@@ -168,6 +168,7 @@
                 android:layout_height="wrap_content"
                 app:helperText="Không được để trống"
                 android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
                 app:helperTextTextColor="#FF0000"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -183,29 +184,36 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/typeContainer"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            <LinearLayout
+                android:id="@+id/llType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="20dp"
-                app:helperText="Không được để trống"
-                app:helperTextTextColor="#FF0000"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/quantityContainer">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtType"
+                app:layout_constraintTop_toBottomOf="@id/quantityContainer"
+                >
+                <TextView
+                    android:id="@+id/tvType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Loại sản phẩm"
+                    android:layout_marginBottom="3dp"
+                    android:textColor="#222222"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/inter_semi_bold" />
+                <com.example.eu_fstyle_mobile.src.view.custom.CustomSpinner
+                    android:id="@+id/spinnerType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Loại giày"
-                    android:inputType="text"
-                    android:lines="1" />
+                    android:popupBackground="@color/colorWhite"
+                    android:background="@drawable/bg_spinner_down"
+                />
+            </LinearLayout>
+            
 
-
-            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/desContainer"
@@ -218,7 +226,7 @@
                 app:helperTextTextColor="#FF0000"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/typeContainer">
+                app:layout_constraintTop_toBottomOf="@id/llType">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edtDes"
@@ -288,6 +296,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_height="wrap_content"
                     android:scrollbarStyle="outsideInset"
                     android:scrollbars="vertical" />

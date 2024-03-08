@@ -1,6 +1,7 @@
 package com.example.eu_fstyle_mobile.src.view.admin;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.example.eu_fstyle_mobile.src.adapter.HomeAdminAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.ListProduct;
 import com.example.eu_fstyle_mobile.src.model.Product;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
@@ -32,10 +34,26 @@ public class HomeAdminFragment extends BaseFragment<FragmentHomeAdminBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        showShimmerEffect();
         initListener();
         homeAdminViewModel = new ViewModelProvider(this).get(HomeAdminViewModel.class);
         homeAdminViewModel.getAllProduct();
         observeViewModel();
+    }
+
+    private void showShimmerEffect() {
+        binding.shimmerView.setVisibility(View.VISIBLE);
+        binding.dataProduct.setVisibility(View.INVISIBLE);
+        binding.shimmerView.startShimmer();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                binding.shimmerView.stopShimmer();
+                binding.shimmerView.setVisibility(View.GONE);
+                binding.dataProduct.setVisibility(View.VISIBLE);
+            }
+        }, 2000);
     }
 
     private void observeViewModel() {

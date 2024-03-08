@@ -4,6 +4,7 @@
         <!-- Customize your light theme here. -->
          <item name="colorPrimary">#E7C989</item>
         <item name="android:windowAnimationStyle">@style/DialogAnimation</item> <!--custom animation style-->
+<!--        <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>--> <!--Hide the status bar-->
     </style>
 
     <style name="Theme.EU_FStyle_Mobile" parent="Base.Theme.EU_FStyle_Mobile" />
