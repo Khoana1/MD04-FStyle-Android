@@ -1,4 +1,3 @@
-
 package com.example.eu_fstyle_mobile.src.view.user.home;
 
 import android.app.Dialog;
@@ -15,9 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.viewmodel.CreationExtras;
@@ -27,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.eu_fstyle_mobile.R;
+import com.example.eu_fstyle_mobile.databinding.BottomDialogFilterBinding;
 import com.example.eu_fstyle_mobile.databinding.FragmentHomeBinding;
 import com.example.eu_fstyle_mobile.src.adapter.BannerAdapter;
 import com.example.eu_fstyle_mobile.src.adapter.CategoryHomeAdapter;
@@ -44,8 +46,11 @@ import com.example.eu_fstyle_mobile.ultilties.SearchUltils;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,6 +61,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     FragmentHomeBinding binding;
     ArrayList<Category> arrayList;
     ArrayList<Product> listProduct;
+    ArrayList<Product> listFilter;
     ProductHomeAdapter productAdapter;
     CategoryHomeAdapter adapter;
     String[] listBanner;
@@ -65,6 +71,11 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     private final long PERIOD_MS = 5000;
     private Handler handler;
     private Runnable runnable;
+    String textButton="";
+    boolean isThapToiCaoSelected= false;
+    boolean isCaoToiThapSelected= false;
+    boolean isDuo1trieuSelected = false;
+    boolean isDuo2trieuSelected =false;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -72,18 +83,21 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         Banner();
         openSearch(Gravity.CENTER);
+        openFilter();
         getAvatar();
         getCategory();
         getProduct();
         binding.avatarHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openScreenHome(new ProfileFragment(), true); // Thay bằng home fragment sau khi làm xong
+                openScreen(new ProfileFragment(), true); // Thay bằng home fragment sau khi làm xong
             }
         });
         initView();
         return binding.getRoot();
     }
+
+
 
     private void initView() {
         User user = UserPrefManager.getInstance(getActivity()).getUser();
@@ -123,6 +137,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
             public void onResponse(Call<ListProduct> call, Response<ListProduct> response) {
                 if(response.isSuccessful()&& response.body()!= null){
                     listProduct = response.body().getArrayList();
+                    Log.d("Huy", "onResponse: "+listProduct.get(0).getName());
                     productAdapter = new ProductHomeAdapter(getActivity(), listProduct,HomeFragment.this);
                     binding.recycleProductHame.setLayoutManager(new GridLayoutManager(getActivity(),2));
                     binding.recycleProductHame.setAdapter(productAdapter);
@@ -144,6 +159,152 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         adapter = new CategoryHomeAdapter(getActivity(), arrayList);
         binding.recycleCategoryHome.setLayoutManager(new GridLayoutManager(getActivity(),2));
         binding.recycleCategoryHome.setAdapter(adapter);
+    }
+    private void openFilter() {
+        listFilter = new ArrayList<>();
+        binding.filterHome.setOnClickListener(v -> {
+            BottomDialogFilterBinding binding1 = BottomDialogFilterBinding.inflate(getLayoutInflater());
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity());
+            View bottomsetView = binding1.getRoot();
+            bottomSheetDialog.setContentView(bottomsetView);
+            ViewGroup.LayoutParams params = bottomsetView.getLayoutParams();
+            params.height = (int) (getResources().getDisplayMetrics().heightPixels * 0.6);
+            bottomsetView.setLayoutParams(params);
+
+            binding1.backFilter.setOnClickListener(v1 -> bottomSheetDialog.dismiss());
+            binding1.btnThaptoicaoFilter.setOnClickListener(v1 -> {
+                isThapToiCaoSelected = !isThapToiCaoSelected;
+                toggleButton(binding1.btnThaptoicaoFilter, isThapToiCaoSelected);
+                if (isThapToiCaoSelected) {
+                    isCaoToiThapSelected = false;
+                    isDuo1trieuSelected = false;
+                    isDuo2trieuSelected = false;
+                    toggleButton(binding1.btnCaotoithapFilter, false);
+                    toggleButton(binding1.btnDuoi1trieuFilter, false);
+                    toggleButton(binding1.btnDuoi2trieuFilter, false);
+                    textButton = String.valueOf(binding1.btnThaptoicaoFilter.getText());
+                    getThaptoiCao();
+                }
+            });
+            binding1.btnCaotoithapFilter.setOnClickListener(v1 -> {
+                isCaoToiThapSelected = !isCaoToiThapSelected;
+                toggleButton(binding1.btnCaotoithapFilter, isCaoToiThapSelected);
+                if (isCaoToiThapSelected) {
+                    isThapToiCaoSelected = false;
+                    isDuo1trieuSelected = false;
+                    isDuo2trieuSelected = false;
+                    toggleButton(binding1.btnThaptoicaoFilter, false);
+                    toggleButton(binding1.btnDuoi1trieuFilter, false);
+                    toggleButton(binding1.btnDuoi2trieuFilter, false);
+                    textButton = String.valueOf(binding1.btnCaotoithapFilter.getText());
+                    getCaotoiThap();
+                }
+            });
+            binding1.btnDuoi1trieuFilter.setOnClickListener(v1 -> {
+                isDuo1trieuSelected = !isDuo1trieuSelected;
+                toggleButton(binding1.btnDuoi1trieuFilter, isDuo1trieuSelected);
+                if (isDuo1trieuSelected) {
+                    isThapToiCaoSelected = false;
+                    isCaoToiThapSelected = false;
+                    isDuo2trieuSelected = false;
+                    toggleButton(binding1.btnThaptoicaoFilter, false);
+                    toggleButton(binding1.btnCaotoithapFilter, false);
+                    toggleButton(binding1.btnDuoi2trieuFilter, false);
+                    textButton = String.valueOf(binding1.btnDuoi1trieuFilter.getText());
+                    getDuoi1trieu();
+                }
+
+            });
+            binding1.btnDuoi2trieuFilter.setOnClickListener(v1 -> {
+                isDuo2trieuSelected = !isDuo2trieuSelected;
+                toggleButton(binding1.btnDuoi2trieuFilter, isDuo2trieuSelected);
+                if (isDuo2trieuSelected) {
+                    isThapToiCaoSelected = false;
+                    isCaoToiThapSelected = false;
+                    isDuo1trieuSelected = false;
+                    toggleButton(binding1.btnThaptoicaoFilter, false);
+                    toggleButton(binding1.btnCaotoithapFilter, false);
+                    toggleButton(binding1.btnDuoi1trieuFilter, false);
+                    textButton = String.valueOf(binding1.btnDuoi2trieuFilter.getText());
+                    getDuoi2trieu();
+                }
+            });
+            binding1.btnThietlaplaiFilter.setOnClickListener(v1 -> {
+                listFilter.clear();
+                toggleButton(binding1.btnThaptoicaoFilter, false);
+                toggleButton(binding1.btnCaotoithapFilter, false);
+                toggleButton(binding1.btnDuoi1trieuFilter, false);
+                toggleButton(binding1.btnDuoi2trieuFilter, false);
+                textButton = "";
+            });
+            binding1.btnApdungFilter.setOnClickListener(v1 -> {
+                if(listFilter.size() != 0) {
+                    ResultSearchFragment resultSearchFragment = ResultSearchFragment.newInstance(listFilter,textButton);
+                    openScreenHome(resultSearchFragment,true);
+                    bottomSheetDialog.dismiss();
+                }else {
+                    Toast.makeText(getActivity(), "chưa chọn điều kiện áp dụng", Toast.LENGTH_LONG).show();
+                }
+            });
+            bottomSheetDialog.show();
+        });
+    }
+    private void toggleButton(Button button, boolean isSelected) {
+        if (isSelected) {
+            button.setBackgroundResource(R.drawable.bg_corner20_silver);
+            button.setTextColor(Color.WHITE);
+        } else {
+            button.setBackgroundResource(R.drawable.bg_corner20);
+            button.setTextColor(Color.BLACK);
+        }
+    }
+    private void getDuoi2trieu(){
+        float maxPrice = 2000000;
+        ArrayList<Product> listDuoi2Trieu = new ArrayList<>();
+       for(Product product: listProduct){
+           if(Float.parseFloat(product.getPrice().toString())<maxPrice){
+               listDuoi2Trieu.add(product);
+           }
+       }
+       listFilter.clear();
+       listFilter.addAll(listDuoi2Trieu);
+    }
+    private void getDuoi1trieu(){
+        float maxPrice = 1000000;
+        ArrayList<Product> listDuoi1Trieu = new ArrayList<>();
+        for(Product product: listProduct){
+            if(Float.parseFloat(product.getPrice().toString())<maxPrice){
+                listDuoi1Trieu.add(product);
+            }
+        }
+        listFilter.clear();
+        listFilter.addAll(listDuoi1Trieu);
+    }
+    private void getThaptoiCao(){
+        ArrayList<Product> sortList = new ArrayList<>(listProduct);
+        Collections.sort(sortList, new Comparator<Product>() {
+            @Override
+            public int compare(Product o1, Product o2) {
+                Float price1 = Float.valueOf(o1.getPrice().toString());
+                Float price2 = Float.valueOf(o2.getPrice().toString());
+                return price1.compareTo(price2);
+            }
+        });
+        listFilter.clear();
+        listFilter.addAll(sortList);
+    }
+    private void getCaotoiThap(){
+        ArrayList<Product> sortList = new ArrayList<>(listProduct);
+        Collections.sort(sortList, new Comparator<Product>() {
+            @Override
+            public int compare(Product o1, Product o2) {
+                Float price1 = Float.valueOf(o1.getPrice().toString());
+                Float price2 = Float.valueOf(o2.getPrice().toString());
+                return price2.compareTo(price1);
+            }
+        });
+        listFilter.clear();
+        listFilter.addAll(sortList);
     }
     private void openSearch(int gravity){
         binding.searchHome.setOnClickListener(v -> {
@@ -182,28 +343,28 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    String str = s.toString().toLowerCase();
-                    String queryWithoutAccents = SearchUltils.removeAccents(str); // Loại bỏ dấu từ chuỗi tìm kiếm
+                  String str = s.toString().toLowerCase();
+                  String queryWithoutAccents = SearchUltils.removeAccents(str); // Loại bỏ dấu từ chuỗi tìm kiếm
 
                     ArrayList<Product> list = new ArrayList<>();
-                    for (Product product : listProduct){
-                        String productName = product.getName().toLowerCase();
-                        String productNameWithoutAccents = SearchUltils.removeAccents(productName);
-                        if (productNameWithoutAccents.contains(queryWithoutAccents)) {
-                            list.add(product);
-                        }
-                        if (list.isEmpty()) {
-                            recyclerView.setVisibility(View.GONE);
-                            layout.setVisibility(View.VISIBLE);
-                        } else {
-                            recyclerView.setVisibility(View.VISIBLE);
-                            layout.setVisibility(View.GONE);
-                            searchAdapter = new SearchAdapter(getActivity(), list);
-                            recyclerView.setAdapter(searchAdapter);
-                            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-                        }
+                  for (Product product : listProduct){
+                      String productName = product.getName().toLowerCase();
+                      String productNameWithoutAccents = SearchUltils.removeAccents(productName);
+                      if (productNameWithoutAccents.contains(queryWithoutAccents)) {
+                          list.add(product);
+                      }
+                      if (list.isEmpty()) {
+                          recyclerView.setVisibility(View.GONE);
+                          layout.setVisibility(View.VISIBLE);
+                      } else {
+                          recyclerView.setVisibility(View.VISIBLE);
+                          layout.setVisibility(View.GONE);
+                          searchAdapter = new SearchAdapter(getActivity(), list);
+                          recyclerView.setAdapter(searchAdapter);
+                          recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+                      }
 
-                    }
+                  }
 
                 }
 
@@ -220,6 +381,19 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     @Override
     public CreationExtras getDefaultViewModelCreationExtras() {
         return super.getDefaultViewModelCreationExtras();
+    }
+  
+      private void getAvatar() {
+        String avatarUrl = "http://10.64.5.110:3000/api/user/avatar/image/%s"; // thay IPv4 của máy tính chạy server vào đây để test
+        User user = UserPrefManager.getInstance(getActivity()).getUser();
+        String userId = user.get_id();
+        String apiUrl = String.format(avatarUrl, userId);
+        Glide.with(getActivity())
+                .load(apiUrl)
+                .placeholder(R.drawable.avatar_home)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(binding.avatarHome);
     }
 
     private void startAutoViewPager() {
@@ -257,20 +431,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
 
     @Override
     public void onClick(Product product) {
-        DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
-        openScreen(detailProductFragment, true);
-    }
-
-    private void getAvatar() {
-        String avatarUrl = "http://10.64.5.110:3000/api/user/avatar/image/%s"; // thay IPv4 của máy tính chạy server vào đây để test
-        User user = UserPrefManager.getInstance(getActivity()).getUser();
-        String userId = user.get_id();
-        String apiUrl = String.format(avatarUrl, userId);
-        Glide.with(getActivity())
-                .load(apiUrl)
-                .placeholder(R.drawable.avatar_home)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(binding.avatarHome);
+          DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
+          openScreenHome(detailProductFragment, true);
     }
 }
