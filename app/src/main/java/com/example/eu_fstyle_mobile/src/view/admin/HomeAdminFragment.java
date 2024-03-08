@@ -63,12 +63,14 @@ public class HomeAdminFragment extends BaseFragment<FragmentHomeAdminBinding> {
                 List<Product> productList = listProduct.getArrayList();
                 homeAdminAdapter = new HomeAdminAdapter(productList);
                 binding.rcvProductAdmin.setAdapter(homeAdminAdapter);
+                hideLoadingDialog();
             }
         });
         homeAdminViewModel.getErrorLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+                hideLoadingDialog();
             }
         });
     }
@@ -78,6 +80,14 @@ public class HomeAdminFragment extends BaseFragment<FragmentHomeAdminBinding> {
             @Override
             public void onClick(View v) {
                 openScreenAddAdmin(new AddProductFragment(), true);
+            }
+        });
+        binding.swipeRefreshLayout.setOnRefreshListener(new androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                binding.swipeRefreshLayout.setRefreshing(false);
+                homeAdminViewModel.getAllProduct();
+                showLoadingDialog();
             }
         });
     }

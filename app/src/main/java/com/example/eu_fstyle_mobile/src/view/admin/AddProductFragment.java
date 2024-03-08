@@ -181,6 +181,14 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
                 }
             }
         });
+        binding.parentLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, android.view.MotionEvent event) {
+                hideKeyboard();
+                clearFocusEditText();
+                return false;
+            }
+        });
     }
 
     private void validateAddProduct() {
@@ -332,5 +340,14 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
     @Override
     public void onPopupWindowClosed(Spinner spinner) {
         binding.spinnerType.setBackground(getResources().getDrawable(R.drawable.bg_spinner_up));
+    }
+
+    private void clearFocusEditText() {
+        binding.edtProductName.clearFocus();
+        binding.edtBrand.clearFocus();
+        binding.edtPrice.clearFocus();
+        binding.edtColor.clearFocus();
+        binding.edtQuantity.clearFocus();
+        binding.edtDes.clearFocus();
     }
 }
