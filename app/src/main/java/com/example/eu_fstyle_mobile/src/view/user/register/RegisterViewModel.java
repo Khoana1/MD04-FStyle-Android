@@ -28,9 +28,9 @@ public class RegisterViewModel extends ViewModel {
         return errorMessage;
     }
 
-    public void registerUser(String name, String email, String password, String phone) {
+    public void registerUser(String avatar, String name, String email, String password, String phone) {
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        RequestCreateUser requestCreateUser = new RequestCreateUser(name, email, password, phone);
+        RequestCreateUser requestCreateUser = new RequestCreateUser(avatar, name, email, password, phone);
         Call<User> call = apiService.createUser(requestCreateUser);
         call.enqueue(new Callback<User>() {
             @Override
@@ -38,7 +38,7 @@ public class RegisterViewModel extends ViewModel {
                 if (response.isSuccessful()) {
                     userData.setValue(response.body());
                 } else {
-                    errorMessage.setValue("Đăng ký thất bại, vui lòng thử lại sau");
+                    errorMessage.setValue("Email đã tồn tại! Vui lòng sử dụng email khác!");
                 }
             }
 

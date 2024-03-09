@@ -2,9 +2,11 @@ package com.example.eu_fstyle_mobile.src.view.user.login;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,20 +15,25 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.eu_fstyle_mobile.AdminActivity;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentLoginBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.User;
-import com.example.eu_fstyle_mobile.src.view.user.ForgotPasswordFragment;
+import com.example.eu_fstyle_mobile.src.view.admin.HomeAdminFragment;
 import com.example.eu_fstyle_mobile.src.view.user.home.HomeFragment;
-import com.example.eu_fstyle_mobile.src.view.user.profile.ProfileFragment;
 import com.example.eu_fstyle_mobile.src.view.user.register.RegisterFragment;
+import com.example.eu_fstyle_mobile.ultilties.AdminPreManager;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
+import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.util.concurrent.Executor;
 import java.util.regex.Pattern;
 
 public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
@@ -35,7 +42,10 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
     private String email;
     private String password;
     private LoginViewModel loginViewModel;
-
+    private Executor executor;
+    private BiometricPrompt biometricPrompt;
+    private BiometricPrompt.PromptInfo promptInfo;
+    private String tokenDevice;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,10 +57,48 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getTokenDevice();
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         observeViewModel();
         initView();
+        executor = ContextCompat.getMainExecutor(getActivity());
+        biometricPrompt = new BiometricPrompt(LoginFragment.this, executor, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+            }
 
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                showLoginLoadingAnimation();
+                loginViewModel.loginUser(UserPrefManager.getInstance(getActivity()).getUser().getEmail(), UserPrefManager.getInstance(getActivity()).getUser().getPassword(), tokenDevice
+                );
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                Toast.makeText(getActivity(), "Xác thực vân tay thất bại", Toast.LENGTH_SHORT).show();
+            }
+        });
+        promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("FStyle Mobile")
+                .setSubtitle("Sử dụng vân tay để đăng nhập")
+                .setNegativeButtonText("Hủy")
+                .build();
+    }
+
+    private void getTokenDevice() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("Login", "Quá trình lấy mã đăng ký FCM thất bại", task.getException());
+                        return;
+                    }
+                    tokenDevice = task.getResult();
+                    Log.d("Login", "FCM Token: " + tokenDevice);
+                });
     }
 
     private void observeViewModel() {
@@ -58,15 +106,23 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
             @Override
             public void onChanged(User user) {
                 UserPrefManager.getInstance(getActivity()).saveUser(user);
+                AdminPreManager.getInstance(getActivity()).saveAdminData(user);
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginPreferences", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean("isLoggedIn", true);
+                editor.putBoolean("isVisibleSwitch", true);
                 editor.apply();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        hideLoginLoadingAnimation();
-                        openScreenHome(new HomeFragment(), false);
+                        if (user.getAdmin().equals(true)) {
+                            hideLoginLoadingAnimation();
+                            Intent intent = new Intent(getActivity(), AdminActivity.class);
+                            startActivity(intent);
+                        } else {
+                            hideLoginLoadingAnimation();
+                            openScreenHome(new HomeFragment(), false);
+                        }
                         Toast.makeText(getActivity(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                     }
                 }, 3000);
@@ -85,13 +141,14 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                         @Override
                         public void run() {
                             hideLoginLoadingAnimation();
-                            Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                            showAlertDialog(error);
                         }
                     }, 2000);
                 }
             }
         });
     }
+
     @Override
     protected FragmentLoginBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
         return FragmentLoginBinding.inflate(inflater, container, false);
@@ -108,7 +165,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                         !binding.edtEmail.getText().toString().isEmpty() &&
                         !binding.edtPass.getText().toString().isEmpty()) {
                     showLoginLoadingAnimation();
-                    loginViewModel.loginUser(email, password);
+                    loginViewModel.loginUser(email, password, tokenDevice);
                 }
             }
         });
@@ -143,6 +200,26 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                         doubleBackToExitPressedOnce = false;
                     }
                 }, 2000);
+            }
+        });
+        binding.tvFingerLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginPreferences", Context.MODE_PRIVATE);
+                boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+                boolean isFingerprintEnabled = sharedPreferences.getBoolean("isFingerprintEnabled", false);
+                if (isLoggedIn) {
+                    if (isFingerprintEnabled) {
+                        biometricPrompt.authenticate(promptInfo);
+                    } else {
+                        String title = "Vui lòng bật xác thực vân tay trong cài đặt trước khi sử dụng tính năng này";
+                        showAlertDialog(title);
+                    }
+                } else {
+                    String title = "Vui lòng đăng nhập lại trước khi sử dụng xác thực vân tay";
+                    showAlertDialog(title);
+                }
+
             }
         });
     }

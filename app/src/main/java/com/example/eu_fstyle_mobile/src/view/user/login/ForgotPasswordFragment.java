@@ -1,4 +1,4 @@
-package com.example.eu_fstyle_mobile.src.view.user;
+package com.example.eu_fstyle_mobile.src.view.user.login;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,99 +9,89 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.eu_fstyle_mobile.databinding.FragmentRegisterBinding;
+import com.example.eu_fstyle_mobile.databinding.FragmentForgotPasswordBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.User;
-import com.example.eu_fstyle_mobile.src.request.RequestCreateUser;
+import com.example.eu_fstyle_mobile.src.request.RequestUpdateUser;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
-import com.example.eu_fstyle_mobile.src.view.user.login.LoginFragment;
+import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 
 import java.util.regex.Pattern;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
+public class ForgotPasswordFragment extends BaseFragment<FragmentForgotPasswordBinding> {
     private String email;
+
     private String phone;
+
     private String password;
+
     private String rePassword;
-    private String name;
+
+    private User user;
 
     @Override
-    protected FragmentRegisterBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
-        return FragmentRegisterBinding.inflate(inflater, container, false);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = FragmentRegisterBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+    protected FragmentForgotPasswordBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
+        return FragmentForgotPasswordBinding.inflate(inflater, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        user = UserPrefManager.getInstance(getActivity()).getUser();
         initView();
     }
 
     private void initView() {
         setStatusHelperText();
-        ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        binding.btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validateRegister();
-                binding.btnRegister.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        validateRegister();
-                        if ((binding.emailLayout.getHelperText() == null || binding.emailLayout.getHelperText().toString().isEmpty()) &&
-                                (binding.phoneLayout.getHelperText() == null || binding.phoneLayout.getHelperText().toString().isEmpty()) &&
-                                (binding.passwordLayout.getHelperText() == null || binding.passwordLayout.getHelperText().toString().isEmpty()) &&
-                                (binding.newPassLayout.getHelperText() == null || binding.newPassLayout.getHelperText().toString().isEmpty() &&
-                                binding.nameLayout.getHelperText() == null || binding.nameLayout.getHelperText().toString().isEmpty())) {
-                            RequestCreateUser requestCreateUser = new RequestCreateUser(name, email, password, phone);
-                            Call<User> call = apiService.createUser(requestCreateUser);
-                            call.enqueue(new Callback<User>() {
-                                @Override
-                                public void onResponse(Call<User> call, Response<User> response) {
-                                    if (response.isSuccessful()) {
-                                        Toast.makeText(getActivity(), "Đăng ký thành công, vui lòng đăng nhập lại", Toast.LENGTH_SHORT).show();
-                                        clearForm();
-                                        openScreen(new LoginFragment(), false);
-                                    } else {
-                                        Toast.makeText(getActivity(), "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<User> call, Throwable t) {
-                                    Toast.makeText(getActivity(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    }
-                });
-            }
-        });
         binding.icGoBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().onBackPressed();
             }
         });
+        binding.btnChangePass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                validateChangePass();
+                if ((binding.emailLayout.getHelperText() == null || binding.emailLayout.getHelperText().toString().isEmpty()) &&
+                        (binding.phoneLayout.getHelperText() == null || binding.phoneLayout.getHelperText().toString().isEmpty()) &&
+                        (binding.passwordLayout.getHelperText() == null || binding.passwordLayout.getHelperText().toString().isEmpty()) &&
+                        (binding.newPassLayout.getHelperText() == null || binding.newPassLayout.getHelperText().toString().isEmpty())) {
+                    ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                    if (phone != user.getPhone()) {
+                        showAlertDialog("Vui lòng nhập đúng số điện thoại đã đăng ký cùng email để đổi mật khẩu");
+                    } else {
+                        RequestUpdateUser requestUpdateUser = new RequestUpdateUser(user.getAvatar(), user.getName(), email, password, phone);
+                        Call<User> call = apiService.updateUser(user.get_id(), requestUpdateUser);
+                        call.enqueue(new retrofit2.Callback<User>() {
+                            @Override
+                            public void onResponse(Call<User> call, Response<User> response) {
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(getActivity(), "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
+                                    openScreenHome(new LoginFragment(), false);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<User> call, Throwable t) {
+                                showAlertDialog("Có lỗi xảy ra, vui lòng thử lại sau");
+                            }
+                        });
+                    }
+
+                }
+            }
+        });
     }
 
-    private void validateRegister() {
-        validateEmail();
-        validatePhone();
-        validatePassword();
-        validateRePass();
-        validateName();
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentForgotPasswordBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     private void setStatusHelperText() {
@@ -109,7 +99,13 @@ public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
         binding.phoneLayout.setHelperText("");
         binding.passwordLayout.setHelperText("");
         binding.newPassLayout.setHelperText("");
-        binding.nameLayout.setHelperText("");
+    }
+
+    private void validateChangePass() {
+        validateEmail();
+        validatePhone();
+        validatePassword();
+        validateRePass();
     }
 
     private void validateEmail() {
@@ -186,22 +182,5 @@ public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
         }
 
         binding.newPassLayout.setHelperText(helperText);
-    }
-
-    private void validateName() {
-        String helperText = "";
-        name = binding.edtName.getText().toString();
-        if (name.isEmpty()) {
-            helperText = "Không được để trống tên";
-        }
-        binding.nameLayout.setHelperText(helperText);
-    }
-
-    private void clearForm() {
-        binding.edtEmail.setText("");
-        binding.edtPhone.setText("");
-        binding.edtPass.setText("");
-        binding.edtNewPass.setText("");
-        binding.edtName.setText("");
     }
 }
