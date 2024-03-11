@@ -57,17 +57,19 @@
             android:id="@+id/frameOrder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/cardView5"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:src="@drawable/cart_home"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginRight="8dp"
                 android:background="@drawable/rounder_oder_item"
-                />
+                android:padding="10dp"
+                android:src="@drawable/cart_home" />
+
             <TextView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
