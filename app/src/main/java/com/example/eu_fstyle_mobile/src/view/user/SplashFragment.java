@@ -1,6 +1,8 @@
 package com.example.eu_fstyle_mobile.src.view.user;
 
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -45,7 +48,7 @@ public class SplashFragment extends BaseFragment<FragmentSplashFragmetBinding> {
             if (isNetworkConnected()) {
                 openScreen(new LoginFragment(), false);
             } else {
-                showAlertDialog("Không có kết nối mạng, Vui lòng thử lại sau!");
+                showAlertNoConnectionDialog();
             }
         }, 3000); // vào ứng dụng sau 3s
     }
@@ -55,4 +58,5 @@ public class SplashFragment extends BaseFragment<FragmentSplashFragmetBinding> {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
+
 }
