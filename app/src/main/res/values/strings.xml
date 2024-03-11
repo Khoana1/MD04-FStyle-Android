@@ -43,4 +43,5 @@
     <string name="tv_edit_item_address">Sửa địa chỉ</string>
     <string name="tv_update_info">Để bảo vệ tài khoản của bạn, bạn có thể thay đổi mật khẩu và cập nhật thông tin cá nhân ở đây. Xin vui lòng điền vào các trường thông tin dưới đây và nhấn "Lưu thông tin" để hoàn tất quá trình.</string>
     <string name="tv_ask_for_question">Bạn có câu hỏi?</string>
+    <string name="tv_admin_profile">Trang cá nhân quản lý</string>
 </resources>
