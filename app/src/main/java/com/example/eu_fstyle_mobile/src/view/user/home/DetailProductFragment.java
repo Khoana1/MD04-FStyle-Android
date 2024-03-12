@@ -17,6 +17,7 @@ import com.example.eu_fstyle_mobile.src.adapter.ViewPager_detail_Adapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.User;
+import com.example.eu_fstyle_mobile.src.view.user.payment.CartFragment;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -46,6 +47,12 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
     }
     private void initView() {
         user = UserPrefManager.getInstance(getActivity()).getUser();
+        binding.imgOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openScreen(new CartFragment(), true);
+            }
+        });
     }
     private void onCLickButton() {
         binding.detailBack.setOnClickListener(v -> {getActivity().onBackPressed();});
