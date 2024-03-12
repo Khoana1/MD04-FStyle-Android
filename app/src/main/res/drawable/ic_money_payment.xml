@@ -1,0 +1,41 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="23dp"
+    android:height="24dp"
+    android:viewportWidth="23"
+    android:viewportHeight="24">
+  <path
+      android:pathData="M18.479,7.92V13.07C18.479,16.15 16.794,17.47 14.266,17.47H5.85C5.419,17.47 5.007,17.43 4.624,17.34C4.385,17.3 4.155,17.23 3.945,17.15C2.508,16.59 1.637,15.29 1.637,13.07V7.92C1.637,4.84 3.322,3.52 5.85,3.52H14.266C16.411,3.52 17.952,4.47 18.364,6.64C18.431,7.04 18.479,7.45 18.479,7.92Z"
+      android:strokeLineJoin="round"
+      android:strokeWidth="1.5"
+      android:fillColor="#00000000"
+      android:strokeColor="#C67C4E"
+      android:strokeLineCap="round"/>
+  <path
+      android:pathData="M21.352,10.92V16.07C21.352,19.15 19.667,20.47 17.139,20.47H8.723C8.015,20.47 7.373,20.37 6.818,20.15C5.679,19.71 4.903,18.8 4.625,17.34C5.008,17.43 5.42,17.47 5.851,17.47H14.267C16.795,17.47 18.48,16.15 18.48,13.07V7.92C18.48,7.45 18.441,7.03 18.365,6.64C20.184,7.04 21.352,8.38 21.352,10.92Z"
+      android:strokeLineJoin="round"
+      android:strokeWidth="1.5"
+      android:fillColor="#00000000"
+      android:strokeColor="#C67C4E"
+      android:strokeLineCap="round"/>
+  <path
+      android:pathData="M10.052,13.14C11.448,13.14 12.579,11.958 12.579,10.5C12.579,9.042 11.448,7.86 10.052,7.86C8.656,7.86 7.524,9.042 7.524,10.5C7.524,11.958 8.656,13.14 10.052,13.14Z"
+      android:strokeLineJoin="round"
+      android:strokeWidth="1.5"
+      android:fillColor="#00000000"
+      android:strokeColor="#C67C4E"
+      android:strokeLineCap="round"/>
+  <path
+      android:pathData="M4.577,8.3V12.7"
+      android:strokeLineJoin="round"
+      android:strokeWidth="1.5"
+      android:fillColor="#00000000"
+      android:strokeColor="#C67C4E"
+      android:strokeLineCap="round"/>
+  <path
+      android:pathData="M15.531,8.3V12.7"
+      android:strokeLineJoin="round"
+      android:strokeWidth="1.5"
+      android:fillColor="#00000000"
+      android:strokeColor="#C67C4E"
+      android:strokeLineCap="round"/>
+</vector>

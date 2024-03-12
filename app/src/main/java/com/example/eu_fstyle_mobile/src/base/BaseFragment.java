@@ -205,23 +205,6 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
         dialog.show();
     }
 
-    protected void showAlertNoConnectionDialog() {
-        Dialog dialog = new Dialog(getContext());
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.setContentView(R.layout.dialog_no_connection);
-        dialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.custom_dialog_background));
-        Button btnConfirm = dialog.findViewById(R.id.btn_ok);
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
-
-
     protected void hideKeyboard() {
         Activity activity = getActivity();
         if (activity != null) {
