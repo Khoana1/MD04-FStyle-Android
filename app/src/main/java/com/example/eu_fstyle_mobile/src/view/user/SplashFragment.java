@@ -1,10 +1,8 @@
 package com.example.eu_fstyle_mobile.src.view.user;
 
 import android.animation.ObjectAnimator;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -24,9 +22,7 @@ import androidx.annotation.Nullable;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentSplashFragmetBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
-import com.example.eu_fstyle_mobile.src.view.user.home.HomeFragment;
 import com.example.eu_fstyle_mobile.src.view.user.login.LoginFragment;
-import com.example.eu_fstyle_mobile.src.view.user.profile.ProfileFragment;
 
 public class SplashFragment extends BaseFragment<FragmentSplashFragmetBinding> {
 
@@ -48,7 +44,17 @@ public class SplashFragment extends BaseFragment<FragmentSplashFragmetBinding> {
             if (isNetworkConnected()) {
                 openScreen(new LoginFragment(), false);
             } else {
-                showAlertNoConnectionDialog();
+                showAlertNoConnectionDialog(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isNetworkConnected()) {
+                            Toast.makeText(getContext(), "Đã có kết nối mạng", Toast.LENGTH_SHORT).show();
+                            openScreen(new LoginFragment(), false);
+                        } else {
+                            showAlertNoConnectionDialog(this);
+                        }
+                    }
+                });
             }
         }, 3000); // vào ứng dụng sau 3s
     }
@@ -57,6 +63,25 @@ public class SplashFragment extends BaseFragment<FragmentSplashFragmetBinding> {
         ConnectivityManager cm = (ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    public void showAlertNoConnectionDialog(Runnable onConfirm) {
+        Dialog dialog = new Dialog(getContext());
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.setContentView(R.layout.dialog_no_connection);
+        dialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.custom_dialog_background));
+        Button btnConfirm = dialog.findViewById(R.id.btn_ok);
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onConfirm.run();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
 }
