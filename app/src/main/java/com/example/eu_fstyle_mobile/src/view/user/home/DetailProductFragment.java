@@ -1,5 +1,6 @@
 package com.example.eu_fstyle_mobile.src.view.user.home;
 
+import android.app.Dialog;
 import android.graphics.Color;
 import android.icu.text.DecimalFormat;
 import android.os.Bundle;
@@ -9,13 +10,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.viewpager.widget.ViewPager;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.BottomSheetDathangBinding;
 import com.example.eu_fstyle_mobile.databinding.BottomSheetHinhthucvcBinding;
+import com.example.eu_fstyle_mobile.databinding.DialogGoiysizeBinding;
 import com.example.eu_fstyle_mobile.databinding.FragmentDetailProductBinding;
 import com.example.eu_fstyle_mobile.src.adapter.ViewPager_detail_Adapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
@@ -36,6 +42,7 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
     boolean isCheckDetail = false;
     boolean isSizeS,isSizeM,isSizeL,isSizeXl= false;
     boolean isColorBlack, isColorWhite,isColorGray,isColorRed = false;
+    Dialog datHangDialog;
     public static DetailProductFragment newInstance(Product product){
         DetailProductFragment detail = new DetailProductFragment();
         Bundle bundle = new Bundle();
@@ -84,6 +91,7 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
             dialog.show();
         });
         binding.btnThemgiohang.setOnClickListener(v -> {Themgiohang();});
+        binding.btnDathangDetail.setOnClickListener(v -> {Themgiohang();});
     }
     private void getData() {
         product = (Product) getArguments().getSerializable(Products);
@@ -140,7 +148,10 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
                         .error(R.drawable.icon_erro)
                                 .into(binding1.itemImageDathang);
         binding1.itemTxtGiaDathang.setText("Giá: "+product.getPrice());
-        binding1.itemTxtKhoDathang.setText("Đã bán "+product.getQuantity());
+        binding1.itemTxtKhoDathang.setText("Đã bán: "+product.getQuantity());
+        binding1.banggoiysize.setOnClickListener(v -> {
+            goiysize();
+        });
         binding1.itemBtnS.setOnClickListener(v -> {
             isSizeS = !isSizeS;
             toggleButton(binding1.itemBtnS, isSizeS);
@@ -245,28 +256,44 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
                 color = binding1.itemBtnRed.getText().toString();
             }
         });
-        binding1.itemBtnDathang.setOnClickListener(v -> {
-            Log.d("Huy", "Themgiohang: "+size);
-            Log.d("Huy", "Themgiohang: "+color);
-        });
+
         //
         int sl = Integer.parseInt(binding1.itemBtnGiatri.getText().toString());
-        if(sl<1){
+        if(sl==1){
             binding1.itemBtntruDonhang.setEnabled(false);
+        }else if(sl>1) {
+            binding1.itemBtntruDonhang.setEnabled(true);
         }
         binding1.itemBtntruDonhang.setOnClickListener(v -> {
             int soluong = Integer.parseInt(binding1.itemBtnGiatri.getText().toString())-1;
-            if(soluong<1){
+            if(soluong==1){
                 binding1.itemBtntruDonhang.setEnabled(false);
                 binding1.itemBtnGiatri.setText(soluong+"");
-            }else {
+            }else if(soluong>1){
                 binding1.itemBtntruDonhang.setEnabled(true);
                 binding1.itemBtnGiatri.setText(soluong+"");
             }
         });
         binding1.itemBtncongDathang.setOnClickListener(v -> {
             int soluong = Integer.parseInt(binding1.itemBtnGiatri.getText().toString())+1;
-            binding1.itemBtnGiatri.setText(""+soluong);
+            if(soluong==1){
+                binding1.itemBtntruDonhang.setEnabled(false);
+                binding1.itemBtnGiatri.setText(""+soluong);
+            }else if(soluong>1){
+                binding1.itemBtntruDonhang.setEnabled(true);
+                binding1.itemBtnGiatri.setText(""+soluong);
+            }
+        });
+        //
+        binding1.itemBtnDathang.setOnClickListener(v -> {
+            Log.d("Huy", "Themgiohang: "+size);
+            Log.d("Huy", "Themgiohang: "+color);
+            Log.d("Huy", "Themgiohang: "+binding1.itemBtnGiatri.getText().toString());
+            if(size.isEmpty() || color.isEmpty()){
+               showAlertDialog("Bạn chưa chọn size hoặc color");
+            }else{
+
+            }
         });
         bottomSheetDialog.show();
     }
@@ -279,8 +306,19 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
             button.setTextColor(Color.BLACK);
         }
     }
+    private void goiysize(){
+        Dialog dialog = new Dialog(getActivity());
+        DialogGoiysizeBinding binding1 = DialogGoiysizeBinding.inflate(getLayoutInflater());
+        View dialogView = binding1.getRoot();
+        dialog.setContentView(dialogView);
+        Window window = dialog.getWindow();
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        binding1.goiysizeBack.setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
+    }
     @Override
     protected FragmentDetailProductBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
         return FragmentDetailProductBinding.inflate(inflater,container,false);
     }
+
 }
