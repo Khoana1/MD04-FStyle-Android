@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorWhite"
     android:weightSum="15"
     tools:context=".src.view.user.home.DetailProductFragment">
 
@@ -188,7 +189,7 @@
                     android:id="@+id/btn_favourite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/icon_heart_red"
+                    android:src="@drawable/ic_border_heart"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.949"
