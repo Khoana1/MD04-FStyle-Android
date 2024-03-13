@@ -6,6 +6,8 @@ import com.example.eu_fstyle_mobile.src.model.ListProduct;
 import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.request.RequestAddAddress;
+import com.example.eu_fstyle_mobile.src.request.RequestCreateCart;
+import com.example.eu_fstyle_mobile.src.request.RequestCreateFavourite;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateProduct;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateUser;
 import com.example.eu_fstyle_mobile.src.request.RequestLoginUser;
@@ -50,4 +52,12 @@ public interface ApiService {
 
     @POST(ApiEndpoint.createProduct)
     Call<Product> createProduct(@Body RequestCreateProduct requestCreateProduct, @Path("id") String id);
+
+    @PUT(ApiEndpoint.createCart)
+    Call<Product> createCart(@Path("id") String id, @Body RequestCreateCart requestCreateCart);
+    @GET(ApiEndpoint.getFavorite)
+    Call<ListProduct> getFavorite(@Path("id") String id);
+
+    @POST(ApiEndpoint.createFavorite)
+    Call<Product> createFavorite(@Path("id") String id, @Body RequestCreateFavourite requestCreateFavourite);
 }
