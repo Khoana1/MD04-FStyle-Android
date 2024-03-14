@@ -96,7 +96,6 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
                 binding.edtProductName.setText("");
                 binding.edtBrand.setText("");
                 binding.edtPrice.setText("");
-                binding.edtSize.setText("");
                 binding.edtColor.setText("");
                 binding.edtQuantity.setText("");
                 binding.edtDes.setText("");
@@ -124,12 +123,6 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
             }
         });
         binding.edtPrice.addTextChangedListener(new NumberTextWatcherForThousand(binding.edtPrice));
-        binding.edtSize.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showNumberPicker();
-            }
-        });
         binding.spinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -177,7 +170,7 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
                     base64Images = convertImagesToBase64(uriArrayList);
                     int productPriceNumber = Integer.parseInt(binding.edtPrice.getText().toString().replace(",", ""));
                     User user = AdminPreManager.getInstance(getActivity()).getAdminData();
-                    addProductViewModel.createProduct(user.get_id(), productName, base64Images.toArray(new String[0]), productBrand, productPriceNumber, Double.parseDouble(binding.edtSize.getText().toString()), productColor, productQuantity, productType , productDescription);
+                    addProductViewModel.createProduct(user.get_id(), productName, base64Images.toArray(new String[0]), productBrand, productPriceNumber, productColor, productQuantity, productType, productDescription);
                 }
             }
         });
@@ -268,33 +261,6 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
             openScreenAdmin(new HomeAdminFragment(), false);
         }
     };
-
-    private void showNumberPicker() {
-        final Dialog dialog = new Dialog(getContext());
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setTitle("Choose Shoe Size");
-        dialog.setContentView(R.layout.number_picker_dialog);
-        Button btnDone = dialog.findViewById(R.id.btn_done);
-        final NumberPicker numberPicker = dialog.findViewById(R.id.number_picker);
-        numberPicker.setMaxValue(50);
-        numberPicker.setMinValue(30);
-        numberPicker.setWrapSelectorWheel(true);
-        numberPicker.setValue(35);
-        numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                numberPicker.setValue(newVal);
-            }
-        });
-        btnDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                binding.edtSize.setText(String.valueOf(numberPicker.getValue()));
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

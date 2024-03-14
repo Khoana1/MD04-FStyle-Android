@@ -30,9 +30,9 @@ public class AddProductViewModel extends ViewModel {
         return errorMessage;
     }
 
-    public void createProduct(String id, String name, String[] image64, String brand, Number price, Number size, String color, String quantity, String type, String description) {
+    public void createProduct(String id, String name, String[] image64, String brand, Number price, String color, String quantity, String type, String description) {
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        RequestCreateProduct requestCreateProduct = new RequestCreateProduct(name, image64, brand, price, size, color, quantity, type, description);
+        RequestCreateProduct requestCreateProduct = new RequestCreateProduct(name, image64, brand, price, color, quantity, type, description);
         Call<Product> call = apiService.createProduct(requestCreateProduct, id);
         call.enqueue(new Callback<Product>() {
             @Override
