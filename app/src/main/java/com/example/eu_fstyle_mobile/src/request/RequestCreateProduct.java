@@ -5,18 +5,16 @@ public class RequestCreateProduct {
     private String[] image64;
     private String brand;
     private Number price;
-    private Number size;
     private String color;
     private String quantity;
     private String type;
     private String description;
 
-    public RequestCreateProduct(String name, String[] image64, String brand, Number price, Number size, String color, String quantity, String type, String description) {
+    public RequestCreateProduct(String name, String[] image64, String brand, Number price, String color, String quantity, String type, String description) {
         this.name = name;
         this.image64 = image64;
         this.brand = brand;
         this.price = price;
-        this.size = size;
         this.color = color;
         this.quantity = quantity;
         this.type = type;
@@ -53,14 +51,6 @@ public class RequestCreateProduct {
 
     public void setPrice(Number price) {
         this.price = price;
-    }
-
-    public Number getSize() {
-        return size;
-    }
-
-    public void setSize(Number size) {
-        this.size = size;
     }
 
     public String getColor() {

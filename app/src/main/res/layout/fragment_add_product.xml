@@ -100,9 +100,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/price_container"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.5"
                     app:helperText="Không được để trống"
                     app:helperTextTextColor="#FF0000">
 
@@ -112,26 +111,6 @@
                         android:layout_height="wrap_content"
                         android:hint="Giá sản phẩm (VND)"
                         android:inputType="number"
-                        android:lines="1" />
-
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/sizeContainer"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_weight="0.5"
-                    app:helperTextTextColor="#FF0000">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtSize"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Cỡ giày"
-                        android:inputType="text"
                         android:lines="1" />
 
 
