@@ -46,4 +46,7 @@
     <string name="tv_admin_profile">Trang cá nhân quản lý</string>
     <string name="payment">Thanh toán</string>
     <string name="change_address">Đổi địa chỉ</string>
+    <string name="default_notification_channel_name">Kênh thông báo chính</string>
+    <string name="default_notification_channel_description">Kênh thông báo này được sử dụng để hiển thị các thông báo chính từ ứng dụng.</string>
+    <string name="default_notification_channel_id">primary_channel_id</string>
 </resources>
