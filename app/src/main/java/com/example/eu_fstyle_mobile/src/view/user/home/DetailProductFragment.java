@@ -23,6 +23,7 @@ import com.example.eu_fstyle_mobile.src.request.RequestCreateFavourite;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
 import com.example.eu_fstyle_mobile.src.view.user.payment.CartFragment;
+import com.example.eu_fstyle_mobile.src.view.user.profile.MyFavouriteFragment;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -114,6 +115,12 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
             @Override
             public void onClick(View v) {
                 openScreen(new CartFragment(), true);
+            }
+        });
+        binding.cardView5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openScreenHome(new MyFavouriteFragment(), true);
             }
         });
     }
