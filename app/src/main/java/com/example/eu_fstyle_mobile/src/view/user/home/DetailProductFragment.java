@@ -36,13 +36,11 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
     FragmentDetailProductBinding binding;
     ViewPager_detail_Adapter adapter;
     User user;
-    String color="";
     String size ="";
     Product product;
     boolean isCheckDetail = false;
-    boolean isSizeS,isSizeM,isSizeL,isSizeXl= false;
-    boolean isColorBlack, isColorWhite,isColorGray,isColorRed = false;
-    Dialog datHangDialog;
+    boolean isCheckDathang=false;
+    boolean isSize36,isSize37,isSize38,isSize39= false;
     public static DetailProductFragment newInstance(Product product){
         DetailProductFragment detail = new DetailProductFragment();
         Bundle bundle = new Bundle();
@@ -90,8 +88,14 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
             });
             dialog.show();
         });
-        binding.btnThemgiohang.setOnClickListener(v -> {Themgiohang();});
-        binding.btnDathangDetail.setOnClickListener(v -> {Themgiohang();});
+        binding.btnThemgiohang.setOnClickListener(v -> {
+            isCheckDathang = true;
+            buttomSheetDetail();
+        });
+        binding.btnDathangDetail.setOnClickListener(v -> {
+            isCheckDathang =false;
+            buttomSheetDetail();
+        });
     }
     private void getData() {
         product = (Product) getArguments().getSerializable(Products);
@@ -136,7 +140,7 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
             }
         });
     }
-    private void Themgiohang(){
+    private void buttomSheetDetail(){
         BottomSheetDathangBinding binding1 = BottomSheetDathangBinding.inflate(getLayoutInflater());
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity());
         View bottomView  = binding1.getRoot();
@@ -152,111 +156,57 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
         binding1.banggoiysize.setOnClickListener(v -> {
             goiysize();
         });
-        binding1.itemBtnS.setOnClickListener(v -> {
-            isSizeS = !isSizeS;
-            toggleButton(binding1.itemBtnS, isSizeS);
-            if(isSizeS){
-                isSizeL = false;
-                isSizeM = false;
-                isSizeXl = false;
-                toggleButton(binding1.itemBtnM, false);
-                toggleButton(binding1.itemBtnL, false);
-                toggleButton(binding1.itemBtnXL, false);
-                size = binding1.itemBtnS.getText().toString();
+        binding1.itemBtn36.setOnClickListener(v -> {
+            isSize36 = !isSize36;
+            toggleButton(binding1.itemBtn36, isSize36);
+            if(isSize36){
+                isSize38 = false;
+                isSize37 = false;
+                isSize39 = false;
+                toggleButton(binding1.itemBtn37, false);
+                toggleButton(binding1.itemBtn38, false);
+                toggleButton(binding1.itemBtn39, false);
+                size = "36";
             }
         });
-        binding1.itemBtnM.setOnClickListener(v -> {
-            isSizeM = !isSizeM;
-            toggleButton(binding1.itemBtnM, isSizeM);
-            if(isSizeM){
-                isSizeL = false;
-                isSizeS = false;
-                isSizeXl = false;
-                toggleButton(binding1.itemBtnS, false);
-                toggleButton(binding1.itemBtnL, false);
-                toggleButton(binding1.itemBtnXL, false);
-                size = binding1.itemBtnM.getText().toString();
+        binding1.itemBtn37.setOnClickListener(v -> {
+            isSize37 = !isSize37;
+            toggleButton(binding1.itemBtn37, isSize37);
+            if(isSize37){
+                isSize38 = false;
+                isSize36 = false;
+                isSize39 = false;
+                toggleButton(binding1.itemBtn36, false);
+                toggleButton(binding1.itemBtn38, false);
+                size = "37";
             }
         });
-        binding1.itemBtnL.setOnClickListener(v -> {
-            isSizeL = !isSizeL;
-            toggleButton(binding1.itemBtnL, isSizeL);
-            if(isSizeL){
-                isSizeS = false;
-                isSizeM = false;
-                isSizeXl = false;
-                toggleButton(binding1.itemBtnM, false);
-                toggleButton(binding1.itemBtnS, false);
-                toggleButton(binding1.itemBtnXL, false);
-                size = binding1.itemBtnL.getText().toString();
+        binding1.itemBtn38.setOnClickListener(v -> {
+            isSize38 = !isSize38;
+            toggleButton(binding1.itemBtn38, isSize38);
+            if(isSize38){
+                isSize36 = false;
+                isSize37 = false;
+                isSize39 = false;
+                toggleButton(binding1.itemBtn37, false);
+                toggleButton(binding1.itemBtn36, false);
+                toggleButton(binding1.itemBtn39, false);
+                size = "38";
             }
         });
-        binding1.itemBtnXL.setOnClickListener(v -> {
-            isSizeXl = !isSizeXl;
-            toggleButton(binding1.itemBtnXL, isSizeXl);
-            if(isSizeXl){
-                isSizeL = false;
-                isSizeM = false;
-                isSizeS = false;
-                toggleButton(binding1.itemBtnM, false);
-                toggleButton(binding1.itemBtnL, false);
-                toggleButton(binding1.itemBtnS, false);
-                size = binding1.itemBtnXL.getText().toString();
+        binding1.itemBtn39.setOnClickListener(v -> {
+            isSize39 = !isSize39;
+            toggleButton(binding1.itemBtn39, isSize39);
+            if(isSize39){
+                isSize38 = false;
+                isSize37 = false;
+                isSize36 = false;
+                toggleButton(binding1.itemBtn37, false);
+                toggleButton(binding1.itemBtn38, false);
+                toggleButton(binding1.itemBtn36, false);
+                size = "39";
             }
         });
-        binding1.itemBtnBlack.setOnClickListener(v -> {
-            isColorBlack = !isColorBlack;
-            toggleButton(binding1.itemBtnBlack, isColorBlack);
-            if(isColorBlack){
-                isColorRed = false;
-                isColorGray = false;
-                isColorWhite = false;
-                toggleButton(binding1.itemBtnGray, false);
-                toggleButton(binding1.itemBtnWhite, false);
-                toggleButton(binding1.itemBtnRed, false);
-                color = binding1.itemBtnBlack.getText().toString();
-            }
-        });
-        binding1.itemBtnWhite.setOnClickListener(v -> {
-            isColorWhite = !isColorWhite;
-            toggleButton(binding1.itemBtnWhite, isColorWhite);
-            if(isColorWhite){
-                isColorRed = false;
-                isColorGray = false;
-                isColorBlack = false;
-                toggleButton(binding1.itemBtnGray, false);
-                toggleButton(binding1.itemBtnBlack, false);
-                toggleButton(binding1.itemBtnRed, false);
-                color = binding1.itemBtnWhite.getText().toString();
-            }
-        });
-        binding1.itemBtnGray.setOnClickListener(v -> {
-            isColorGray = !isColorGray;
-            toggleButton(binding1.itemBtnGray, isColorGray);
-            if(isColorGray){
-                isColorRed = false;
-                isColorBlack = false;
-                isColorWhite = false;
-                toggleButton(binding1.itemBtnBlack, false);
-                toggleButton(binding1.itemBtnWhite, false);
-                toggleButton(binding1.itemBtnRed, false);
-                color = binding1.itemBtnGray.getText().toString();
-            }
-        });
-        binding1.itemBtnRed.setOnClickListener(v -> {
-            isColorRed = !isColorRed;
-            toggleButton(binding1.itemBtnRed, isColorRed);
-            if(isColorRed){
-                isColorBlack = false;
-                isColorGray = false;
-                isColorWhite = false;
-                toggleButton(binding1.itemBtnGray, false);
-                toggleButton(binding1.itemBtnWhite, false);
-                toggleButton(binding1.itemBtnBlack, false);
-                color = binding1.itemBtnRed.getText().toString();
-            }
-        });
-
         //
         int sl = Integer.parseInt(binding1.itemBtnGiatri.getText().toString());
         if(sl==1){
@@ -287,15 +237,26 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
         //
         binding1.itemBtnDathang.setOnClickListener(v -> {
             Log.d("Huy", "Themgiohang: "+size);
-            Log.d("Huy", "Themgiohang: "+color);
             Log.d("Huy", "Themgiohang: "+binding1.itemBtnGiatri.getText().toString());
-            if(size.isEmpty() || color.isEmpty()){
-               showAlertDialog("Bạn chưa chọn size hoặc color");
+            if(size.isEmpty()){
+               showAlertDialog("Bạn chưa chọn size");
             }else{
-
+                if(isCheckDathang){
+                    themGioHang(product, size, Integer.parseInt(binding1.itemBtnGiatri.getText().toString()));
+                }else {
+                    bottomSheetDialog.dismiss();
+                   muaNgay(product,size,Integer.parseInt(binding1.itemBtnGiatri.getText().toString()));
+                }
             }
         });
         bottomSheetDialog.show();
+    }
+    private void themGioHang(Product product, String size, int quality){
+
+    }
+    private void muaNgay(Product product, String size, int quality){
+        ThanhtoanFragment thanhtoanFragment = ThanhtoanFragment.getInstance(product,size,quality);
+            openScreen(thanhtoanFragment,true);
     }
     private void toggleButton(Button button, boolean isSelected) {
         if (isSelected) {
@@ -304,6 +265,7 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
         } else {
             button.setBackgroundResource(R.drawable.bg_btn_size_color);
             button.setTextColor(Color.BLACK);
+            size="";
         }
     }
     private void goiysize(){

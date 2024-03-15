@@ -71,102 +71,45 @@
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="60dp"
             android:layout_height="40dp"
-            android:text="S"
+            android:text="36"
             android:background="@drawable/bg_btn_size_color"
             android:gravity="center"
             android:layout_below="@+id/item_txtsize"
             android:layout_marginLeft="10dp"
-            android:id="@+id/item_btnS"
+            android:id="@+id/item_btn36"
             />
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="60dp"
             android:layout_height="40dp"
-            android:text="M"
+            android:text="37"
             android:background="@drawable/bg_btn_size_color"
             android:gravity="center"
             android:layout_below="@+id/item_txtsize"
             android:layout_marginLeft="10dp"
-            android:id="@+id/item_btnM"
-            android:layout_toRightOf="@+id/item_btnS"/>
+            android:id="@+id/item_btn37"
+            android:layout_toRightOf="@+id/item_btn36"/>
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="60dp"
             android:layout_height="40dp"
-            android:text="L"
+            android:text="38"
             android:background="@drawable/bg_btn_size_color"
             android:gravity="center"
             android:layout_below="@+id/item_txtsize"
             android:layout_marginLeft="10dp"
-            android:id="@+id/item_btnL"
-            android:layout_toRightOf="@+id/item_btnM"/>
+            android:id="@+id/item_btn38"
+            android:layout_toRightOf="@+id/item_btn37"/>
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="60dp"
             android:layout_height="40dp"
-            android:text="XL"
+            android:text="39"
             android:background="@drawable/bg_btn_size_color"
             android:gravity="center"
             android:layout_below="@+id/item_txtsize"
             android:layout_marginLeft="10dp"
-            android:id="@+id/item_btnXL"
-            android:layout_toRightOf="@+id/item_btnL"/>
+            android:id="@+id/item_btn39"
+            android:layout_toRightOf="@+id/item_btn38"/>
     </RelativeLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        style="@style/Widget.AppCompat.AutoCompleteTextView"/>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/item_txtcolor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="Color"
-            android:textSize="15dp" />
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="60dp"
-            android:layout_height="40dp"
-            android:text="Black"
-            android:background="@drawable/bg_btn_size_color"
-            android:gravity="center"
-            android:layout_below="@+id/item_txtcolor"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/item_btnBlack"/>
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="60dp"
-            android:layout_height="40dp"
-            android:text="White"
-            android:background="@drawable/bg_btn_size_color"
-            android:gravity="center"
-            android:layout_below="@+id/item_txtcolor"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/item_btnWhite"
-            android:layout_toRightOf="@+id/item_btnBlack"/>
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="60dp"
-            android:layout_height="40dp"
-            android:text="Gray"
-            android:background="@drawable/bg_btn_size_color"
-            android:gravity="center"
-            android:layout_below="@+id/item_txtcolor"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/item_btnGray"
-            android:layout_toRightOf="@+id/item_btnWhite"/>
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="60dp"
-            android:layout_height="40dp"
-            android:text="Red"
-            android:background="@drawable/bg_btn_size_color"
-            android:gravity="center"
-            android:layout_below="@+id/item_txtcolor"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/item_btnRed"
-            android:layout_toRightOf="@+id/item_btnGray"/>
-    </RelativeLayout>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="30dp"

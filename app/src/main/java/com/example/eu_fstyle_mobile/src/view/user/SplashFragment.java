@@ -43,7 +43,7 @@ public class SplashFragment extends BaseFragment<FragmentSplashFragmetBinding> {
         binding.imgLogo.startAnimation(animationLogo);
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             if (isNetworkConnected()) {
-                openScreen(new LoginFragment(), false);
+                openScreen(new HomeFragment(), false);
             } else {
                 showAlertDialog("Không có kết nối mạng, Vui lòng thử lại sau!");
             }
