@@ -1,5 +1,6 @@
 package com.example.eu_fstyle_mobile.src.adapter;
 
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -8,31 +9,31 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.eu_fstyle_mobile.databinding.ItemFavouriteBinding;
 import com.example.eu_fstyle_mobile.databinding.ItemMyAddressBinding;
 import com.example.eu_fstyle_mobile.src.model.Product;
+import com.example.eu_fstyle_mobile.src.model.ProductFavourite;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class MyFavouriteAdapter extends RecyclerView.Adapter<MyFavouriteAdapter.ViewHolder> {
 
-    private List<Product>  productList;
+    private List<ProductFavourite> productList;
 
-    public MyFavouriteAdapter(List<Product> productList) {
+    public MyFavouriteAdapter(List<ProductFavourite> productList) {
         this.productList = productList;
     }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        return new MyFavouriteAdapter .ViewHolder(ItemFavouriteBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Product product = productList.get(position);
-        String[] imageArray = product.getImage64();
-        String image = imageArray.length>0 ? imageArray[0]: "";
-        Picasso.get().load(image).into(holder.binding.itemImageProductHome);
+        ProductFavourite product = productList.get(position);
+        String image = product.getDefaultImage();
         holder.binding.itemNameProductHome.setText(product.getName());
         holder.binding.itemPriceProductHome.setText(product.getPrice() + "đ");
+        Picasso.get().load(image).into(holder.binding.itemImageProductHome);
     }
 
     @Override

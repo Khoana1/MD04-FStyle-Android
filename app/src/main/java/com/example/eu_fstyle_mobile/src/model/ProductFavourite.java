@@ -1,17 +1,25 @@
-package com.example.eu_fstyle_mobile.src.request;
+package com.example.eu_fstyle_mobile.src.model;
 
-public class RequestCreateFavourite {
+import com.google.gson.annotations.SerializedName;
+
+public class ProductFavourite {
+    @SerializedName("name")
     private String name;
+    @SerializedName("quantity")
     private String quantity;
-    private String price;
+    @SerializedName("price")
+    private Number price;
+    @SerializedName("defaultImage")
     private String defaultImage;
+    @SerializedName("_id")
+    private String _id;
 
-
-    public RequestCreateFavourite(String name, String quantity, String price, String defaultImage) {
+    public ProductFavourite(String name, String quantity, Number price, String defaultImage, String _id) {
         this.name = name;
         this.quantity = quantity;
         this.price = price;
         this.defaultImage = defaultImage;
+        this._id = _id;
     }
 
     public String getName() {
@@ -30,11 +38,11 @@ public class RequestCreateFavourite {
         this.quantity = quantity;
     }
 
-    public String getPrice() {
+    public Number getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Number price) {
         this.price = price;
     }
 
@@ -45,4 +53,13 @@ public class RequestCreateFavourite {
     public void setDefaultImage(String defaultImage) {
         this.defaultImage = defaultImage;
     }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
 }
