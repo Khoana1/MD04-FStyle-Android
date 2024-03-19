@@ -49,4 +49,5 @@
     <string name="default_notification_channel_name">Kênh thông báo chính</string>
     <string name="default_notification_channel_description">Kênh thông báo này được sử dụng để hiển thị các thông báo chính từ ứng dụng.</string>
     <string name="default_notification_channel_id">primary_channel_id</string>
+    <string name="content_size_shoe">Để đảm bảo bạn chọn đúng <b>kích thước giày</b>, hãy tham khảo bảng kích thước dưới đây. Hãy lưu ý rằng kích thước có thể thay đổi tùy theo thương hiệu và kiểu giày.</string>
 </resources>
