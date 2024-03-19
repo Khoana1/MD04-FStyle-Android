@@ -220,7 +220,6 @@
                     android:id="@+id/detail_txt_phivanchuyen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="15000"
                     android:textColor="#FF00"
                     android:textSize="18dp"
                     android:textStyle="bold"
@@ -401,7 +400,7 @@
                 android:background="@android:color/darker_gray" />
 
             <LinearLayout
-                android:id="@+id/btnThemgiohang"
+
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="0dp"

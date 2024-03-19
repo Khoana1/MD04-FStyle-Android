@@ -165,7 +165,7 @@
             android:id="@+id/price_bottom_sheet_htvc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="15000 VNĐ"
+            android:text="15,000 VNĐ"
             android:textColor="#FF00"
             android:textSize="20dp"
             android:textStyle="bold"

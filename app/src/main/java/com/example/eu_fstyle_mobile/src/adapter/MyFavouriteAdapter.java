@@ -12,6 +12,7 @@ import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.ProductFavourite;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class MyFavouriteAdapter extends RecyclerView.Adapter<MyFavouriteAdapter.ViewHolder> {
@@ -32,7 +33,8 @@ public class MyFavouriteAdapter extends RecyclerView.Adapter<MyFavouriteAdapter.
         ProductFavourite product = productList.get(position);
         String image = product.getDefaultImage();
         holder.binding.itemNameProductHome.setText(product.getName());
-        holder.binding.itemPriceProductHome.setText(product.getPrice() + "đ");
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+        holder.binding.itemPriceProductHome.setText(decimalFormat.format(product.getPrice())+" VNĐ");
         Picasso.get().load(image).into(holder.binding.itemImageProductHome);
     }
 
