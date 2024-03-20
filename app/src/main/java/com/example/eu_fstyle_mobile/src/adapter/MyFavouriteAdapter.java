@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.ItemFavouriteBinding;
 import com.example.eu_fstyle_mobile.databinding.ItemMyAddressBinding;
 import com.example.eu_fstyle_mobile.src.model.Product;
@@ -35,7 +36,10 @@ public class MyFavouriteAdapter extends RecyclerView.Adapter<MyFavouriteAdapter.
         holder.binding.itemNameProductHome.setText(product.getName());
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         holder.binding.itemPriceProductHome.setText(decimalFormat.format(product.getPrice())+" VNĐ");
-        Picasso.get().load(image).into(holder.binding.itemImageProductHome);
+        Picasso.get().load(image)
+                .placeholder(R.drawable.icon_home)
+                .error(R.drawable.icon_erro)
+                .into(holder.binding.itemImageProductHome);
     }
 
     @Override

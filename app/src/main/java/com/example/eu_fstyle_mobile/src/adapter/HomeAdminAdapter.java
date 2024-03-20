@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.ItemProductAdminBinding;
 import com.example.eu_fstyle_mobile.src.model.Product;
 import com.squareup.picasso.Picasso;
@@ -31,7 +32,10 @@ public class HomeAdminAdapter extends RecyclerView.Adapter<HomeAdminAdapter.View
         Product product = productList.get(position);
         String[] imageArray = product.getImage64();
         String image = imageArray.length>0 ? imageArray[0]: "";
-        Picasso.get().load(image).into(holder.binding.itemImageProductHome);
+        Picasso.get().load(image)
+                .placeholder(R.drawable.icon_home)
+                .error(R.drawable.icon_erro)
+                .into(holder.binding.itemImageProductHome);
         holder.binding.itemNameProductHome.setText(product.getName());
         holder.binding.itemPriceProductHome.setText(product.getPrice() + "đ");
     }

@@ -41,7 +41,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Viewholder
         Product product = arrayList.get(position);
         String[] imagearray = product.getImage64();
         String image = imagearray.length>0 ? imagearray[0]: "";
-        Picasso.get().load(image).into(holder.imageView);
+        Picasso.get().load(image)
+                .placeholder(R.drawable.icon_home)
+                .error(R.drawable.icon_erro)
+                .into(holder.imageView);
         DecimalFormat dcf = new DecimalFormat("###,###,###");
         holder.txtPrice.setText(dcf.format(product.getPrice())+" VNĐ");
         holder.txtName.setText(product.getName());
