@@ -52,12 +52,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="20dp"
-                        android:src="@drawable/ic_back" />
+                        android:layout_alignParentEnd="true"
+                        android:src="@drawable/ic_admin_icon" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
+                        android:textColor="@color/colorBlack"
                         android:fontFamily="@font/inter_semi_bold"
                         android:text="@string/tv_admin_profile"
                         android:textSize="18sp"
@@ -171,9 +173,10 @@
                                 android:background="@drawable/oval_background">
 
                                 <ImageView
+                                    android:id="@+id/img_wallet"
                                     android:layout_width="35dp"
                                     android:layout_height="35dp"
-                                    android:src="@drawable/settings"
+                                    android:src="@drawable/bell"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -185,7 +188,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="8dp"
                                 android:fontFamily="@font/inter_bold"
-                                android:text="Cài đặt"
+                                android:text="Thông báo"
                                 android:textAlignment="center"
                                 android:textColor="@color/colorBlack"
                                 android:textSize="13sp" />
@@ -202,6 +205,7 @@
                             android:orientation="vertical">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/constraintLogOut"
                                 android:layout_width="60dp"
                                 android:layout_height="60dp"
                                 android:layout_gravity="center_horizontal"
@@ -209,10 +213,9 @@
                                 android:background="@drawable/oval_background">
 
                                 <ImageView
-                                    android:id="@+id/img_wallet"
                                     android:layout_width="35dp"
-                                    android:layout_height="30dp"
-                                    android:src="@drawable/bell"
+                                    android:layout_height="35dp"
+                                    android:src="@drawable/settings"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -224,7 +227,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="8dp"
                                 android:fontFamily="@font/inter_bold"
-                                android:text="Thông báo"
+                                android:text="Đăng xuất"
                                 android:textAlignment="center"
                                 android:textColor="@color/colorBlack"
                                 android:textSize="13sp" />
