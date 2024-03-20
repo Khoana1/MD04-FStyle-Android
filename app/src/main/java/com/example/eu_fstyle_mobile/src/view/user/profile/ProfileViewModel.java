@@ -12,7 +12,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProfileViewModel extends ViewModel {
-
     private MutableLiveData<User> userData = new MutableLiveData<>();
     private MutableLiveData<String> errorData = new MutableLiveData<>();
 
@@ -33,7 +32,7 @@ public class ProfileViewModel extends ViewModel {
                 if (response.isSuccessful()) {
                     userData.setValue(response.body());
                 } else {
-                    errorData.setValue("Error fetching user data");
+                    errorData.setValue("Gặp lỗi lấy dữ liệu người dùng");
                 }
             }
 

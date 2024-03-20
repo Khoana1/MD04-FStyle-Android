@@ -41,6 +41,7 @@ import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
+import com.example.eu_fstyle_mobile.src.view.user.payment.CartFragment;
 import com.example.eu_fstyle_mobile.src.view.user.profile.ProfileFragment;
 import com.example.eu_fstyle_mobile.ultilties.SearchUltils;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
@@ -90,7 +91,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         binding.avatarHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openScreen(new ProfileFragment(), true); // Thay bằng home fragment sau khi làm xong
+                openScreen(new ProfileFragment(), true);
             }
         });
         initView();
@@ -103,6 +104,12 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         User user = UserPrefManager.getInstance(getActivity()).getUser();
         String lastName = getLastName(user.getName());
         binding.textviewNameUser.setText(lastName);
+        binding.cardView3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openScreen(new CartFragment(), true);
+            }
+        });
     }
 
     public String getLastName(String fullName) {

@@ -42,18 +42,22 @@ public class HomeAdminFragment extends BaseFragment<FragmentHomeAdminBinding> {
     }
 
     private void showShimmerEffect() {
-        binding.shimmerView.setVisibility(View.VISIBLE);
-        binding.dataProduct.setVisibility(View.INVISIBLE);
-        binding.shimmerView.startShimmer();
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                binding.shimmerView.stopShimmer();
-                binding.shimmerView.setVisibility(View.GONE);
-                binding.dataProduct.setVisibility(View.VISIBLE);
-            }
-        }, 2000);
+        if (binding != null) {
+            binding.shimmerView.setVisibility(View.VISIBLE);
+            binding.dataProduct.setVisibility(View.INVISIBLE);
+            binding.shimmerView.startShimmer();
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (binding != null) {
+                        binding.shimmerView.stopShimmer();
+                        binding.shimmerView.setVisibility(View.GONE);
+                        binding.dataProduct.setVisibility(View.VISIBLE);
+                    }
+                }
+            }, 2000);
+        }
     }
 
     private void observeViewModel() {
