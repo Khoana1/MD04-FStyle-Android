@@ -46,7 +46,7 @@
     <string name="tv_admin_profile">Trang cá nhân quản lý</string>
     <string name="payment">Thanh toán</string>
     <string name="change_address">Đổi địa chỉ</string>
-    <string name="default_notification_channel_name">Kênh thông báo chính</string>
-    <string name="default_notification_channel_description">Kênh thông báo này được sử dụng để hiển thị các thông báo chính từ ứng dụng.</string>
+    <string name="default_notification_channel_name">Kênh thông báo FStyle</string>
+    <string name="default_notification_channel_description">Chào mừng các bạn đến với kênh thông báo chính của FStyle - nơi cập nhật những giao dịch và ưu đãi độc quyền chỉ dành cho bạn!</string>
     <string name="default_notification_channel_id">primary_channel_id</string>
 </resources>

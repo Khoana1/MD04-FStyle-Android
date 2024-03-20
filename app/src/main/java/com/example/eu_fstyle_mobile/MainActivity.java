@@ -1,18 +1,25 @@
 package com.example.eu_fstyle_mobile;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.Manifest;
+import android.widget.Toast;
 
 import com.example.eu_fstyle_mobile.src.view.user.IntroFragment;
 import com.example.eu_fstyle_mobile.src.view.user.SplashFragment;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_NOTIFICATION_PERMISSION = 1001;
 
     private Handler handler;
 
@@ -31,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (isFirstRun) {
             openIntroFragment();
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_NOTIFICATION_PERMISSION);
+            } else {
+            }
             sharedPreferences.edit().putBoolean("isFirstRun", false).apply();
         } else {
             replaceFragment(new SplashFragment());
@@ -53,4 +65,14 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_NOTIFICATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            } else {
+                Toast.makeText(this, "Bật thông báo để nhận các thông tin từ FStyle", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }
