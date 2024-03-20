@@ -42,7 +42,7 @@ public class SplashFragment extends BaseFragment<FragmentSplashFragmetBinding> {
         binding.imgLogo.startAnimation(animationLogo);
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             if (isNetworkConnected()) {
-                openScreen(new LoginFragment(), false);
+                openScreen(new HomeFragment(), false);
             } else {
                 showAlertNoConnectionDialog(new Runnable() {
                     @Override

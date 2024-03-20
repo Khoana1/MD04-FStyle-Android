@@ -204,7 +204,9 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity());
         View bottomView  = binding1.getRoot();
         bottomSheetDialog.setContentView(bottomView);
-
+        if(!bottomSheetDialog.isShowing()){
+           size="";
+        }
         binding1.itemDialogCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
         Picasso.get().load(product.getImage64()[0])
                 .placeholder(R.drawable.icon_home)
@@ -226,6 +228,8 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
                 toggleButton(binding1.itemBtn38, false);
                 toggleButton(binding1.itemBtn39, false);
                 size = "36";
+            }else {
+                size="";
             }
         });
         binding1.itemBtn37.setOnClickListener(v -> {
@@ -238,6 +242,8 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
                 toggleButton(binding1.itemBtn36, false);
                 toggleButton(binding1.itemBtn38, false);
                 size = "37";
+            }else {
+                size="";
             }
         });
         binding1.itemBtn38.setOnClickListener(v -> {
@@ -251,6 +257,8 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
                 toggleButton(binding1.itemBtn36, false);
                 toggleButton(binding1.itemBtn39, false);
                 size = "38";
+            }else {
+                size="";
             }
         });
         binding1.itemBtn39.setOnClickListener(v -> {
@@ -264,6 +272,8 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
                 toggleButton(binding1.itemBtn38, false);
                 toggleButton(binding1.itemBtn36, false);
                 size = "39";
+            }else {
+                size="";
             }
         });
         //
@@ -323,7 +333,6 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
         } else {
             button.setBackgroundResource(R.drawable.bg_btn_size_color);
             button.setTextColor(Color.BLACK);
-            size="";
         }
     }
     private void goiysize(){

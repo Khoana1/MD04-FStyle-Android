@@ -36,7 +36,10 @@ public class CategoryHomeAdapter extends RecyclerView.Adapter<CategoryHomeAdapte
     @Override
     public void onBindViewHolder(@NonNull Viewholder holder, int position) {
         Category category = arrayList.get(position);
-        Picasso.get().load(category.getImage()).into(holder.imageView);
+        Picasso.get().load(category.getImage())
+                .placeholder(R.drawable.icon_home)
+                .error(R.drawable.icon_erro)
+                .into(holder.imageView);
         holder.txtname.setText(category.getName());
     }
 

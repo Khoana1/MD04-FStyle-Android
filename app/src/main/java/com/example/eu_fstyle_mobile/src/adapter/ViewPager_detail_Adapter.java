@@ -37,7 +37,10 @@ public class ViewPager_detail_Adapter extends PagerAdapter {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.item_banner_home, container, false);
         ImageView imageView = view.findViewById(R.id.item_image_banner);
-        Picasso.get().load(list[position]).into(imageView);
+        Picasso.get().load(list[position])
+                .placeholder(R.drawable.icon_home)
+                .error(R.drawable.icon_erro)
+                .into(imageView);
         container.addView(view);
         return view;
     }
