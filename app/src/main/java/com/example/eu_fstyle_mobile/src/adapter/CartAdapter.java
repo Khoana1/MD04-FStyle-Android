@@ -74,6 +74,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         return productCartList.size();
     }
 
+    public void removeItem(int position) {
+        productCartList.remove(position);
+        notifyItemRemoved(position);
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         ItemCartProductBinding binding;
 
