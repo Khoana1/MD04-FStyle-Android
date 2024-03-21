@@ -2,6 +2,7 @@ package com.example.eu_fstyle_mobile.src.retrofit;
 
 import com.example.eu_fstyle_mobile.src.model.Address;
 import com.example.eu_fstyle_mobile.src.model.AddressRespone;
+import com.example.eu_fstyle_mobile.src.model.Cart;
 import com.example.eu_fstyle_mobile.src.model.Favourite;
 import com.example.eu_fstyle_mobile.src.model.ListProduct;
 import com.example.eu_fstyle_mobile.src.model.Product;
@@ -60,4 +61,6 @@ public interface ApiService {
     Call<Favourite> getFavorite(@Path("id") String id);
     @POST(ApiEndpoint.createFavorite)
     Call<Product> createFavorite(@Path("id") String id, @Body RequestCreateFavourite requestCreateFavourite);
+    @GET(ApiEndpoint.getCart)
+    Call<Cart> getCart(@Path("id") String id);
 }
