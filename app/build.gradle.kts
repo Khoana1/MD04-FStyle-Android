@@ -73,4 +73,5 @@ implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.facebook.shimmer:shimmer:0.4.0")
     implementation ("androidx.biometric:biometric:1.2.0-alpha03")
     implementation("com.daimajia.swipelayout:library:1.2.0@aar")
+    implementation ("it.xabaras.android:recyclerview-swipedecorator:1.4")
 }
