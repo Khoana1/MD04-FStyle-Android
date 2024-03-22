@@ -97,7 +97,6 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implem
         binding.tvAddress.setText(completeAddress);
         bottomSheet.dismiss();
         binding.tvEditItemAddress.setText("Đổi địa chỉ");
-        binding1.addressBottomSheetHtvc.setText(address.getCity());
     }
 
     private void selectMomoPayment() {

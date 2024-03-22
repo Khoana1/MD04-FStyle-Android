@@ -1,9 +1,11 @@
 package com.example.eu_fstyle_mobile.src.view.user.login;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -26,7 +28,6 @@ import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentLoginBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.User;
-import com.example.eu_fstyle_mobile.src.view.admin.HomeAdminFragment;
 import com.example.eu_fstyle_mobile.src.view.user.home.HomeFragment;
 import com.example.eu_fstyle_mobile.src.view.user.register.RegisterFragment;
 import com.example.eu_fstyle_mobile.ultilties.AdminPreManager;
@@ -117,13 +118,15 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                     public void run() {
                         if (user.getAdmin().equals(true)) {
                             hideLoginLoadingAnimation();
+                            Toast.makeText(getActivity(), "Chào mừng ADMIN!!!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getActivity(), AdminActivity.class);
                             startActivity(intent);
                         } else {
                             hideLoginLoadingAnimation();
+                            Toast.makeText(getActivity(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                             openScreenHome(new HomeFragment(), false);
                         }
-                        Toast.makeText(getActivity(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+
                     }
                 }, 3000);
             }

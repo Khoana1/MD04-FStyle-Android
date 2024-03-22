@@ -21,6 +21,7 @@
             tools:src="@drawable/giay1" />
 
         <LinearLayout
+            android:id="@+id/ll_favourite"
             android:layout_margin="5dp"
             android:layout_width="20dp"
             android:layout_height="20dp"

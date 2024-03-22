@@ -1,4 +1,4 @@
-package com.example.eu_fstyle_mobile.src.view.user.profile;
+package com.example.eu_fstyle_mobile.src.view.admin;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -11,7 +11,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProfileViewModel extends ViewModel {
+public class ProfileAdminViewModel extends ViewModel {
     private MutableLiveData<User> userData = new MutableLiveData<>();
     private MutableLiveData<String> errorData = new MutableLiveData<>();
 
