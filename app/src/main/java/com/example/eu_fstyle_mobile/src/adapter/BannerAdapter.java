@@ -40,8 +40,6 @@ public class BannerAdapter extends PagerAdapter {
         View view = inflater.inflate(R.layout.item_banner_home, container, false);
         ShapeableImageView imageView = view.findViewById(R.id.item_image_banner);
         Picasso.get().load(listImage[position])
-                .placeholder(R.drawable.icon_home)
-                .error(R.drawable.icon_erro)
                 .into(imageView);
         container.addView(view);
         return view;
