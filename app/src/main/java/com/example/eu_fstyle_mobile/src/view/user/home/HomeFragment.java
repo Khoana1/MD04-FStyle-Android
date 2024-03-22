@@ -39,6 +39,7 @@ import com.example.eu_fstyle_mobile.src.model.Category;
 import com.example.eu_fstyle_mobile.src.model.ListProduct;
 import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.User;
+import com.example.eu_fstyle_mobile.src.request.RequestCreateFavourite;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
 import com.example.eu_fstyle_mobile.src.view.user.payment.CartFragment;
@@ -440,5 +441,28 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     public void onClick(Product product) {
           DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
           openScreenHome(detailProductFragment, true);
+    }
+
+    @Override
+    public void onClickFavourite(Product product) {
+        User user = UserPrefManager.getInstance(getActivity()).getUser();
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        RequestCreateFavourite requestCreateFavourite = new RequestCreateFavourite(product.getName(), product.getQuantity(), product.getPrice().toString(), product.getImage64()[0]);
+        Call<Product> call = apiService.createFavorite(user.get_id(), requestCreateFavourite);
+        call.enqueue(new Callback<Product>() {
+            @Override
+            public void onResponse(Call<Product> call, Response<Product> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(getActivity(), "Thêm vào yêu thích thành công", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Thêm vào yêu thích thất bại", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Product> call, Throwable t) {
+                Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
