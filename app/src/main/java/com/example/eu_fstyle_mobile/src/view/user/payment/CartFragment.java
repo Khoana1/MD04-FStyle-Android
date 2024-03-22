@@ -1,5 +1,6 @@
 package com.example.eu_fstyle_mobile.src.view.user.payment;
 
+import android.app.Dialog;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,29 +13,45 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentCartBinding;
 import com.example.eu_fstyle_mobile.src.adapter.CartAdapter;
+import com.example.eu_fstyle_mobile.src.adapter.MayBeLikeAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.Cart;
+import com.example.eu_fstyle_mobile.src.model.ListProduct;
+import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.ProductCart;
 import com.example.eu_fstyle_mobile.src.model.User;
+import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
+import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
 import com.example.eu_fstyle_mobile.src.view.user.home.HomeFragment;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CartFragment extends BaseFragment<FragmentCartBinding> {
     private CartAdapter cartAdapter;
+
+    private MayBeLikeAdapter mayBeLikeAdapter;
     private CartViewModel cartViewModel;
 
     boolean isUndoClicked = false;
+
+    Dialog cartDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,11 +63,35 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.viewEmpty.setVisibility(View.GONE);
+        showCartLoading();
         User user = UserPrefManager.getInstance(getActivity()).getUser();
         cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
         cartViewModel.getCart(user.get_id());
         observeViewModel();
+        getDataMayBeLike();
         initListener();
+    }
+
+    private void getDataMayBeLike() {
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        Call<ListProduct> call = apiService.getAllProducts();
+        call.enqueue(new Callback<ListProduct>() {
+            @Override
+            public void onResponse(Call<ListProduct> call, Response<ListProduct> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ArrayList<Product> listProduct = response.body().getArrayList();
+                    mayBeLikeAdapter = new MayBeLikeAdapter(listProduct);
+                    binding.rcvMaybeLike.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                    binding.rcvMaybeLike.setAdapter(mayBeLikeAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ListProduct> call, Throwable t) {
+                Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void observeViewModel() {
@@ -58,6 +99,7 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
             @Override
             public void onChanged(Cart cart) {
                 if (cart != null) {
+                    hideLoadingDialog();
                     List<ProductCart> productCartList = cart.getListProduct();
                     cartAdapter = new CartAdapter(productCartList);
                     binding.rcvCart.setAdapter(cartAdapter);
@@ -75,6 +117,7 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
                         binding.llQuantum.setVisibility(View.VISIBLE);
                         binding.viewEmpty.setVisibility(View.GONE);
                     }
+
                     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
                         @Override
                         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -161,11 +204,49 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
         binding.btnEmpty.setOnClickListener(v -> {
             openScreenHome(new HomeFragment(), true);
         });
+        binding.swipeCart.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                binding.swipeCart.setRefreshing(false);
+                User user = UserPrefManager.getInstance(getActivity()).getUser();
+                cartViewModel.getCart(user.get_id());
+                getDataMayBeLike();
+                showLoadingDialog();
+            }
+        });
     }
 
     @Override
     protected FragmentCartBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
         return FragmentCartBinding.inflate(inflater, container, false);
     }
+
+    private void showCartAnimation() {
+        cartDialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+        cartDialog.setContentView(R.layout.dialog_cart_loading);
+        LottieAnimationView animationView = cartDialog.findViewById(R.id.ltAnimationView);
+        animationView.setAnimation(R.raw.cart_loading);
+        animationView.setSpeed(4f);
+        animationView.playAnimation();
+        cartDialog.show();
+    }
+
+    private void hideCartLoadingAnimation() {
+        if (cartDialog != null && cartDialog.isShowing()) {
+            cartDialog.dismiss();
+        }
+    }
+
+    private void showCartLoading() {
+        showCartAnimation();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideCartLoadingAnimation();
+            }
+        }, 2000);
+    }
+
 
 }

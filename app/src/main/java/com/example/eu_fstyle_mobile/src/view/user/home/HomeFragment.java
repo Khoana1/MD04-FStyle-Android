@@ -138,7 +138,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     }
 
 
-    private void getProduct() {ApiService apiService = ApiClient.getClient().create(ApiService.class);
+    private void getProduct() {
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
         Call<ListProduct> call = apiService.getAllProducts();
         call.enqueue(new Callback<ListProduct>() {
             @Override
