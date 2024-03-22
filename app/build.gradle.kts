@@ -72,4 +72,6 @@ implementation("androidx.appcompat:appcompat:1.6.1")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     implementation("com.facebook.shimmer:shimmer:0.4.0")
     implementation ("androidx.biometric:biometric:1.2.0-alpha03")
+    implementation("com.daimajia.swipelayout:library:1.2.0@aar")
+    implementation ("it.xabaras.android:recyclerview-swipedecorator:1.4")
 }

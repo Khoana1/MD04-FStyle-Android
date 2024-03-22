@@ -54,11 +54,17 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
 
             }
         });
+        holder.ll_favourite.setOnClickListener(v -> {
+            onClickItem.onClickFavourite(product);
+        });
         holder.itemView.setOnClickListener(v -> {
             if(onClickItem != null){
                 onClickItem.onClick(product);
             }
         });
+
+
+
     }
 
     @Override
@@ -67,17 +73,20 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
     }
     public interface onClickItem{
         void onClick(Product product);
+
+        void onClickFavourite(Product product);
     }
     public class Viewholder extends RecyclerView.ViewHolder{
         ImageView imageView;
         TextView txtName,txtPrice;
-        LinearLayout btn_add;
+        LinearLayout btn_add, ll_favourite;
         public Viewholder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.item_image_product_home);
             txtName = itemView.findViewById(R.id.item_name_product_home);
             txtPrice = itemView.findViewById(R.id.item_price_product_home);
             btn_add = itemView.findViewById(R.id.item_btnCong_product_home);
+            ll_favourite = itemView.findViewById(R.id.ll_favourite);
         }
     }
 }
