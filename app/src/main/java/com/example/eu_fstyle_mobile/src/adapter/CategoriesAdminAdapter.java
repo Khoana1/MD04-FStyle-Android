@@ -8,17 +8,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.ItemProductAdminBinding;
+import com.example.eu_fstyle_mobile.src.model.Categories;
 import com.example.eu_fstyle_mobile.src.model.Product;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class HomeAdminAdapter extends RecyclerView.Adapter<HomeAdminAdapter.ViewHolder> {
+public class CategoriesAdminAdapter extends RecyclerView.Adapter<CategoriesAdminAdapter.ViewHolder> {
 
-    private List<Product> productList;
+    private List<Categories> categoriesList;
 
-    public HomeAdminAdapter(List<Product> productList) {
-        this.productList = productList;
+    public CategoriesAdminAdapter(List<Categories> categoriesList) {
+        this.categoriesList = categoriesList;
     }
 
     @NonNull
@@ -28,21 +29,18 @@ public class HomeAdminAdapter extends RecyclerView.Adapter<HomeAdminAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HomeAdminAdapter.ViewHolder holder, int position) {
-        Product product = productList.get(position);
-        String[] imageArray = product.getImage64();
-        String image = imageArray.length>0 ? imageArray[0]: "";
-        Picasso.get().load(image)
+    public void onBindViewHolder(@NonNull CategoriesAdminAdapter.ViewHolder holder, int position) {
+        Categories categories = categoriesList.get(position);
+        Picasso.get().load(categories.getImage())
                 .placeholder(R.drawable.icon_home)
                 .error(R.drawable.icon_erro)
                 .into(holder.binding.itemImageProductHome);
-        holder.binding.itemNameProductHome.setText(product.getName());
-        holder.binding.itemPriceProductHome.setText(product.getPrice() + "đ");
+        holder.binding.itemNameProductHome.setText(categories.getName());
     }
 
     @Override
     public int getItemCount() {
-        return productList.size();
+        return categoriesList.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
