@@ -20,14 +20,17 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Viewholder> {
-    Context context;
-    ArrayList<Product> arrayList;
+    private Context context;
+    private ArrayList<Product> arrayList;
+    private onclickItem onClick;
 
     public SearchAdapter(Context context, ArrayList<Product> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
     }
-
+    public void setOnclickItem(onclickItem onClick){
+        this.onClick = onClick;
+    }
     @NonNull
     @Override
     public Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -54,16 +57,19 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Viewholder
 
             }
         });
+        holder.itemView.setOnClickListener(v -> {
+            if(onClick != null){
+                onClick.onclick(product);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return arrayList.size();
     }
-    public void updateData(ArrayList<Product> newData) {
-        arrayList.clear(); // Xóa dữ liệu cũ
-        arrayList.addAll(newData); // Thêm dữ liệu mới
-        notifyDataSetChanged(); // Thông báo cho RecyclerView cập nhật lại giao diện
+    public interface onclickItem{
+        void onclick(Product product);
     }
     public class Viewholder extends RecyclerView.ViewHolder{
         ImageView imageView;

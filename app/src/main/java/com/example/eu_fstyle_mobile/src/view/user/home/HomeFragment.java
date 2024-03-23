@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -78,6 +79,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     boolean isCaoToiThapSelected= false;
     boolean isDuo1trieuSelected = false;
     boolean isDuo2trieuSelected =false;
+    Dialog dialogSearch;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -317,7 +319,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     }
     private void openSearch(int gravity){
         binding.searchHome.setOnClickListener(v -> {
-            Dialog dialogSearch = new Dialog(getActivity());
+            dialogSearch = new Dialog(getActivity());
             dialogSearch.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialogSearch.setContentView(R.layout.dialog_search);
             Window window = dialogSearch.getWindow();
@@ -371,6 +373,15 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                           searchAdapter = new SearchAdapter(getActivity(), list);
                           recyclerView.setAdapter(searchAdapter);
                           recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+                          searchAdapter.setOnclickItem(new SearchAdapter.onclickItem() {
+                              @Override
+                              public void onclick(Product product) {
+                                  dialogSearch.dismiss();
+                                  hidekeyboard(recyclerView);
+                                  DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
+                                  openScreenHome(detailProductFragment, true);
+                              }
+                          });
                       }
 
                   }
@@ -386,12 +397,21 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         });
 
     }
+    private void hidekeyboard(RecyclerView recyclerView){
+       recyclerView.setOnTouchListener(new View.OnTouchListener() {
+           @Override
+           public boolean onTouch(View v, MotionEvent event) {
+               hideKeyboard();
+               return false;
+           }
+       });
+    }
     @NonNull
     @Override
     public CreationExtras getDefaultViewModelCreationExtras() {
         return super.getDefaultViewModelCreationExtras();
     }
-  
+
       private void getAvatar() {
         String avatarUrl = "http://10.64.5.110:3000/api/user/avatar/image/%s"; // thay IPv4 của máy tính chạy server vào đây để test
         User user = UserPrefManager.getInstance(getActivity()).getUser();
@@ -440,6 +460,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
 
     @Override
     public void onClick(Product product) {
+          dialogSearch.dismiss();
           DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
           openScreenHome(detailProductFragment, true);
     }
