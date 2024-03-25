@@ -22,8 +22,12 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.viewmodel.CreationExtras;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -32,17 +36,21 @@ import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.BottomDialogFilterBinding;
 import com.example.eu_fstyle_mobile.databinding.FragmentHomeBinding;
 import com.example.eu_fstyle_mobile.src.adapter.BannerAdapter;
+import com.example.eu_fstyle_mobile.src.adapter.CategoryFillerAdapter;
 import com.example.eu_fstyle_mobile.src.adapter.CategoryHomeAdapter;
 import com.example.eu_fstyle_mobile.src.adapter.ProductHomeAdapter;
 import com.example.eu_fstyle_mobile.src.adapter.SearchAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
+import com.example.eu_fstyle_mobile.src.model.Categories;
 import com.example.eu_fstyle_mobile.src.model.Category;
+import com.example.eu_fstyle_mobile.src.model.ListCategories;
 import com.example.eu_fstyle_mobile.src.model.ListProduct;
 import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateFavourite;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
+import com.example.eu_fstyle_mobile.src.view.admin.CategoriesViewModel;
 import com.example.eu_fstyle_mobile.src.view.user.payment.CartFragment;
 import com.example.eu_fstyle_mobile.src.view.user.profile.ProfileFragment;
 import com.example.eu_fstyle_mobile.ultilties.SearchUltils;
@@ -62,7 +70,9 @@ import retrofit2.Response;
 
 public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements ProductHomeAdapter.onClickItem{
     FragmentHomeBinding binding;
-    ArrayList<Category> arrayList;
+    CategoryFillerAdapter fillerAdapter;
+    CategoriesViewModel categoriesViewModel;
+    ArrayList<Categories> arrayList;
     ArrayList<Product> listProduct;
     ArrayList<Product> listFilter;
     ProductHomeAdapter productAdapter;
@@ -85,6 +95,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+        categoriesViewModel = new ViewModelProvider(this).get(CategoriesViewModel.class);
+        categoriesViewModel.getAllCategories();
         Banner();
         openSearch(Gravity.CENTER);
         openFilter();
@@ -140,7 +152,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     }
 
 
-    private void getProduct() {ApiService apiService = ApiClient.getClient().create(ApiService.class);
+    private void getProduct() {
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
         Call<ListProduct> call = apiService.getAllProducts();
         call.enqueue(new Callback<ListProduct>() {
             @Override
@@ -163,12 +176,16 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     }
 
     private void getCategory() {
-        arrayList = new ArrayList<>();
-        arrayList.add(new Category(1, "https://i.pinimg.com/564x/70/6d/1e/706d1e17ddb9188407952985c83c4ab7.jpg","shoes"));
-        arrayList.add(new Category(2, "https://i.pinimg.com/564x/87/e7/b1/87e7b1ecc2ef1580841e7a0d23ed49a0.jpg", "shoes2"));
-        adapter = new CategoryHomeAdapter(getActivity(), arrayList);
-        binding.recycleCategoryHome.setLayoutManager(new GridLayoutManager(getActivity(),2));
-        binding.recycleCategoryHome.setAdapter(adapter);
+        categoriesViewModel.getCategorieData().observe(getViewLifecycleOwner(), new Observer<ListCategories>() {
+            @Override
+            public void onChanged(ListCategories listCategories) {
+                arrayList = listCategories.getArrayList();
+                adapter = new CategoryHomeAdapter(getActivity(), arrayList);
+                binding.recycleCategoryHome.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+                binding.recycleCategoryHome.setAdapter(adapter);
+            }
+        });
+
     }
     private void openFilter() {
         listFilter = new ArrayList<>();
@@ -180,65 +197,20 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
             ViewGroup.LayoutParams params = bottomsetView.getLayoutParams();
             params.height = (int) (getResources().getDisplayMetrics().heightPixels * 0.6);
             bottomsetView.setLayoutParams(params);
-
+            //
+            ArrayList<String> listName = new ArrayList<>();
+            for(int i=0; i<arrayList.size();i++){
+                listName.add(arrayList.get(i).getName());
+            }
+            fillerAdapter = new CategoryFillerAdapter(listName);
+            binding1.recycleFiller.setAdapter(fillerAdapter);
+            binding1.recycleFiller.setLayoutManager(new GridLayoutManager(getActivity(), 2));
             binding1.backFilter.setOnClickListener(v1 -> bottomSheetDialog.dismiss());
-            binding1.btnThaptoicaoFilter.setOnClickListener(v1 -> {
-                isThapToiCaoSelected = !isThapToiCaoSelected;
-                toggleButton(binding1.btnThaptoicaoFilter, isThapToiCaoSelected);
-                if (isThapToiCaoSelected) {
-                    isCaoToiThapSelected = false;
-                    isDuo1trieuSelected = false;
-                    isDuo2trieuSelected = false;
-                    toggleButton(binding1.btnCaotoithapFilter, false);
-                    toggleButton(binding1.btnDuoi1trieuFilter, false);
-                    toggleButton(binding1.btnDuoi2trieuFilter, false);
-                    textButton = String.valueOf(binding1.btnThaptoicaoFilter.getText());
-                    getThaptoiCao();
-                }
-            });
-            binding1.btnCaotoithapFilter.setOnClickListener(v1 -> {
-                isCaoToiThapSelected = !isCaoToiThapSelected;
-                toggleButton(binding1.btnCaotoithapFilter, isCaoToiThapSelected);
-                if (isCaoToiThapSelected) {
-                    isThapToiCaoSelected = false;
-                    isDuo1trieuSelected = false;
-                    isDuo2trieuSelected = false;
-                    toggleButton(binding1.btnThaptoicaoFilter, false);
-                    toggleButton(binding1.btnDuoi1trieuFilter, false);
-                    toggleButton(binding1.btnDuoi2trieuFilter, false);
-                    textButton = String.valueOf(binding1.btnCaotoithapFilter.getText());
-                    getCaotoiThap();
-                }
-            });
-            binding1.btnDuoi1trieuFilter.setOnClickListener(v1 -> {
-                isDuo1trieuSelected = !isDuo1trieuSelected;
-                toggleButton(binding1.btnDuoi1trieuFilter, isDuo1trieuSelected);
-                if (isDuo1trieuSelected) {
-                    isThapToiCaoSelected = false;
-                    isCaoToiThapSelected = false;
-                    isDuo2trieuSelected = false;
-                    toggleButton(binding1.btnThaptoicaoFilter, false);
-                    toggleButton(binding1.btnCaotoithapFilter, false);
-                    toggleButton(binding1.btnDuoi2trieuFilter, false);
-                    textButton = String.valueOf(binding1.btnDuoi1trieuFilter.getText());
-                    getDuoi1trieu();
-                }
+            //
 
-            });
-            binding1.btnDuoi2trieuFilter.setOnClickListener(v1 -> {
-                isDuo2trieuSelected = !isDuo2trieuSelected;
-                toggleButton(binding1.btnDuoi2trieuFilter, isDuo2trieuSelected);
-                if (isDuo2trieuSelected) {
-                    isThapToiCaoSelected = false;
-                    isCaoToiThapSelected = false;
-                    isDuo1trieuSelected = false;
-                    toggleButton(binding1.btnThaptoicaoFilter, false);
-                    toggleButton(binding1.btnCaotoithapFilter, false);
-                    toggleButton(binding1.btnDuoi1trieuFilter, false);
-                    textButton = String.valueOf(binding1.btnDuoi2trieuFilter.getText());
-                    getDuoi2trieu();
-                }
-            });
+            //
+            buttonPrice(binding1);
+            //
             binding1.btnThietlaplaiFilter.setOnClickListener(v1 -> {
                 listFilter.clear();
                 toggleButton(binding1.btnThaptoicaoFilter, false);
@@ -257,6 +229,65 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                 }
             });
             bottomSheetDialog.show();
+        });
+    }
+    private void buttonPrice(BottomDialogFilterBinding binding1){
+        binding1.btnThaptoicaoFilter.setOnClickListener(v1 -> {
+            isThapToiCaoSelected = !isThapToiCaoSelected;
+            toggleButton(binding1.btnThaptoicaoFilter, isThapToiCaoSelected);
+            if (isThapToiCaoSelected) {
+                isCaoToiThapSelected = false;
+                isDuo1trieuSelected = false;
+                isDuo2trieuSelected = false;
+                toggleButton(binding1.btnCaotoithapFilter, false);
+                toggleButton(binding1.btnDuoi1trieuFilter, false);
+                toggleButton(binding1.btnDuoi2trieuFilter, false);
+                textButton = String.valueOf(binding1.btnThaptoicaoFilter.getText());
+                getThaptoiCao();
+            }
+        });
+        binding1.btnCaotoithapFilter.setOnClickListener(v1 -> {
+            isCaoToiThapSelected = !isCaoToiThapSelected;
+            toggleButton(binding1.btnCaotoithapFilter, isCaoToiThapSelected);
+            if (isCaoToiThapSelected) {
+                isThapToiCaoSelected = false;
+                isDuo1trieuSelected = false;
+                isDuo2trieuSelected = false;
+                toggleButton(binding1.btnThaptoicaoFilter, false);
+                toggleButton(binding1.btnDuoi1trieuFilter, false);
+                toggleButton(binding1.btnDuoi2trieuFilter, false);
+                textButton = String.valueOf(binding1.btnCaotoithapFilter.getText());
+                getCaotoiThap();
+            }
+        });
+        binding1.btnDuoi1trieuFilter.setOnClickListener(v1 -> {
+            isDuo1trieuSelected = !isDuo1trieuSelected;
+            toggleButton(binding1.btnDuoi1trieuFilter, isDuo1trieuSelected);
+            if (isDuo1trieuSelected) {
+                isThapToiCaoSelected = false;
+                isCaoToiThapSelected = false;
+                isDuo2trieuSelected = false;
+                toggleButton(binding1.btnThaptoicaoFilter, false);
+                toggleButton(binding1.btnCaotoithapFilter, false);
+                toggleButton(binding1.btnDuoi2trieuFilter, false);
+                textButton = String.valueOf(binding1.btnDuoi1trieuFilter.getText());
+                getDuoi1trieu();
+            }
+
+        });
+        binding1.btnDuoi2trieuFilter.setOnClickListener(v1 -> {
+            isDuo2trieuSelected = !isDuo2trieuSelected;
+            toggleButton(binding1.btnDuoi2trieuFilter, isDuo2trieuSelected);
+            if (isDuo2trieuSelected) {
+                isThapToiCaoSelected = false;
+                isCaoToiThapSelected = false;
+                isDuo1trieuSelected = false;
+                toggleButton(binding1.btnThaptoicaoFilter, false);
+                toggleButton(binding1.btnCaotoithapFilter, false);
+                toggleButton(binding1.btnDuoi1trieuFilter, false);
+                textButton = String.valueOf(binding1.btnDuoi2trieuFilter.getText());
+                getDuoi2trieu();
+            }
         });
     }
     private void toggleButton(Button button, boolean isSelected) {

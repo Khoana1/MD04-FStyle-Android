@@ -3,12 +3,14 @@ package com.example.eu_fstyle_mobile.src.retrofit;
 import com.example.eu_fstyle_mobile.src.model.Address;
 import com.example.eu_fstyle_mobile.src.model.AddressRespone;
 import com.example.eu_fstyle_mobile.src.model.Cart;
+import com.example.eu_fstyle_mobile.src.model.Categories;
 import com.example.eu_fstyle_mobile.src.model.Favourite;
 import com.example.eu_fstyle_mobile.src.model.ListCategories;
 import com.example.eu_fstyle_mobile.src.model.ListProduct;
 import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.request.RequestAddAddress;
+import com.example.eu_fstyle_mobile.src.request.RequestCategory;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateCart;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateFavourite;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateProduct;
@@ -20,6 +22,8 @@ import com.example.eu_fstyle_mobile.ultilties.ApiEndpoint;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -65,6 +69,10 @@ public interface ApiService {
   
     @GET(ApiEndpoint.getAllCategories)
     Call<ListCategories> getAllCategories();
+    @POST(ApiEndpoint.createCategories)
+    Call<Categories> createCategory(
+            @Body RequestCategory requestCategory
+            );
   
     @GET(ApiEndpoint.getCart)
     Call<Cart> getCart(@Path("id") String id);

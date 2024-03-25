@@ -1,6 +1,7 @@
 package com.example.eu_fstyle_mobile.src.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eu_fstyle_mobile.R;
+import com.example.eu_fstyle_mobile.src.model.Categories;
 import com.example.eu_fstyle_mobile.src.model.Category;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.squareup.picasso.Picasso;
@@ -18,9 +20,9 @@ import java.util.ArrayList;
 
 public class CategoryHomeAdapter extends RecyclerView.Adapter<CategoryHomeAdapter.Viewholder> {
     Context context;
-    ArrayList<Category> arrayList;
+    ArrayList<Categories> arrayList;
 
-    public CategoryHomeAdapter(Context context, ArrayList<Category> arrayList) {
+    public CategoryHomeAdapter(Context context, ArrayList<Categories> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
     }
@@ -35,12 +37,14 @@ public class CategoryHomeAdapter extends RecyclerView.Adapter<CategoryHomeAdapte
 
     @Override
     public void onBindViewHolder(@NonNull Viewholder holder, int position) {
-        Category category = arrayList.get(position);
+        Categories category = arrayList.get(position);
         Picasso.get().load(category.getImage())
                 .placeholder(R.drawable.icon_home)
                 .error(R.drawable.icon_erro)
                 .into(holder.imageView);
         holder.txtname.setText(category.getName());
+        holder.txtname.setMaxLines(2);
+        holder.txtname.setEllipsize(TextUtils.TruncateAt.END);
     }
 
     @Override

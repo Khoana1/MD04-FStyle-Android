@@ -1,5 +1,8 @@
 package com.example.eu_fstyle_mobile.src.adapter;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -31,10 +34,21 @@ public class CategoriesAdminAdapter extends RecyclerView.Adapter<CategoriesAdmin
     @Override
     public void onBindViewHolder(@NonNull CategoriesAdminAdapter.ViewHolder holder, int position) {
         Categories categories = categoriesList.get(position);
-        Picasso.get().load(categories.getImage())
-                .placeholder(R.drawable.icon_home)
-                .error(R.drawable.icon_erro)
-                .into(holder.binding.itemImageProductHome);
+        if(categories.getImage() != null){
+            if(categories.getImage().startsWith("http")){
+                Picasso.get().load(categories.getImage())
+                        .placeholder(R.drawable.icon_home)
+                        .error(R.drawable.icon_erro)
+                        .into(holder.binding.itemImageProductHome);
+            }else {
+            byte[] decodedString = Base64.decode(categories.getImage(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            holder.binding.itemImageProductHome.setImageBitmap(decodedByte);
+        }
+        }else {
+            Picasso.get().load(categories.getImage())
+                    .placeholder(R.drawable.icon_home);
+        }
         holder.binding.itemNameProductHome.setText(categories.getName());
     }
 
