@@ -21,11 +21,10 @@
 
             >
 
-            <LinearLayout
-                android:id="@+id/ll_title"
+            <RelativeLayout
+                android:id="@+id/rlt_title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/icBack"
@@ -35,16 +34,21 @@
                     android:src="@drawable/ic_back_payment" />
 
                 <TextView
+                    android:id="@+id/tv_cart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:fontFamily="@font/inter_semi_bold"
                     android:text="Giỏ hàng"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/icBack"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
                     android:id="@+id/ll_quantum"
+                    android:layout_toRightOf="@id/tv_cart"
+                    android:layout_centerVertical="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -77,13 +81,21 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/ic_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_hint_cart" />
+
+            </RelativeLayout>
 
             <FrameLayout
                 android:id="@+id/frameCart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/ll_title">
+                android:layout_below="@id/rlt_title">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcvCart"

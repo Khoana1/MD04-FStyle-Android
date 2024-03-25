@@ -1,23 +1,19 @@
 package com.example.eu_fstyle_mobile.src.view.admin;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.eu_fstyle_mobile.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.example.eu_fstyle_mobile.databinding.FragmentCategoryAdminBinding;
 import com.example.eu_fstyle_mobile.src.adapter.CategoriesAdminAdapter;
-import com.example.eu_fstyle_mobile.src.adapter.HomeAdminAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.Categories;
 import com.example.eu_fstyle_mobile.src.model.ListCategories;
@@ -62,9 +58,9 @@ public class CategoryAdminFragment extends BaseFragment<FragmentCategoryAdminBin
         });
     }
     private void initListioner(){
-        binding.icAddCategory.setOnClickListener(v -> {
-            openScreenAddAdmin(new AddCategoriesFragment(), true);
-        });
+//        binding.icAddCategory.setOnClickListener(v -> {
+//            openScreenAddAdmin(new AddCategoriesFragment(), true);
+//        });
         binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
