@@ -42,7 +42,7 @@ import java.util.Arrays;
 
 
 public class AddCategoriesFragment extends BaseFragment<FragmentAddCategoriesBinding> {
-       private Uri uriImage= Uri.parse("");
+       private Uri uriImage;
        private static final int READ_PERMISSION = 101;
        String imageBase64;
        String name;
@@ -100,7 +100,7 @@ public class AddCategoriesFragment extends BaseFragment<FragmentAddCategoriesBin
         });
         binding.btnAddCategory.setOnClickListener(v -> {
             validateAddCategory();
-            if(binding.categoryNameContainer.getHelperText()== null && !uriImage.equals("")){
+            if(binding.categoryNameContainer.getHelperText()== null && uriImage != null ){
                 imageBase64 = convertImagesToBase64(uriImage);
                 User user = AdminPreManager.getInstance(getActivity()).getAdminData();
                 Log.d("Huy", "initView: "+"_"+name+"_"+imageBase64);
@@ -118,7 +118,7 @@ public class AddCategoriesFragment extends BaseFragment<FragmentAddCategoriesBin
         }else {
             binding.categoryNameContainer.setHelperText("");
         }
-        if(uriImage.equals("")){
+        if(uriImage == null){
             binding.tvErrorPickImage.setVisibility(View.VISIBLE);
             binding.tvErrorPickImage.setText("Bạn chưa chọn ảnh");
         }else {
