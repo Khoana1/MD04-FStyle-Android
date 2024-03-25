@@ -1,6 +1,9 @@
 package com.example.eu_fstyle_mobile.src.view.user.payment;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,6 +56,9 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
 
     Dialog cartDialog;
 
+    private static final String PREF_NAME = "app_prefs";
+    private static final String IS_DIALOG_SHOWN = "is_dialog_shown";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -63,6 +69,7 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        showHintCartDialog();
         showCartLoading();
         User user = UserPrefManager.getInstance(getActivity()).getUser();
         cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
@@ -71,6 +78,17 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
         getDataMayBeLike();
         initListener();
     }
+
+    private void showHintCartDialog() {
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("app_prefs", MODE_PRIVATE);
+        boolean isFirstRun = sharedPreferences.getBoolean("isFirstHint", true);
+
+        if (isFirstRun) {
+            showHintDialog();
+            sharedPreferences.edit().putBoolean("isFirstHint", false).apply();
+        }
+    }
+
 
     private void getDataMayBeLike() {
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
@@ -138,6 +156,8 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
                             Snackbar snackbar = Snackbar.make(binding.rcvCart, "Sản phẩm sẽ bị xóa khỏi giỏ hàng", Snackbar.LENGTH_LONG).setAction("Hoàn tác", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    binding.rcvCart.setVisibility(View.VISIBLE);
+                                    binding.viewEmpty.setVisibility(View.GONE);
                                     isUndoClicked = true;
                                     productCartList.add(position, removedProduct);
                                     cartAdapter.notifyItemInserted(position);
@@ -191,6 +211,9 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
     private void initListener() {
         binding.icBack.setOnClickListener(v -> {
             requireActivity().onBackPressed();
+        });
+        binding.icHint.setOnClickListener(v -> {
+            showHintDialog();
         });
         binding.btnPayment.setOnClickListener(new View.OnClickListener() {
             @Override
