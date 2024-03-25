@@ -5,6 +5,9 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class Product implements Serializable {
+
+    @SerializedName("_id")
+    private String _id;
     @SerializedName("name")
     private String name;
     @SerializedName("image64")
@@ -26,7 +29,8 @@ public class Product implements Serializable {
     @SerializedName("description")
     private String description;
 
-    public Product(String name, String[] image64, String brand, Number price, Number size, String color, String quantity, String status, String type, String description) {
+    public Product(String _id, String name, String[] image64, String brand, Number price, Number size, String color, String quantity, String status, String type, String description) {
+        this._id = _id;
         this.name = name;
         this.image64 = image64;
         this.brand = brand;
@@ -37,6 +41,15 @@ public class Product implements Serializable {
         this.status = status;
         this.type = type;
         this.description = description;
+    }
+
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public String getName() {
