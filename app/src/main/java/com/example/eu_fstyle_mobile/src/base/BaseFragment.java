@@ -216,4 +216,11 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+    protected void hideKeyboard(View view) {
+        Activity activity = getActivity();
+        if (activity != null && view != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 }

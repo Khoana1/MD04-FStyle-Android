@@ -344,6 +344,13 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
             productAdapter = new ProductHomeAdapter(getActivity(), listProduct, HomeFragment.this);
             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
             recyclerView.setAdapter(productAdapter);
+            recyclerView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                   hideKeyboard(v);
+                    return false;
+                }
+            });
             dialogSearch.show();
             EditText editText = dialogSearch.findViewById(R.id.edit_search_home);
             editText.addTextChangedListener(new TextWatcher() {
@@ -376,10 +383,9 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                           searchAdapter.setOnclickItem(new SearchAdapter.onclickItem() {
                               @Override
                               public void onclick(Product product) {
-                                  dialogSearch.dismiss();
-                                  hidekeyboard(recyclerView);
                                   DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
                                   openScreenHome(detailProductFragment, true);
+                                  dialogSearch.dismiss();
                               }
                           });
                       }
@@ -397,21 +403,11 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         });
 
     }
-    private void hidekeyboard(RecyclerView recyclerView){
-       recyclerView.setOnTouchListener(new View.OnTouchListener() {
-           @Override
-           public boolean onTouch(View v, MotionEvent event) {
-               hideKeyboard();
-               return false;
-           }
-       });
-    }
     @NonNull
     @Override
     public CreationExtras getDefaultViewModelCreationExtras() {
         return super.getDefaultViewModelCreationExtras();
     }
-
       private void getAvatar() {
         String avatarUrl = "http://10.64.5.110:3000/api/user/avatar/image/%s"; // thay IPv4 của máy tính chạy server vào đây để test
         User user = UserPrefManager.getInstance(getActivity()).getUser();
@@ -460,7 +456,11 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
 
     @Override
     public void onClick(Product product) {
-          dialogSearch.dismiss();
+        if(dialogSearch != null&& dialogSearch.isShowing()){
+            DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
+            openScreenHome(detailProductFragment, true);
+            dialogSearch.dismiss();
+        }
           DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
           openScreenHome(detailProductFragment, true);
     }
