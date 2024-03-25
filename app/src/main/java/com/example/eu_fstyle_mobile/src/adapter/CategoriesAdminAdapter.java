@@ -3,6 +3,7 @@ package com.example.eu_fstyle_mobile.src.adapter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -13,6 +14,7 @@ import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.ItemProductAdminBinding;
 import com.example.eu_fstyle_mobile.src.model.Categories;
 import com.example.eu_fstyle_mobile.src.model.Product;
+import com.example.eu_fstyle_mobile.src.view.custom.checkBase64;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -40,16 +42,22 @@ public class CategoriesAdminAdapter extends RecyclerView.Adapter<CategoriesAdmin
                         .placeholder(R.drawable.icon_home)
                         .error(R.drawable.icon_erro)
                         .into(holder.binding.itemImageProductHome);
+            }else if(checkBase64.isBase64(categories.getImage())){
+                byte[] decodedString = Base64.decode(categories.getImage(), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                holder.binding.itemImageProductHome.setImageBitmap(decodedByte);
             }else {
-            byte[] decodedString = Base64.decode(categories.getImage(), Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            holder.binding.itemImageProductHome.setImageBitmap(decodedByte);
-        }
+                Picasso.get().load(categories.getImage())
+                        .error(R.drawable.icon_erro);
+            }
         }else {
             Picasso.get().load(categories.getImage())
-                    .placeholder(R.drawable.icon_home);
+                    .error(R.drawable.icon_home);
         }
         holder.binding.itemNameProductHome.setText(categories.getName());
+        holder.itemView.setOnClickListener(v -> {
+            Log.d("Huy", "onBindViewHolder: "+categories.getId());
+        });
     }
 
     @Override
