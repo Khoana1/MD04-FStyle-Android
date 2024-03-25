@@ -63,7 +63,6 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.viewEmpty.setVisibility(View.GONE);
         showCartLoading();
         User user = UserPrefManager.getInstance(getActivity()).getUser();
         cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
@@ -139,8 +138,6 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
                             Snackbar snackbar = Snackbar.make(binding.rcvCart, "Sản phẩm sẽ bị xóa khỏi giỏ hàng", Snackbar.LENGTH_LONG).setAction("Hoàn tác", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    binding.rcvCart.setVisibility(View.VISIBLE);
-                                    binding.viewEmpty.setVisibility(View.GONE);
                                     isUndoClicked = true;
                                     productCartList.add(position, removedProduct);
                                     cartAdapter.notifyItemInserted(position);
@@ -151,7 +148,7 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
                                 @Override
                                 public void onDismissed(Snackbar transientBottomBar, int event) {
                                     if (!isUndoClicked && event != DISMISS_EVENT_ACTION) {
-                                        Toast.makeText(getActivity(), "Xóa sản phẩm khỏi giỏ hàng thành công", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(requireContext(), "Xóa sản phẩm khỏi giỏ hàng thành công", Toast.LENGTH_SHORT).show();
                                         //deleteData();
                                     }
                                     super.onDismissed(transientBottomBar, event);
