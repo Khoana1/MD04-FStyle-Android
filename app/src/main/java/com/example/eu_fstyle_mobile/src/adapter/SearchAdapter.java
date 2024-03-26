@@ -57,6 +57,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Viewholder
 
             }
         });
+        holder.btn_favourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClick.onClickFavourite(product);
+            }
+        });
         holder.itemView.setOnClickListener(v -> {
             if(onClick != null){
                 onClick.onclick(product);
@@ -70,17 +76,20 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Viewholder
     }
     public interface onclickItem{
         void onclick(Product product);
+
+        void onClickFavourite(Product product);
     }
     public class Viewholder extends RecyclerView.ViewHolder{
         ImageView imageView;
         TextView txtName,txtPrice;
-        LinearLayout btn_add;
+        LinearLayout btn_add, btn_favourite;
         public Viewholder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.item_image_product_home);
             txtName = itemView.findViewById(R.id.item_name_product_home);
             txtPrice = itemView.findViewById(R.id.item_price_product_home);
             btn_add = itemView.findViewById(R.id.item_btnCong_product_home);
+            btn_favourite = itemView.findViewById(R.id.ll_favourite);
         }
     }
 }

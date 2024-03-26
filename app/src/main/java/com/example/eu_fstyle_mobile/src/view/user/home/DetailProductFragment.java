@@ -59,10 +59,6 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
     boolean isSize36, isSize37, isSize38, isSize39 = false;
     int soluong;
 
-    private Boolean isCart;
-
-    private Boolean isBuy;
-
     public static DetailProductFragment newInstance(Product product) {
         DetailProductFragment detail = new DetailProductFragment();
         Bundle bundle = new Bundle();
@@ -77,9 +73,9 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
         // Inflate the layout for this fragment
         binding = FragmentDetailProductBinding.inflate(inflater, container, false);
         initView();
+        getCartCountNumber();
         getData();
         initListener();
-        getCartCountNumber();
         setTotolPrice();
         return binding.getRoot();
     }
@@ -339,6 +335,7 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
                             @Override
                             public void onResponse(Call<Product> call, Response<Product> response) {
                                 Toast.makeText(getActivity(), "Thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
+                                getCartCountNumber();
                             }
 
                             @Override
@@ -407,9 +404,9 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
 
     }
 
-
     @Override
     protected FragmentDetailProductBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
         return FragmentDetailProductBinding.inflate(inflater, container, false);
     }
+
 }
