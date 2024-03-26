@@ -3,20 +3,20 @@ package com.example.eu_fstyle_mobile.src.model;
 import com.google.gson.annotations.SerializedName;
 
 public class Categories {
-    @SerializedName("id")
-    int id;
+    @SerializedName("_id")
+    String id;
     @SerializedName("name")
     String name;
     @SerializedName("image")
     String image;
 
-    public Categories(int id, String name, String image) {
+    public Categories(String id, String name, String image) {
         this.id = id;
         this.name = name;
         this.image = image;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -28,7 +28,7 @@ public class Categories {
         this.image = image;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
