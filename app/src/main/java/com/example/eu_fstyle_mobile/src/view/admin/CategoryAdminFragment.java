@@ -23,6 +23,7 @@ import java.util.List;
 public class CategoryAdminFragment extends BaseFragment<FragmentCategoryAdminBinding> {
     private CategoriesViewModel categoriesViewModel;
     private CategoriesAdminAdapter adapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -33,10 +34,10 @@ public class CategoryAdminFragment extends BaseFragment<FragmentCategoryAdminBin
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-         initListioner();
-         categoriesViewModel = new ViewModelProvider(this).get(CategoriesViewModel.class);
-         categoriesViewModel.getAllCategories();
-         observeViewModel();
+        initListener();
+        categoriesViewModel = new ViewModelProvider(this).get(CategoriesViewModel.class);
+        categoriesViewModel.getAllCategories();
+        observeViewModel();
     }
 
     private void observeViewModel() {
@@ -44,9 +45,9 @@ public class CategoryAdminFragment extends BaseFragment<FragmentCategoryAdminBin
             @Override
             public void onChanged(ListCategories listCategories) {
                 List<Categories> categoriesList = listCategories.getArrayList();
-                 adapter= new CategoriesAdminAdapter(categoriesList);
-                 binding.rcvCategoryAdmin.setAdapter(adapter);
-                 hideLoadingDialog();
+                adapter = new CategoriesAdminAdapter(categoriesList);
+                binding.rcvCategoryAdmin.setAdapter(adapter);
+                hideLoadingDialog();
             }
         });
         categoriesViewModel.getErrorMessage().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -57,10 +58,11 @@ public class CategoryAdminFragment extends BaseFragment<FragmentCategoryAdminBin
             }
         });
     }
-    private void initListioner(){
-//        binding.icAddCategory.setOnClickListener(v -> {
-//            openScreenAddAdmin(new AddCategoriesFragment(), true);
-//        });
+
+    private void initListener() {
+        binding.icAddCategory.setOnClickListener(v -> {
+            openScreenAdmin(new AddCategoriesFragment(), true);
+        });
         binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -70,6 +72,7 @@ public class CategoryAdminFragment extends BaseFragment<FragmentCategoryAdminBin
             }
         });
     }
+
     @Override
     protected FragmentCategoryAdminBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
         return FragmentCategoryAdminBinding.inflate(inflater, container, false);
