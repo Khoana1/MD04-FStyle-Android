@@ -140,11 +140,9 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
                     }
                     binding.tvTotalDetail.setText(cart.getTotalCart().toString() + "VNĐ");
                     if (productCartList.isEmpty()) {
-                        binding.rcvCart.setVisibility(View.GONE);
-                        binding.viewEmpty.setVisibility(View.VISIBLE);
+                        setStatusDisable();
                     } else {
-                        binding.rcvCart.setVisibility(View.VISIBLE);
-                        binding.viewEmpty.setVisibility(View.GONE);
+                        setStatusEnable();
                     }
 
                     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -159,32 +157,14 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
                             ProductCart removedProduct = productCartList.get(position);
                             cartAdapter.removeItem(position);
                             if (productCartList.isEmpty()) {
-                                binding.rcvCart.setVisibility(View.GONE);
-                                binding.viewEmpty.setVisibility(View.VISIBLE);
-                                binding.rltTotal.setVisibility(View.GONE);
-                                binding.llTotal.setVisibility(View.GONE);
-                                binding.llQuantum.setVisibility(View.GONE);
-                                binding.btnPayment.setEnabled(false);
-                                binding.btnPayment.setAlpha(0.4f);
+                                setStatusDisable();
                             } else {
-                                binding.rcvCart.setVisibility(View.VISIBLE);
-                                binding.viewEmpty.setVisibility(View.GONE);
-                                binding.rltTotal.setVisibility(View.VISIBLE);
-                                binding.llTotal.setVisibility(View.VISIBLE);
-                                binding.llQuantum.setVisibility(View.VISIBLE);
-                                binding.btnPayment.setEnabled(true);
-                                binding.btnPayment.setAlpha(1f);
+                                setStatusEnable();
                             }
                             Snackbar snackbar = Snackbar.make(binding.rcvCart, "Sản phẩm sẽ bị xóa khỏi giỏ hàng", Snackbar.LENGTH_LONG).setAction("Hoàn tác", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    binding.rcvCart.setVisibility(View.VISIBLE);
-                                    binding.viewEmpty.setVisibility(View.GONE);
-                                    binding.rltTotal.setVisibility(View.VISIBLE);
-                                    binding.llTotal.setVisibility(View.VISIBLE);
-                                    binding.llQuantum.setVisibility(View.VISIBLE);
-                                    binding.btnPayment.setEnabled(true);
-                                    binding.btnPayment.setAlpha(1f);
+                                    setStatusEnable();
                                     isUndoClicked = true;
                                     productCartList.add(position, removedProduct);
                                     cartAdapter.notifyItemInserted(position);
@@ -294,6 +274,25 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
             }
         }, 2000);
     }
-
-
+    
+    
+    private void setStatusEnable() {
+        binding.rcvCart.setVisibility(View.VISIBLE);
+        binding.viewEmpty.setVisibility(View.GONE);
+        binding.rltTotal.setVisibility(View.VISIBLE);
+        binding.llTotal.setVisibility(View.VISIBLE);
+        binding.llQuantum.setVisibility(View.VISIBLE);
+        binding.btnPayment.setEnabled(true);
+        binding.btnPayment.setAlpha(1f);
+    }
+    
+    private void setStatusDisable() {
+        binding.rcvCart.setVisibility(View.GONE);
+        binding.viewEmpty.setVisibility(View.VISIBLE);
+        binding.rltTotal.setVisibility(View.GONE);
+        binding.llTotal.setVisibility(View.GONE);
+        binding.llQuantum.setVisibility(View.GONE);
+        binding.btnPayment.setEnabled(false);
+        binding.btnPayment.setAlpha(0.4f);
+    }
 }

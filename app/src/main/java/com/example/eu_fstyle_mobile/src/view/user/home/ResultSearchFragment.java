@@ -97,4 +97,9 @@ public class ResultSearchFragment extends BaseFragment<FragmentResultSearchBindi
             }
         });
     }
+
+    @Override
+    public void onClickCart(Product product) {
+
+    }
 }

@@ -42,6 +42,7 @@ import com.example.eu_fstyle_mobile.src.adapter.CategoryHomeAdapter;
 import com.example.eu_fstyle_mobile.src.adapter.ProductHomeAdapter;
 import com.example.eu_fstyle_mobile.src.adapter.SearchAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
+import com.example.eu_fstyle_mobile.src.model.Cart;
 import com.example.eu_fstyle_mobile.src.model.Categories;
 import com.example.eu_fstyle_mobile.src.model.Category;
 import com.example.eu_fstyle_mobile.src.model.ListCategories;
@@ -55,8 +56,6 @@ import com.example.eu_fstyle_mobile.src.view.admin.CategoriesViewModel;
 import com.example.eu_fstyle_mobile.src.view.user.payment.CartFragment;
 import com.example.eu_fstyle_mobile.src.view.user.profile.ProfileFragment;
 import com.example.eu_fstyle_mobile.ultilties.SearchUltils;
-import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
-import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -94,8 +93,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+        showShimmerEffect();
         categoriesViewModel = new ViewModelProvider(this).get(CategoriesViewModel.class);
         categoriesViewModel.getAllCategories();
         Banner();
@@ -104,9 +103,11 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         getAvatar();
         getCategory();
         getProduct();
+        getCartCountNumber();
         initView();
         return binding.getRoot();
     }
+
 
 
 
@@ -429,6 +430,11 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                                   openScreenHome(detailProductFragment, true);
                                   dialogSearch.dismiss();
                               }
+
+                              @Override
+                              public void onClickFavourite(Product product)     {
+
+                              }
                           });
                       }
 
@@ -528,5 +534,55 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                 Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onClickCart(Product product) {
+        if(dialogSearch != null&& dialogSearch.isShowing()){
+            DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
+            openScreenHome(detailProductFragment, true);
+            dialogSearch.dismiss();
+        }
+        DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
+        openScreenHome(detailProductFragment, true);
+    }
+
+    private void getCartCountNumber() {
+        User user = UserPrefManager.getInstance(getActivity()).getUser();
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        Call<Cart> call = apiService.getCart(user.get_id());
+        call.enqueue(new Callback<Cart>() {
+            @Override
+            public void onResponse(Call<Cart> call, Response<Cart> response) {
+                if (response.isSuccessful()) {
+                    String numberCart = String.valueOf(response.body().getListProduct().size());
+                    binding.tvNumberCart.setText(numberCart);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Cart> call, Throwable t) {
+                Log.d("Error", "Server error: " + t);
+            }
+        });
+    }
+
+    private void showShimmerEffect() {
+        if (binding != null) {
+            binding.shimmerView.setVisibility(View.VISIBLE);
+            binding.dataProduct.setVisibility(View.INVISIBLE);
+            binding.shimmerView.startShimmer();
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (binding != null) {
+                        binding.shimmerView.stopShimmer();
+                        binding.shimmerView.setVisibility(View.GONE);
+                        binding.dataProduct.setVisibility(View.VISIBLE);
+                    }
+                }
+            }, 2000);
+        }
     }
 }
