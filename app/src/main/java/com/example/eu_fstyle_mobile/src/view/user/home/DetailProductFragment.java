@@ -366,14 +366,6 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
         bottomSheetDialog.show();
     }
 
-    private void themGioHang(Product product, String size, int quality) {
-
-    }
-
-    private void muaNgay(Product product, String size, int quality) {
-
-    }
-
     private void toggleButton(Button button, boolean isSelected) {
         if (isSelected) {
             button.setBackgroundResource(R.drawable.bg_corner20_silver);
@@ -409,7 +401,7 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
 
             @Override
             public void onFailure(Call<Cart> call, Throwable t) {
-                Log.d("Error", "Server error" + t);
+                Log.d("Error", "Server error: " + t);
             }
         });
 

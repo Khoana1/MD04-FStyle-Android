@@ -118,8 +118,18 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
                     cartAdapter = new CartAdapter(productCartList);
                     binding.rcvCart.setAdapter(cartAdapter);
                     int listSize = productCartList.size();
-                    binding.tvQuantum.setText(String.valueOf(listSize));
-                    binding.tvDetailQuantum.setText(String.valueOf(listSize));
+                    if (listSize == 0) {
+                        binding.llQuantum.setVisibility(View.GONE);
+                        binding.rltTotal.setVisibility(View.GONE);
+                        binding.rltTotal.setVisibility(View.GONE);
+                    } else {
+                        binding.llQuantum.setVisibility(View.VISIBLE);
+                        binding.rltTotal.setVisibility(View.VISIBLE);
+                        binding.rltTotal.setVisibility(View.VISIBLE);
+                        binding.tvQuantum.setText(String.valueOf(listSize));
+                        binding.tvDetailQuantum.setText(String.valueOf(listSize));
+                    }
+
                     String totalPrice = cart.getTotalCart().toString();
                     int maxLength = 6;
                     if (totalPrice.length() > maxLength) {
@@ -131,11 +141,9 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
                     binding.tvTotalDetail.setText(cart.getTotalCart().toString() + "VNĐ");
                     if (productCartList.isEmpty()) {
                         binding.rcvCart.setVisibility(View.GONE);
-                        binding.llQuantum.setVisibility(View.GONE);
                         binding.viewEmpty.setVisibility(View.VISIBLE);
                     } else {
                         binding.rcvCart.setVisibility(View.VISIBLE);
-                        binding.llQuantum.setVisibility(View.VISIBLE);
                         binding.viewEmpty.setVisibility(View.GONE);
                     }
 
@@ -153,15 +161,30 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
                             if (productCartList.isEmpty()) {
                                 binding.rcvCart.setVisibility(View.GONE);
                                 binding.viewEmpty.setVisibility(View.VISIBLE);
+                                binding.rltTotal.setVisibility(View.GONE);
+                                binding.llTotal.setVisibility(View.GONE);
+                                binding.llQuantum.setVisibility(View.GONE);
+                                binding.btnPayment.setEnabled(false);
+                                binding.btnPayment.setAlpha(0.4f);
                             } else {
                                 binding.rcvCart.setVisibility(View.VISIBLE);
                                 binding.viewEmpty.setVisibility(View.GONE);
+                                binding.rltTotal.setVisibility(View.VISIBLE);
+                                binding.llTotal.setVisibility(View.VISIBLE);
+                                binding.llQuantum.setVisibility(View.VISIBLE);
+                                binding.btnPayment.setEnabled(true);
+                                binding.btnPayment.setAlpha(1f);
                             }
                             Snackbar snackbar = Snackbar.make(binding.rcvCart, "Sản phẩm sẽ bị xóa khỏi giỏ hàng", Snackbar.LENGTH_LONG).setAction("Hoàn tác", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     binding.rcvCart.setVisibility(View.VISIBLE);
                                     binding.viewEmpty.setVisibility(View.GONE);
+                                    binding.rltTotal.setVisibility(View.VISIBLE);
+                                    binding.llTotal.setVisibility(View.VISIBLE);
+                                    binding.llQuantum.setVisibility(View.VISIBLE);
+                                    binding.btnPayment.setEnabled(true);
+                                    binding.btnPayment.setAlpha(1f);
                                     isUndoClicked = true;
                                     productCartList.add(position, removedProduct);
                                     cartAdapter.notifyItemInserted(position);
