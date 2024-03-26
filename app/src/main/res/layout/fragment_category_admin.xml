@@ -57,7 +57,8 @@
                 android:layout_marginTop="10dp"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="2"
-                tools:listitem="@layout/item_product_admin" />
+                tools:listitem="@layout/item_product_home"
+                />
         </LinearLayout>
 
 

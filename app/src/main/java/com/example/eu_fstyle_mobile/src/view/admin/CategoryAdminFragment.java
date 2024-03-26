@@ -63,7 +63,7 @@ public class CategoryAdminFragment extends BaseFragment<FragmentCategoryAdminBin
     }
     private void initListioner(){
         binding.icAddCategory.setOnClickListener(v -> {
-            openScreenAddAdmin(new AddCategoriesFragment(), true);
+            openScreenAdmin(new AddCategoriesFragment(), true);
         });
         binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

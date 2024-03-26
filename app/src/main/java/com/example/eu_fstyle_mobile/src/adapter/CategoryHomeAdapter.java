@@ -1,7 +1,10 @@
 package com.example.eu_fstyle_mobile.src.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,10 +41,19 @@ public class CategoryHomeAdapter extends RecyclerView.Adapter<CategoryHomeAdapte
     @Override
     public void onBindViewHolder(@NonNull Viewholder holder, int position) {
         Categories category = arrayList.get(position);
-        Picasso.get().load(category.getImage())
-                .placeholder(R.drawable.icon_home)
-                .error(R.drawable.icon_erro)
-                .into(holder.imageView);
+        if(category.getImage() != null){
+            if(category.getImage().startsWith("http")){
+                Picasso.get().load(category.getImage())
+                        .error(R.drawable.icon_erro)
+                        .into(holder.imageView);
+            }else {
+                byte[] decodedString = Base64.decode(category.getImage(), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                holder.imageView.setImageBitmap(decodedByte);
+            }
+        }else {
+            holder.imageView.setImageResource(R.drawable.icon_erro);
+        }
         holder.txtname.setText(category.getName());
         holder.txtname.setMaxLines(2);
         holder.txtname.setEllipsize(TextUtils.TruncateAt.END);

@@ -1,5 +1,8 @@
 package com.example.eu_fstyle_mobile.src.adapter;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -8,8 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.ItemFavouriteBinding;
-import com.example.eu_fstyle_mobile.databinding.ItemMyAddressBinding;
-import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.ProductFavourite;
 import com.squareup.picasso.Picasso;
 
@@ -36,10 +37,19 @@ public class MyFavouriteAdapter extends RecyclerView.Adapter<MyFavouriteAdapter.
         holder.binding.itemNameProductHome.setText(product.getName());
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         holder.binding.itemPriceProductHome.setText(decimalFormat.format(product.getPrice())+" VNĐ");
-        Picasso.get().load(image)
-                .placeholder(R.drawable.icon_home)
-                .error(R.drawable.icon_erro)
-                .into(holder.binding.itemImageProductHome);
+        if(image != null){
+            if(image.startsWith("http")){
+                Picasso.get().load(image)
+                        .error(R.drawable.icon_erro)
+                        .into(holder.binding.itemImageProductHome);
+            }else {
+                byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                holder.binding.itemImageProductHome.setImageBitmap(decodedByte);
+            }
+        }else {
+            holder.binding.itemImageProductHome.setImageResource(R.drawable.icon_erro);
+        }
     }
 
     @Override
