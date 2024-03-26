@@ -49,7 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:src="@drawable/hint_fstyle"
+        android:src="@drawable/hint_cart_new"
         app:layout_constraintBottom_toTopOf="@id/layout_error_dialog"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -27,6 +27,7 @@ import com.example.eu_fstyle_mobile.databinding.FragmentCartBinding;
 import com.example.eu_fstyle_mobile.src.adapter.CartAdapter;
 import com.example.eu_fstyle_mobile.src.adapter.MayBeLikeAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
+import com.example.eu_fstyle_mobile.src.model.Address;
 import com.example.eu_fstyle_mobile.src.model.Cart;
 import com.example.eu_fstyle_mobile.src.model.ListProduct;
 import com.example.eu_fstyle_mobile.src.model.Product;
@@ -155,6 +156,7 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
                         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                             int position = viewHolder.getAdapterPosition();
                             ProductCart removedProduct = productCartList.get(position);
+                            String productId = removedProduct.getIdProduct();
                             cartAdapter.removeItem(position);
                             if (productCartList.isEmpty()) {
                                 setStatusDisable();
@@ -175,8 +177,22 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
                                 @Override
                                 public void onDismissed(Snackbar transientBottomBar, int event) {
                                     if (!isUndoClicked && event != DISMISS_EVENT_ACTION) {
-                                        Toast.makeText(requireContext(), "Xóa sản phẩm khỏi giỏ hàng thành công", Toast.LENGTH_SHORT).show();
-                                        //deleteData();
+                                        User user = UserPrefManager.getInstance(getActivity()).getUser();
+                                        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                                        if (!productCartList.isEmpty()) {
+                                            Call<Cart> call = apiService.deleteCart(user.get_id(), productId);
+                                            call.enqueue(new Callback<Cart>() {
+                                                @Override
+                                                public void onResponse(Call<Cart> call, Response<Cart> response) {
+                                                    Toast.makeText(requireContext(), "Xóa sản phẩm khỏi giỏ hàng thành công", Toast.LENGTH_SHORT).show();
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<Cart> call, Throwable t) {
+                                                    showAlertDialog("Xóa sản phẩm khỏi giỏ hàng thất bại, sản phẩm sẽ trở lại sớm");
+                                                }
+                                            });
+                                        }
                                     }
                                     super.onDismissed(transientBottomBar, event);
                                 }
