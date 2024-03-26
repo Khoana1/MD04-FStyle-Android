@@ -186,6 +186,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <RelativeLayout
+                android:id="@+id/rlt_total"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"

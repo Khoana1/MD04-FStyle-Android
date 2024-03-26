@@ -40,21 +40,18 @@ public class MyFavouriteAdapter extends RecyclerView.Adapter<MyFavouriteAdapter.
         holder.binding.itemNameProductHome.setText(product.getName());
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         holder.binding.itemPriceProductHome.setText(decimalFormat.format(product.getPrice()) + " VNĐ");
-        if (image != null) {
-            if (image.startsWith("http")) {
-                Picasso.get().load(image)
+        if(product.getDefaultImage() != null){
+            if(product.getDefaultImage().startsWith("http")){
+                Picasso.get().load(product.getDefaultImage())
                         .error(R.drawable.error_shoe)
                         .into(holder.binding.itemImageProductHome);
-            } else {
-                boolean isBase64 = isBase64(image);
-                if (isBase64) {
-                    byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
-                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                    holder.binding.itemImageProductHome.setImageBitmap(decodedByte);
-                } else {
-                    holder.binding.itemImageProductHome.setImageResource(R.drawable.error_shoe);
-                }
+            }else {
+                byte[] decodedString = Base64.decode(product.getDefaultImage(), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                holder.binding.itemImageProductHome.setImageBitmap(decodedByte);
             }
+        }else {
+            holder.binding.itemImageProductHome.setImageResource(R.drawable.error_shoe);
         }
     }
 
@@ -72,15 +69,4 @@ public class MyFavouriteAdapter extends RecyclerView.Adapter<MyFavouriteAdapter.
         }
     }
 
-    public static boolean isBase64(String input) {
-        try {
-            byte[] decodedBytes = Base64.decode(input, Base64.DEFAULT);
-            String decodedString = new String(decodedBytes);
-            byte[] reEncodedBytes = Base64.encode(decodedString.getBytes(), Base64.DEFAULT);
-            String reEncodedString = new String(reEncodedBytes);
-            return reEncodedString.equals(input);
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-    }
 }
