@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.ItemCartProductBinding;
-import com.example.eu_fstyle_mobile.databinding.ItemFavouriteBinding;
 import com.example.eu_fstyle_mobile.src.model.ProductCart;
 import com.squareup.picasso.Picasso;
 
@@ -52,13 +51,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             }
         }
         String defaultName = productCart.getName();
-        int maxLength = 20;
+        int maxLength = 13;
         if (defaultName.length() > maxLength) {
             String truncatedName = defaultName.substring(0, maxLength) + "...";
             holder.binding.tvNameShoe.setText(truncatedName);
         } else {
             holder.binding.tvNameShoe.setText(productCart.getName());
         }
+
 
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         holder.binding.tvPriceShoe.setText(decimalFormat.format(productCart.getPrice()) + " VNĐ");

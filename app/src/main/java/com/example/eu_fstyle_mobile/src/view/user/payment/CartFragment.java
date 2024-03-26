@@ -56,9 +56,6 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
 
     Dialog cartDialog;
 
-    private static final String PREF_NAME = "app_prefs";
-    private static final String IS_DIALOG_SHOWN = "is_dialog_shown";
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -123,7 +120,14 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
                     int listSize = productCartList.size();
                     binding.tvQuantum.setText(String.valueOf(listSize));
                     binding.tvDetailQuantum.setText(String.valueOf(listSize));
-                    binding.tvTotal.setText(cart.getTotalCart().toString() + "VNĐ");
+                    String totalPrice = cart.getTotalCart().toString();
+                    int maxLength = 6;
+                    if (totalPrice.length() > maxLength) {
+                        String truncatedPrice = totalPrice.substring(0, maxLength) + "..." + "VNĐ";
+                        binding.tvTotal.setText(truncatedPrice);
+                    } else {
+                        binding.tvTotal.setText(cart.getTotalCart().toString() + "VNĐ");
+                    }
                     binding.tvTotalDetail.setText(cart.getTotalCart().toString() + "VNĐ");
                     if (productCartList.isEmpty()) {
                         binding.rcvCart.setVisibility(View.GONE);

@@ -29,6 +29,7 @@ import androidx.lifecycle.viewmodel.CreationExtras;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -103,12 +104,6 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         getAvatar();
         getCategory();
         getProduct();
-        binding.avatarHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openScreen(new ProfileFragment(), true);
-            }
-        });
         initView();
         return binding.getRoot();
     }
@@ -116,6 +111,22 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
 
 
     private void initView() {
+        binding.avatarHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openScreen(new ProfileFragment(), true);
+            }
+        });
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getProduct();
+                getCategory();
+                getAvatar();
+                showLoadingDialog();
+                binding.swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         User user = UserPrefManager.getInstance(getActivity()).getUser();
         String lastName = getLastName(user.getName());
         binding.textviewNameUser.setText(lastName);
@@ -159,6 +170,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
             @Override
             public void onResponse(Call<ListProduct> call, Response<ListProduct> response) {
                 if(response.isSuccessful()&& response.body()!= null){
+                    hideLoadingDialog();
                     listProduct = response.body().getArrayList();
                     Log.d("Huy", "onResponse: "+listProduct.get(0).getName());
                     productAdapter = new ProductHomeAdapter(getActivity(), listProduct,HomeFragment.this);

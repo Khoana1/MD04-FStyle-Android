@@ -27,6 +27,7 @@ import com.example.eu_fstyle_mobile.src.adapter.ViewPager_detail_Adapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.Cart;
 import com.example.eu_fstyle_mobile.src.model.Product;
+import com.example.eu_fstyle_mobile.src.model.ProductCart;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateCart;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateFavourite;
@@ -37,6 +38,9 @@ import com.example.eu_fstyle_mobile.src.view.user.profile.MyFavouriteFragment;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -75,6 +79,7 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
         initView();
         getData();
         initListener();
+        getCartCountNumber();
         setTotolPrice();
         return binding.getRoot();
     }
@@ -389,6 +394,27 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
         binding1.goiysizeBack.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
     }
+
+    private void getCartCountNumber() {
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        Call<Cart> call = apiService.getCart(user.get_id());
+        call.enqueue(new Callback<Cart>() {
+            @Override
+            public void onResponse(Call<Cart> call, Response<Cart> response) {
+                if (response.isSuccessful()) {
+                    String numberCart = String.valueOf(response.body().getListProduct().size());
+                    binding.tvNumberCart.setText(numberCart);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Cart> call, Throwable t) {
+                Log.d("Error", "Server error" + t);
+            }
+        });
+
+    }
+
 
     @Override
     protected FragmentDetailProductBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
