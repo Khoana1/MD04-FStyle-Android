@@ -1,6 +1,7 @@
 package com.example.eu_fstyle_mobile.src.view.admin;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.eu_fstyle_mobile.MainActivity;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentProfileAdminBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
@@ -72,7 +74,8 @@ public class ProfileAdminFragment extends BaseFragment<FragmentProfileAdminBindi
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean("isLoggedIn", false);
                     editor.apply();
-                    openScreenAddAdmin(new SplashFragment(), false);
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    startActivity(intent);
                 }
             });
         });
