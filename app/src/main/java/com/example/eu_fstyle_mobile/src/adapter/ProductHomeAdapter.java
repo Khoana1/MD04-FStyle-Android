@@ -62,7 +62,7 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
         holder.btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                onClickItem.onClickCart(product);
             }
         });
         holder.ll_favourite.setOnClickListener(v -> {
@@ -86,6 +86,8 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
         void onClick(Product product);
 
         void onClickFavourite(Product product);
+
+        void onClickCart(Product product);
     }
     public class Viewholder extends RecyclerView.ViewHolder{
         ImageView imageView;

@@ -1,24 +1,28 @@
 package com.example.eu_fstyle_mobile.src.request;
 
 public class RequestCreateCart {
-    private String image64;
+    private String idProduct;
     private String name;
-    private String quantity;
+    private String soLuong;
+    private String size;
     private Number price;
+    private String imageDefault;
 
-    public RequestCreateCart(String image64, String name, String quantity, Number price) {
-        this.image64 = image64;
+    public RequestCreateCart(String idProduct, String name, String soLuong, String size, Number price, String imageDefault) {
+        this.idProduct = idProduct;
         this.name = name;
-        this.quantity = quantity;
+        this.soLuong = soLuong;
+        this.size = size;
         this.price = price;
+        this.imageDefault = imageDefault;
     }
 
-    public String getImage64() {
-        return image64;
+    public String getIdProduct() {
+        return idProduct;
     }
 
-    public void setImage64(String image64) {
-        this.image64 = image64;
+    public void setIdProduct(String idProduct) {
+        this.idProduct = idProduct;
     }
 
     public String getName() {
@@ -29,12 +33,20 @@ public class RequestCreateCart {
         this.name = name;
     }
 
-    public String getQuantity() {
-        return quantity;
+    public String getSoLuong() {
+        return soLuong;
     }
 
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
+    public void setSoLuong(String soLuong) {
+        this.soLuong = soLuong;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 
     public Number getPrice() {
@@ -43,5 +55,13 @@ public class RequestCreateCart {
 
     public void setPrice(Number price) {
         this.price = price;
+    }
+
+    public String getImageDefault() {
+        return imageDefault;
+    }
+
+    public void setImageDefault(String imageDefault) {
+        this.imageDefault = imageDefault;
     }
 }

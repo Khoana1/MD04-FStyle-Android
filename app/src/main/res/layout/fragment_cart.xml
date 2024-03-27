@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe_cart"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite"
     tools:context=".src.view.user.payment.CartFragment">
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
 
             >
 
-            <LinearLayout
-                android:id="@+id/ll_title"
+            <RelativeLayout
+                android:id="@+id/rlt_title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/icBack"
@@ -34,28 +34,34 @@
                     android:src="@drawable/ic_back_payment" />
 
                 <TextView
+                    android:id="@+id/tv_cart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_gravity="center_vertical"
+                    android:layout_toRightOf="@id/icBack"
                     android:fontFamily="@font/inter_semi_bold"
                     android:text="Giỏ hàng"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
                 <LinearLayout
                     android:id="@+id/ll_quantum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_centerVertical="true"
                     android:layout_gravity="center_vertical"
-                    >
+                    android:layout_toRightOf="@id/tv_cart"
+                    android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:fontFamily="@font/inter_semi_bold"
+                        android:text="("
                         android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:text="(" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tv_quantum"
@@ -65,229 +71,253 @@
                         android:textSize="18sp"
                         android:textStyle="bold"
                         tools:text="3" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/inter_semi_bold"
+                        android:text=")"
                         android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:text=")" />
+                        android:textStyle="bold" />
                 </LinearLayout>
 
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/ic_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:padding="20dp"
+                    android:src="@drawable/ic_hint_cart" />
+
+            </RelativeLayout>
 
             <FrameLayout
                 android:id="@+id/frameCart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/ll_title"
-                >
+                android:layout_below="@id/rlt_title">
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcvCart"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:itemCount="3"
                     android:visibility="gone"
-                    tools:listitem="@layout/item_cart_product"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/item_cart_product" />
+
                 <LinearLayout
                     android:id="@+id/view_empty"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="20dp"
                     android:layout_below="@+id/ll_title"
-                    >
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
+
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:src="@drawable/img_empty_cart"
-                        />
+                        android:src="@drawable/img_empty_cart" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Giỏ hàng trống trơn"
-                        android:fontFamily="@font/inter_medium"
+                        android:layout_gravity="center_horizontal"
                         android:layout_marginTop="20dp"
-                        android:textSize="16sp"
+                        android:fontFamily="@font/inter_medium"
+                        android:text="Giỏ hàng trống trơn"
                         android:textColor="@color/colorBlack"
-                        android:layout_gravity="center_horizontal"
-                        />
+                        android:textSize="16sp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Dạo quanh FStyle lụm hàng ngay thôi"
-                        android:fontFamily="@font/inter_medium"
-                        android:layout_marginTop="5dp"
-                        android:textSize="14sp"
-                        android:textColor="@color/colorBlack"
                         android:layout_gravity="center_horizontal"
-                        />
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:text="Dạo quanh FStyle lụm hàng ngay thôi"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14sp" />
 
                     <Button
                         android:id="@+id/btn_empty"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="50dp"
                         android:layout_marginTop="5dp"
+                        android:background="@drawable/bg_border_empty_cart"
+                        android:fontFamily="@font/inter_medium"
                         android:text="Đi ngay thôi"
                         android:textColor="@color/colorSplash"
-                        android:textStyle="bold"
-                        android:fontFamily="@font/inter_medium"
-                        android:layout_marginHorizontal="50dp"
-                        android:background="@drawable/bg_border_empty_cart"
-                        />
+                        android:textStyle="bold" />
 
                 </LinearLayout>
             </FrameLayout>
 
 
-                <TextView
-                    android:id="@+id/tv_maybe_like"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/frameCart"
-                    android:layout_marginVertical="10dp"
-                    android:fontFamily="@font/inter_semi_bold"
-                    android:gravity="center"
-                    android:text="Có thể bạn sẽ thích"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="20sp" />
+            <TextView
+                android:id="@+id/tv_maybe_like"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/frameCart"
+                android:layout_marginVertical="10dp"
+                android:fontFamily="@font/inter_semi_bold"
+                android:gravity="center"
+                android:text="Có thể bạn sẽ thích"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rcvMaybeLike"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_maybe_like"
-                    app:spanCount="2"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    tools:listitem="@layout/item_maybe_like"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvMaybeLike"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_maybe_like"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2"
+                tools:listitem="@layout/item_maybe_like" />
         </RelativeLayout>
-    </ScrollView>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@color/colorWhite"
-        >
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="10dp"
-            app:layout_constraintBottom_toTopOf="@id/ll_total"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:background="@drawable/bg_detail_total"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tổng số sản phẩm: "
-                android:textColor="@color/colorBlack"
-                android:layout_marginLeft="20dp"
-                android:fontFamily="@font/inter_medium"
-                android:paddingVertical="10dp"
-                />
-            <TextView
-                android:id="@+id/tv_detail_quantum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="3"
-                android:textColor="@color/colorBlack"
-                android:fontFamily="@font/inter_medium"
-                android:paddingVertical="10dp"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tổng giá: "
-                android:textColor="@color/colorBlack"
-                android:layout_marginLeft="60dp"
-                android:fontFamily="@font/inter_medium"
-                android:paddingVertical="10dp"
-                />
-            <TextView
-                android:id="@+id/tv_total"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="1.500.000 VND"
-                android:textColor="@color/colorBlack"
-                android:fontFamily="@font/inter_bold"
-                android:paddingVertical="10dp"
-                />
-
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/ll_total"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginBottom="20dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@id/btn_payment"
+            android:background="@color/colorWhite"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <ImageView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/rlt_total"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_money_payment" />
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_detail_total"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@id/ll_total"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="10dp"
+                    android:orientation="horizontal"
+                    android:paddingVertical="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_medium"
+                        android:text="Tổng số sản phẩm: "
+                        android:textColor="@color/colorBlack" />
+
+                    <TextView
+                        android:id="@+id/tv_detail_quantum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/colorBlack"
+                        tools:text="3" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="10dp"
+                    android:orientation="horizontal"
+                    android:paddingVertical="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_medium"
+                        android:text="Tổng giá: "
+                        android:textColor="@color/colorBlack" />
+
+                    <TextView
+                        android:id="@+id/tv_total"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:maxLines="1"
+                        android:textColor="@color/colorBlack"
+                        tools:text="1.500.000 VND" />
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/ll_total"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/rounder_ll_tt"
-                android:orientation="horizontal">
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@id/btn_payment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@drawable/rounded_tt"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="4dp"
-                    android:text="TT"
-                    android:fontFamily="@font/inter_semi_bold"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="10sp" />
+                    android:src="@drawable/ic_money_payment" />
 
-                <TextView
-                    android:id="@+id/tv_total_detail"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="5dp"
-                    android:fontFamily="@font/inter_medium"
-                    android:textColor="#2F2D2C"
-                    android:paddingRight="15dp"
-                    tools:text="1.500.000 VND" />
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/rounder_ll_tt"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/rounded_tt"
+                        android:fontFamily="@font/inter_semi_bold"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="4dp"
+                        android:text="TT"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/tv_total_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:paddingRight="15dp"
+                        android:textColor="#2F2D2C"
+                        tools:text="1.500.000 VND" />
+                </LinearLayout>
+
             </LinearLayout>
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/btn_payment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/rounder_button"
+                android:fontFamily="@font/inter_semi_bold"
+                android:gravity="center"
+                android:padding="25dp"
+                android:text="Mua hàng"
+                android:textColor="@color/colorWhite"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/btn_payment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/rounder_button"
-            android:fontFamily="@font/inter_semi_bold"
-            android:gravity="center"
-            android:padding="25dp"
-            android:text="Mua hàng"
-            android:textColor="@color/colorWhite"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
