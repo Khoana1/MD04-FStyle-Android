@@ -1,7 +1,10 @@
 package com.example.eu_fstyle_mobile.src.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.icu.text.DecimalFormat;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eu_fstyle_mobile.R;
-import com.example.eu_fstyle_mobile.databinding.ItemProductHomeBinding;
 import com.example.eu_fstyle_mobile.src.model.Product;
 import com.squareup.picasso.Picasso;
 
@@ -41,10 +43,19 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
         Product product = arrayList.get(position);
         String[] imagearray = product.getImage64();
         String image = imagearray.length>0 ? imagearray[0]: "";
-        Picasso.get().load(image)
-                .placeholder(R.drawable.icon_home)
-                .error(R.drawable.icon_erro)
-                .into(holder.imageView);
+        if(image != null){
+            if(image.startsWith("http")){
+                Picasso.get().load(image)
+                        .error(R.drawable.icon_erro)
+                        .into(holder.imageView);
+            }else {
+                byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                holder.imageView.setImageBitmap(decodedByte);
+            }
+        }else {
+            holder.imageView.setImageResource(R.drawable.icon_erro);
+        }
         DecimalFormat dcf = new DecimalFormat("###,###,###");
         holder.txtPrice.setText(dcf.format(product.getPrice())+" VNĐ");
         holder.txtName.setText(product.getName());

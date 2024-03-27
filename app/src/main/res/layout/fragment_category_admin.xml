@@ -13,7 +13,7 @@
         tools:context=".src.view.admin.CategoryAdminFragment">
 
         <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/shimmer_view"
+            android:id="@+id/shimmer_view_category"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone">
@@ -57,7 +57,8 @@
                 android:layout_marginTop="10dp"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="2"
-                tools:listitem="@layout/item_product_admin" />
+                tools:listitem="@layout/item_product_home"
+                />
         </LinearLayout>
 
 
