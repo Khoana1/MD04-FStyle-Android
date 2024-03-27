@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.ItemFavouriteBinding;
+import com.example.eu_fstyle_mobile.databinding.ItemMyAddressBinding;
+import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.ProductFavourite;
 import com.squareup.picasso.Picasso;
 
@@ -24,10 +26,11 @@ public class MyFavouriteAdapter extends RecyclerView.Adapter<MyFavouriteAdapter.
     public MyFavouriteAdapter(List<ProductFavourite> productList) {
         this.productList = productList;
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyFavouriteAdapter .ViewHolder(ItemFavouriteBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new MyFavouriteAdapter.ViewHolder(ItemFavouriteBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -36,19 +39,19 @@ public class MyFavouriteAdapter extends RecyclerView.Adapter<MyFavouriteAdapter.
         String image = product.getDefaultImage();
         holder.binding.itemNameProductHome.setText(product.getName());
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        holder.binding.itemPriceProductHome.setText(decimalFormat.format(product.getPrice())+" VNĐ");
-        if(image != null){
-            if(image.startsWith("http")){
-                Picasso.get().load(image)
-                        .error(R.drawable.icon_erro)
+        holder.binding.itemPriceProductHome.setText(decimalFormat.format(product.getPrice()) + " VNĐ");
+        if(product.getDefaultImage() != null){
+            if(product.getDefaultImage().startsWith("http")){
+                Picasso.get().load(product.getDefaultImage())
+                        .error(R.drawable.error_shoe)
                         .into(holder.binding.itemImageProductHome);
             }else {
-                byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
+                byte[] decodedString = Base64.decode(product.getDefaultImage(), Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 holder.binding.itemImageProductHome.setImageBitmap(decodedByte);
             }
         }else {
-            holder.binding.itemImageProductHome.setImageResource(R.drawable.icon_erro);
+            holder.binding.itemImageProductHome.setImageResource(R.drawable.error_shoe);
         }
     }
 
@@ -65,4 +68,5 @@ public class MyFavouriteAdapter extends RecyclerView.Adapter<MyFavouriteAdapter.
             this.binding = binding;
         }
     }
+
 }
