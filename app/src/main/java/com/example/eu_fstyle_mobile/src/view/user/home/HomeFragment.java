@@ -98,6 +98,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         categoriesViewModel = new ViewModelProvider(this).get(CategoriesViewModel.class);
         categoriesViewModel.getAllCategories();
         Banner();
+        ShimmerHome();
         openSearch(Gravity.CENTER);
         openFilter();
         getAvatar();
@@ -114,7 +115,25 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     }
 
 
-
+    private void ShimmerHome(){
+        if(binding!= null){
+            binding.shimmerHomeUser.setVisibility(View.VISIBLE);
+            binding.dataHomeUser.setVisibility(View.INVISIBLE);
+            binding.constraintLayout20.setVisibility(View.INVISIBLE);
+            binding.shimmerHomeUser.startShimmer();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (binding != null) {
+                        binding.shimmerHomeUser.stopShimmer();
+                        binding.shimmerHomeUser.setVisibility(View.GONE);
+                        binding.dataHomeUser.setVisibility(View.VISIBLE);
+                        binding.constraintLayout20.setVisibility(View.INVISIBLE);
+                    }
+                }
+            },2000);
+        }
+    }
     private void initView() {
         User user = UserPrefManager.getInstance(getActivity()).getUser();
         String lastName = getLastName(user.getName());

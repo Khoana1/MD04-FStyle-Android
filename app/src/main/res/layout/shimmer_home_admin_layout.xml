@@ -29,10 +29,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:background="@color/colorDDDDDD"
                 android:fontFamily="@font/inter_semi_bold"
                 android:text="Quản lý sản phẩm"
                 android:textColor="@color/colorDDDDDD"
-                android:background="@color/colorDDDDDD"
                 android:textSize="18sp"
                 android:textStyle="bold" />
         </RelativeLayout>
