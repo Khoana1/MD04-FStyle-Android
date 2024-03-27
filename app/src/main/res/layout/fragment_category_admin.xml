@@ -13,7 +13,7 @@
         tools:context=".src.view.admin.CategoryAdminFragment">
 
         <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/shimmer_view"
+            android:id="@+id/shimmer_view_category"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone">

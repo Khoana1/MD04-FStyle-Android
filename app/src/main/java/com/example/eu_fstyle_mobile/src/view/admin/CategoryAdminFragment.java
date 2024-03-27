@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,11 +39,29 @@ public class CategoryAdminFragment extends BaseFragment<FragmentCategoryAdminBin
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
          initListioner();
+         showShimmerEffect();
          categoriesViewModel = new ViewModelProvider(this).get(CategoriesViewModel.class);
          categoriesViewModel.getAllCategories();
          observeViewModel();
     }
-
+    private void showShimmerEffect() {
+        if (binding != null) {
+            binding.shimmerViewCategory.setVisibility(View.VISIBLE);
+            binding.dataCategory.setVisibility(View.INVISIBLE);
+            binding.shimmerViewCategory.startShimmer();
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (binding != null) {
+                        binding.shimmerViewCategory.stopShimmer();
+                        binding.shimmerViewCategory.setVisibility(View.GONE);
+                        binding.dataCategory.setVisibility(View.VISIBLE);
+                    }
+                }
+            }, 2000);
+        }
+    }
     private void observeViewModel() {
         categoriesViewModel.getCategorieData().observe(getViewLifecycleOwner(), new Observer<ListCategories>() {
             @Override
