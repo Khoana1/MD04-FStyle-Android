@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.viewmodel.CreationExtras;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -44,7 +43,6 @@ import com.example.eu_fstyle_mobile.src.adapter.SearchAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.Cart;
 import com.example.eu_fstyle_mobile.src.model.Categories;
-import com.example.eu_fstyle_mobile.src.model.Category;
 import com.example.eu_fstyle_mobile.src.model.ListCategories;
 import com.example.eu_fstyle_mobile.src.model.ListProduct;
 import com.example.eu_fstyle_mobile.src.model.Product;
@@ -72,7 +70,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     FragmentHomeBinding binding;
     CategoryFillerAdapter fillerAdapter;
     CategoriesViewModel categoriesViewModel;
-    ArrayList<Categories> arrayList;
+    ArrayList<Categories> listCategoryFiller;
     ArrayList<Product> listProduct;
     ArrayList<Product> listFilter;
     ProductHomeAdapter productAdapter;
@@ -85,6 +83,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     private Handler handler;
     private Runnable runnable;
     String textButton="";
+    String typeCategory="";
     boolean isThapToiCaoSelected= false;
     boolean isCaoToiThapSelected= false;
     boolean isDuo1trieuSelected = false;
@@ -192,8 +191,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         categoriesViewModel.getCategorieData().observe(getViewLifecycleOwner(), new Observer<ListCategories>() {
             @Override
             public void onChanged(ListCategories listCategories) {
-                arrayList = listCategories.getArrayList();
-                adapter = new CategoryHomeAdapter(getActivity(), arrayList);
+                listCategoryFiller = listCategories.getArrayList();
+                adapter = new CategoryHomeAdapter(getActivity(), listCategoryFiller);
                 binding.recycleCategoryHome.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
                 binding.recycleCategoryHome.setAdapter(adapter);
             }
@@ -212,13 +211,10 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
             bottomsetView.setLayoutParams(params);
             //
             ArrayList<String> listName = new ArrayList<>();
-            for(int i=0; i<arrayList.size();i++){
-                listName.add(arrayList.get(i).getName());
+            for(int i = 0; i< listCategoryFiller.size(); i++){
+                listName.add(listCategoryFiller.get(i).getName());
             }
-            fillerAdapter = new CategoryFillerAdapter(listName);
-            binding1.recycleFiller.setAdapter(fillerAdapter);
-            binding1.recycleFiller.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-            binding1.backFilter.setOnClickListener(v1 -> bottomSheetDialog.dismiss());
+            getListFiller(listName, binding1,bottomSheetDialog);
             //
 
             //
@@ -242,6 +238,22 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                 }
             });
             bottomSheetDialog.show();
+        });
+    }
+    private void getListFiller(ArrayList<String> listName, BottomDialogFilterBinding binding1,BottomSheetDialog bottomSheetDialog){
+        fillerAdapter = new CategoryFillerAdapter(listName);
+        binding1.recycleFiller.setAdapter(fillerAdapter);
+        binding1.recycleFiller.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        binding1.backFilter.setOnClickListener(v1 -> bottomSheetDialog.dismiss());
+        fillerAdapter.setOnClickItem(new CategoryFillerAdapter.onClickItem() {
+            @Override
+            public void onClick(String name) {
+             for(Product product : listProduct){
+                 if(product.getType().equals(name)){
+                     listFilter.add(product);
+                 }
+             }
+            }
         });
     }
     private void buttonPrice(BottomDialogFilterBinding binding1){
