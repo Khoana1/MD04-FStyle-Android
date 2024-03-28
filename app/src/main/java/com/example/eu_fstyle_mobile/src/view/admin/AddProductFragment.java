@@ -34,8 +34,10 @@ import com.example.eu_fstyle_mobile.databinding.FragmentAddProductBinding;
 import com.example.eu_fstyle_mobile.src.adapter.CategorySpinnerAdapter;
 import com.example.eu_fstyle_mobile.src.adapter.ImageAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
+import com.example.eu_fstyle_mobile.src.model.Categories;
 import com.example.eu_fstyle_mobile.src.model.Category;
 import com.example.eu_fstyle_mobile.src.model.DataCategory;
+import com.example.eu_fstyle_mobile.src.model.ListCategories;
 import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.view.custom.CustomSpinner;
@@ -65,6 +67,7 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
     private CategorySpinnerAdapter adapter;
 
     private AddProductViewModel addProductViewModel;
+    private CategoriesViewModel categoriesViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,6 +80,8 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), onBackPressedCallback);
+        categoriesViewModel = new ViewModelProvider(this).get(CategoriesViewModel.class);
+        categoriesViewModel.getAllCategories();
         spinnerCategory();
         initView();
         addProductViewModel = new ViewModelProvider(this).get(AddProductViewModel.class);
@@ -84,9 +89,21 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
     }
 
     private void spinnerCategory() {
+        categoriesViewModel.getCategorieData().observe(getViewLifecycleOwner(), new Observer<ListCategories>() {
+            @Override
+            public void onChanged(ListCategories listCategories) {
+                ArrayList<Categories> list = listCategories.getArrayList();
+                adapter = new CategorySpinnerAdapter(requireContext(), list);
+                binding.spinnerType.setAdapter(adapter);
+            }
+        });
+        categoriesViewModel.getErrorMessage().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+            }
+        });
         binding.spinnerType.setSpinnerEventsListener(this);
-        adapter = new CategorySpinnerAdapter(requireContext(), DataCategory.getDataCategory());
-        binding.spinnerType.setAdapter(adapter);
     }
 
     private void observeViewModel() {
@@ -126,7 +143,7 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
         binding.spinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Category selectedCategory = (Category) parent.getItemAtPosition(position);
+                Categories selectedCategory = (Categories) parent.getItemAtPosition(position);
                 productType = selectedCategory.getName();
             }
 
@@ -165,7 +182,7 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
                 if (binding.productNameContainer.getHelperText() == null && binding.brandContainer.getHelperText() == null &&
                         binding.priceContainer.getHelperText() == null && binding.colorContainer.getHelperText() == null &&
                         binding.desContainer.getHelperText() == null && uriArrayList.size() >= 2) {
-                    productType = ((Category) binding.spinnerType.getSelectedItem()).getName();
+                    productType = ((Categories) binding.spinnerType.getSelectedItem()).getName();
 
                     base64Images = convertImagesToBase64(uriArrayList);
                     int productPriceNumber = Integer.parseInt(binding.edtPrice.getText().toString().replace(",", ""));
