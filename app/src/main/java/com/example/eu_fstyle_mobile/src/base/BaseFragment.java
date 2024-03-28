@@ -205,6 +205,23 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
         dialog.show();
     }
 
+    protected void showHintDialog() {
+        Dialog dialog = new Dialog(getContext());
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.setContentView(R.layout.hint_cart_layout);
+        dialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.custom_dialog_background));
+
+        Button btnConfirm = dialog.findViewById(R.id.btn_hint_ok);
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
     protected void hideKeyboard() {
         Activity activity = getActivity();
         if (activity != null) {

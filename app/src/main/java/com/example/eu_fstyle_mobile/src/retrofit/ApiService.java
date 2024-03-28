@@ -62,19 +62,23 @@ public interface ApiService {
 
     @PUT(ApiEndpoint.createCart)
     Call<Product> createCart(@Path("id") String id, @Body RequestCreateCart requestCreateCart);
+
     @GET(ApiEndpoint.getFavorite)
     Call<Favourite> getFavorite(@Path("id") String id);
+
     @POST(ApiEndpoint.createFavorite)
     Call<Product> createFavorite(@Path("id") String id, @Body RequestCreateFavourite requestCreateFavourite);
-  
+
     @GET(ApiEndpoint.getAllCategories)
     Call<ListCategories> getAllCategories();
+
     @POST(ApiEndpoint.createCategories)
-    Call<Categories> createCategory(
-            @Body RequestCategory requestCategory
-            );
-  
+    Call<Categories> createCategory(@Body RequestCategory requestCategory);
+
     @GET(ApiEndpoint.getCart)
     Call<Cart> getCart(@Path("id") String id);
+
+    @GET(ApiEndpoint.deleteCart)
+    Call<Cart> deleteCart(@Path("id") String id, @Path("id_product") String id_product);
 
 }
