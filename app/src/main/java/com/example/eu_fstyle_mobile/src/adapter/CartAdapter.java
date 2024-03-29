@@ -3,6 +3,7 @@ package com.example.eu_fstyle_mobile.src.adapter;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -38,48 +39,43 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             if(productCart.getImageDefault().startsWith("http")){
                 Picasso.get().load(productCart.getImageDefault())
                         .error(R.drawable.error_shoe)
-                        .into(holder.binding.imgShoe);
+                        .into(holder.binding.imageCart);
             }else {
                 byte[] decodedString = Base64.decode(productCart.getImageDefault(), Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                holder.binding.imgShoe.setImageBitmap(decodedByte);
+                holder.binding.imageCart.setImageBitmap(decodedByte);
             }
         }else {
-            holder.binding.imgShoe.setImageResource(R.drawable.error_shoe);
+            holder.binding.imageCart.setImageResource(R.drawable.error_shoe);
         }
-        String defaultName = productCart.getName();
-        int maxLength = 13;
-        if (defaultName.length() > maxLength) {
-            String truncatedName = defaultName.substring(0, maxLength) + "...";
-            holder.binding.tvNameShoe.setText(truncatedName);
-        } else {
-            holder.binding.tvNameShoe.setText(productCart.getName());
-        }
-
+        holder.binding.nameCart.setMaxLines(1);
+        holder.binding.nameCart.setEllipsize(TextUtils.TruncateAt.END);
+        holder.binding.nameCart.setText(productCart.getName());
+        holder.binding.sizeCart.setText("size: "+productCart.getSize());
 
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        holder.binding.tvPriceShoe.setText(decimalFormat.format(productCart.getPrice()) + " VNĐ");
-        holder.binding.tvSoluongShoe.setText(productCart.getSoLuong().toString());
-        holder.binding.imgReduce.setOnClickListener(v -> {
+        holder.binding.priceCart.setText(decimalFormat.format(productCart.getPrice()) + " VNĐ");
+        holder.binding.btnGiatriCart.setText(productCart.getSoLuong().toString());
+        holder.binding.btntruCart.setOnClickListener(v -> {
             int currentQuantity = productCart.getSoLuong().intValue();
             if (currentQuantity > 1) {
                 currentQuantity--;
                 productCart.setSoLuong(currentQuantity);
-                holder.binding.tvSoluongShoe.setText(String.valueOf(currentQuantity));
+                holder.binding.btnGiatriCart.setText(String.valueOf(currentQuantity));
                 double pricePerItem = productCart.getPrice().doubleValue();
                 double totalPrice = currentQuantity * pricePerItem;
-                holder.binding.tvPriceShoe.setText(decimalFormat.format(totalPrice) + " VNĐ");
+                holder.binding.priceCart.setText(decimalFormat.format(totalPrice) + " VNĐ");
             }
         });
 
-        holder.binding.imgIncrease.setOnClickListener(v -> {
+        holder.binding.btncongCart.setOnClickListener(v -> {
             int currentQuantity = productCart.getSoLuong().intValue();
             currentQuantity++;
             productCart.setSoLuong(currentQuantity);
-            holder.binding.tvSoluongShoe.setText(String.valueOf(currentQuantity));
+            holder.binding.btnGiatriCart.setText(String.valueOf(currentQuantity));
             double pricePerItem = productCart.getPrice().doubleValue();
             double totalPrice = currentQuantity * pricePerItem;
-            holder.binding.tvPriceShoe.setText(decimalFormat.format(totalPrice) + " VNĐ");
+            holder.binding.priceCart.setText(decimalFormat.format(totalPrice) + " VNĐ");
         });
 
 
