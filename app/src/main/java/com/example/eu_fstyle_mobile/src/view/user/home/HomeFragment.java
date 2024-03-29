@@ -567,8 +567,11 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
             @Override
             public void onResponse(Call<Cart> call, Response<Cart> response) {
                 if (response.isSuccessful()) {
-                    String numberCart = String.valueOf(response.body().getListProduct().size());
-                    binding.tvNumberCart.setText(numberCart);
+                    int numberCart = response.body().getListProduct().size();
+                    if(numberCart == 0){
+                        binding.tvNumberCart.setText("0");
+                    }
+                    binding.tvNumberCart.setText(String.valueOf(numberCart));
                 }
             }
 

@@ -16,6 +16,9 @@ import android.widget.Button;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.eu_fstyle_mobile.R;
@@ -23,9 +26,11 @@ import com.example.eu_fstyle_mobile.databinding.BottomSheetDathangBinding;
 import com.example.eu_fstyle_mobile.databinding.BottomSheetHinhthucvcBinding;
 import com.example.eu_fstyle_mobile.databinding.DialogGoiysizeBinding;
 import com.example.eu_fstyle_mobile.databinding.FragmentDetailProductBinding;
+import com.example.eu_fstyle_mobile.src.adapter.ProductHomeAdapter;
 import com.example.eu_fstyle_mobile.src.adapter.ViewPager_detail_Adapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.Cart;
+import com.example.eu_fstyle_mobile.src.model.ListProduct;
 import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.ProductCart;
 import com.example.eu_fstyle_mobile.src.model.User;
@@ -33,6 +38,7 @@ import com.example.eu_fstyle_mobile.src.request.RequestCreateCart;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateFavourite;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
+import com.example.eu_fstyle_mobile.src.view.admin.HomeAdminViewModel;
 import com.example.eu_fstyle_mobile.src.view.user.payment.CartFragment;
 import com.example.eu_fstyle_mobile.src.view.user.profile.MyFavouriteFragment;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
@@ -46,10 +52,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DetailProductFragment extends BaseFragment<FragmentDetailProductBinding> {
+public class DetailProductFragment extends BaseFragment<FragmentDetailProductBinding> implements ProductHomeAdapter.onClickItem{
     public static final String Products = "product";
     FragmentDetailProductBinding binding;
     ViewPager_detail_Adapter adapter;
+    ProductHomeAdapter productdapter;
     User user;
     DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
     boolean isCheckDetail = false;
@@ -58,6 +65,8 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
     int orderCheck = 0;
     boolean isSize36, isSize37, isSize38, isSize39 = false;
     int soluong;
+    ArrayList<Product> listProduct1;
+    HomeAdminViewModel homeAdminViewModel;
 
     public static DetailProductFragment newInstance(Product product) {
         DetailProductFragment detail = new DetailProductFragment();
@@ -71,12 +80,34 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentDetailProductBinding.inflate(inflater, container, false);
+        homeAdminViewModel = new ViewModelProvider(this).get(HomeAdminViewModel.class);
+        homeAdminViewModel.getAllProduct();
         initView();
         getCartCountNumber();
         getData();
         initListener();
         setTotolPrice();
+        getSanphamTuongtu();
         return binding.getRoot();
+    }
+
+    private void getSanphamTuongtu() {
+        homeAdminViewModel.getProductLiveData().observe(getViewLifecycleOwner(), new Observer<ListProduct>() {
+            @Override
+            public void onChanged(ListProduct listProduct) {
+                ArrayList<Product> newList = new ArrayList<>();
+                listProduct1 = listProduct.getArrayList();
+                for (Product product1: listProduct1){
+                    if(product1.getType().equals(product.getType())){
+                        newList.add(product1);
+                    }
+                }
+                productdapter = new ProductHomeAdapter(getActivity(), newList, DetailProductFragment.this);
+                binding.recycleSanphamtuongtu.setAdapter(productdapter);
+                binding.recycleSanphamtuongtu.setLayoutManager(new GridLayoutManager(getActivity(),2));
+
+            }
+        });
     }
 
     private void initListener() {
@@ -226,7 +257,7 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
                 .placeholder(R.drawable.icon_home)
                 .error(R.drawable.icon_erro)
                 .into(binding1.itemImageDathang);
-        binding1.itemTxtGiaDathang.setText("Giá: " + product.getPrice());
+        binding1.itemTxtGiaDathang.setText("Giá: " +decimalFormat.format(product.getPrice()) );
         binding1.itemTxtKhoDathang.setText("Đã bán: " + product.getQuantity());
         binding1.banggoiysize.setOnClickListener(v -> {
             goiysize();
@@ -408,4 +439,38 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
         return FragmentDetailProductBinding.inflate(inflater, container, false);
     }
 
+    @Override
+    public void onClick(Product product) {
+        DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
+        openScreenHome(detailProductFragment, true);
+    }
+
+    @Override
+    public void onClickFavourite(Product product) {
+        User user = UserPrefManager.getInstance(getActivity()).getUser();
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        RequestCreateFavourite requestCreateFavourite = new RequestCreateFavourite(product.getName(), product.getQuantity(), product.getPrice().toString(), product.getImage64()[0]);
+        Call<Product> call = apiService.createFavorite(user.get_id(), requestCreateFavourite);
+        call.enqueue(new Callback<Product>() {
+            @Override
+            public void onResponse(Call<Product> call, Response<Product> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(getActivity(), "Thêm vào yêu thích thành công", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Thêm vào yêu thích thất bại", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Product> call, Throwable t) {
+                Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onClickCart(Product product) {
+        DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
+        openScreenHome(detailProductFragment, true);
+    }
 }
