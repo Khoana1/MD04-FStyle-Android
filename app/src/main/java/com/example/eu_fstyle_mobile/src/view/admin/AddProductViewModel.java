@@ -1,5 +1,7 @@
 package com.example.eu_fstyle_mobile.src.view.admin;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -30,10 +32,11 @@ public class AddProductViewModel extends ViewModel {
         return errorMessage;
     }
 
-    public void createProduct(String id, String name, String[] image64, String brand, Number price, String color, String quantity, String type, String description) {
+    public void createProduct( String name, String[] image64, String brand, Number price, String color, int quantity, String Idtype, String description) {
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        RequestCreateProduct requestCreateProduct = new RequestCreateProduct(name, image64, brand, price, color, quantity, type, description);
-        Call<Product> call = apiService.createProduct(requestCreateProduct, id);
+        RequestCreateProduct requestCreateProduct = new RequestCreateProduct(name, image64, brand, price, 37, color, quantity, description, Idtype);
+        Log.d("Huy", "createProduct: "+name+"_"+ image64[0]+"_"+brand+"_"+"_"+price+"_"+color+"_"+quantity+"_"+description+"_"+Idtype);
+        Call<Product> call = apiService.createProduct(requestCreateProduct);
         call.enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
@@ -41,6 +44,7 @@ public class AddProductViewModel extends ViewModel {
                     productData.setValue(response.body());
                 } else {
                     errorMessage.setValue("Thêm sản phẩm thất bại, vui lòng kiểm tra lại thông tin!");
+                    Log.d("Huy_erro", "onResponse: "+response.message());
                 }
             }
 

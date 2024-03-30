@@ -24,12 +24,12 @@ public class Product implements Serializable {
     private String quantity;
     @SerializedName("status")
     private String status;
-    @SerializedName("type")
-    private String type;
+    @SerializedName("category")
+    private String idCategory;
     @SerializedName("description")
     private String description;
 
-    public Product(String _id, String name, String[] image64, String brand, Number price, Number size, String color, String quantity, String status, String type, String description) {
+    public Product(String _id, String name, String[] image64, String brand, Number price, Number size, String color, String quantity, String status, String idCategory, String description) {
         this._id = _id;
         this.name = name;
         this.image64 = image64;
@@ -39,7 +39,7 @@ public class Product implements Serializable {
         this.color = color;
         this.quantity = quantity;
         this.status = status;
-        this.type = type;
+        this.idCategory = idCategory;
         this.description = description;
     }
 
@@ -116,12 +116,12 @@ public class Product implements Serializable {
         this.status = status;
     }
 
-    public String getType() {
-        return type;
+    public String getIdCategory() {
+        return idCategory;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setIdCategory(String idCategory) {
+        this.idCategory = idCategory;
     }
 
     public String getDescription() {

@@ -3,7 +3,6 @@ package com.example.eu_fstyle_mobile.src.view.admin;
 import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -15,8 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -35,8 +32,6 @@ import com.example.eu_fstyle_mobile.src.adapter.CategorySpinnerAdapter;
 import com.example.eu_fstyle_mobile.src.adapter.ImageAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.Categories;
-import com.example.eu_fstyle_mobile.src.model.Category;
-import com.example.eu_fstyle_mobile.src.model.DataCategory;
 import com.example.eu_fstyle_mobile.src.model.ListCategories;
 import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.User;
@@ -60,8 +55,8 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
     private String productBrand;
     private String productPrice;
     private String productColor;
-    private String productQuantity;
-    private String productType;
+    private int productQuantity;
+    private String idProductType;
     private String productDescription;
 
     private CategorySpinnerAdapter adapter;
@@ -144,7 +139,7 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Categories selectedCategory = (Categories) parent.getItemAtPosition(position);
-                productType = selectedCategory.getName();
+                idProductType = selectedCategory.getId();
             }
 
             @Override
@@ -182,12 +177,12 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
                 if (binding.productNameContainer.getHelperText() == null && binding.brandContainer.getHelperText() == null &&
                         binding.priceContainer.getHelperText() == null && binding.colorContainer.getHelperText() == null &&
                         binding.desContainer.getHelperText() == null && uriArrayList.size() >= 2) {
-                    productType = ((Categories) binding.spinnerType.getSelectedItem()).getName();
+                    idProductType = ((Categories) binding.spinnerType.getSelectedItem()).getId();
 
                     base64Images = convertImagesToBase64(uriArrayList);
                     int productPriceNumber = Integer.parseInt(binding.edtPrice.getText().toString().replace(",", ""));
                     User user = AdminPreManager.getInstance(getActivity()).getAdminData();
-                    addProductViewModel.createProduct(user.get_id(), productName, base64Images.toArray(new String[0]), productBrand, productPriceNumber, productColor, productQuantity, productType, productDescription);
+                    addProductViewModel.createProduct(productName, base64Images.toArray(new String[0]), productBrand, productPriceNumber, productColor, productQuantity, idProductType, productDescription);
                 }
             }
         });
@@ -207,7 +202,7 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
         productBrand = binding.edtBrand.getText().toString();
         productPrice = binding.edtPrice.getText().toString();
         productColor = binding.edtColor.getText().toString();
-        productQuantity = binding.edtQuantity.getText().toString();
+        productQuantity = Integer.parseInt(binding.edtQuantity.getText().toString());
         productDescription = binding.edtDes.getText().toString();
         if (productName.isEmpty()) {
             helperText = "Không được để trốn tên giày";
@@ -233,7 +228,7 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
         } else {
             binding.colorContainer.setHelperText("");
         }
-        if (productQuantity.isEmpty()) {
+        if (productQuantity==0) {
             helperText = "Không được để trống số lượng giày";
             binding.quantityContainer.setHelperText(helperText);
         } else {

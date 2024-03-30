@@ -70,7 +70,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     FragmentHomeBinding binding;
     CategoryFillerAdapter fillerAdapter;
     CategoriesViewModel categoriesViewModel;
-    ArrayList<Categories> listCategoryFiller;
+    ArrayList<Categories> listCategory;
     ArrayList<Product> listProduct;
     ArrayList<Product> listSize;
     ArrayList<Product> listByCategory;
@@ -191,8 +191,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         categoriesViewModel.getCategorieData().observe(getViewLifecycleOwner(), new Observer<ListCategories>() {
             @Override
             public void onChanged(ListCategories listCategories) {
-                listCategoryFiller = listCategories.getArrayList();
-                adapter = new CategoryHomeAdapter(getActivity(), listCategoryFiller);
+                listCategory = listCategories.getArrayList();
+                adapter = new CategoryHomeAdapter(getActivity(), listCategory);
                 binding.recycleCategoryHome.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
                 binding.recycleCategoryHome.setAdapter(adapter);
             }
@@ -211,11 +211,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
             params.height = (int) (getResources().getDisplayMetrics().heightPixels * 0.6);
             bottomsetView.setLayoutParams(params);
             //
-            ArrayList<String> listName = new ArrayList<>();
-            for(int i = 0; i< listCategoryFiller.size(); i++){
-                listName.add(listCategoryFiller.get(i).getName());
-            }
-            getListFiller(listName, binding1,bottomSheetDialog);
+            getListFiller(listCategory, binding1,bottomSheetDialog);
             //
             buttonPrice(binding1);
             //
@@ -240,17 +236,17 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
             bottomSheetDialog.show();
         });
     }
-    private void getListFiller(ArrayList<String> listName, BottomDialogFilterBinding binding1,BottomSheetDialog bottomSheetDialog){
-        fillerAdapter = new CategoryFillerAdapter(listName);
+    private void getListFiller(ArrayList<Categories> listCategory, BottomDialogFilterBinding binding1,BottomSheetDialog bottomSheetDialog){
+        fillerAdapter = new CategoryFillerAdapter(listCategory);
         binding1.recycleFiller.setAdapter(fillerAdapter);
         binding1.recycleFiller.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         binding1.backFilter.setOnClickListener(v1 -> bottomSheetDialog.dismiss());
         fillerAdapter.setOnClickItem(new CategoryFillerAdapter.onClickItem() {
             @Override
-            public void onClick(String name) {
-                Log.d("Huy", "onClick: "+name);
+            public void onClick(String idCategory) {
+                Log.d("Huy", "onClick: "+idCategory);
              for(Product product : listProduct){
-                 if(product.getType().equals(name)){
+                 if(product.getIdCategory().equals(idCategory)){
                      listByCategory.add(product);
                  }
              }

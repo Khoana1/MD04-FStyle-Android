@@ -98,7 +98,7 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
                 ArrayList<Product> newList = new ArrayList<>();
                 listProduct1 = listProduct.getArrayList();
                 for (Product product1: listProduct1){
-                    if(product1.getType().equals(product.getType())){
+                    if(product1.getIdCategory().equals(product.getIdCategory())){
                         newList.add(product1);
                     }
                 }
