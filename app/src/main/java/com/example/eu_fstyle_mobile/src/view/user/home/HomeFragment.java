@@ -222,7 +222,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                     openScreenHome(resultSearchFragment,true);
                     bottomSheetDialog.dismiss();
                 }else {
-                    Toast.makeText(getActivity(), "chưa chọn điều kiện áp dụng", Toast.LENGTH_LONG).show();
+                    showAlertDialog("chưa chọn size");
                 }
             });
             if(!bottomSheetDialog.isShowing()){
@@ -234,6 +234,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     private void reset(BottomDialogFilterBinding binding1){
         fillerAdapter.clearSelection();
         listByCategory.clear();
+        listSize.clear();
         toggleButton(binding1.btnThaptoicaoFilter, false);
         toggleButton(binding1.btnCaotoithapFilter, false);
         toggleButton(binding1.btnDuoi1trieuFilter, false);
@@ -259,7 +260,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                 if(listByCategory.size()>0){
                   buttonPrice(binding1);
                 }else {
-                    Toast.makeText(getActivity(), "Không có sản phẩm nào thuộc thể loại này", Toast.LENGTH_SHORT).show();
+                    showAlertDialog("Không có sản phẩm nào thuộc thể loại này");
+
                 }
             }
         });
@@ -277,6 +279,9 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                 toggleButton(binding1.btnDuoi2trieuFilter, false);
                 textButton = String.valueOf(binding1.btnThaptoicaoFilter.getText());
                 getThaptoiCao();
+            }else {
+                textButton="";
+                listSize.clear();
             }
         });
         binding1.btnCaotoithapFilter.setOnClickListener(v1 -> {
@@ -291,6 +296,9 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                 toggleButton(binding1.btnDuoi2trieuFilter, false);
                 textButton = String.valueOf(binding1.btnCaotoithapFilter.getText());
                 getCaotoiThap();
+            }else {
+                textButton="";
+                listSize.clear();
             }
         });
         binding1.btnDuoi1trieuFilter.setOnClickListener(v1 -> {
@@ -305,6 +313,9 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                 toggleButton(binding1.btnDuoi2trieuFilter, false);
                 textButton = String.valueOf(binding1.btnDuoi1trieuFilter.getText());
                 getDuoi1trieu();
+            }else {
+                textButton="";
+                listSize.clear();
             }
 
         });
@@ -320,6 +331,9 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                 toggleButton(binding1.btnDuoi1trieuFilter, false);
                 textButton = String.valueOf(binding1.btnDuoi2trieuFilter.getText());
                 getDuoi2trieu();
+            }else {
+                textButton="";
+                listSize.clear();
             }
         });
     }
