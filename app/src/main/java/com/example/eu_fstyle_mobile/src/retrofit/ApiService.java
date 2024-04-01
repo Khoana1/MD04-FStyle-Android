@@ -58,7 +58,7 @@ public interface ApiService {
     Call<ListProduct> getAllProducts();
 
     @POST(ApiEndpoint.createProduct)
-    Call<Product> createProduct(@Body RequestCreateProduct requestCreateProduct, @Path("id") String id);
+    Call<Product> createProduct(@Body RequestCreateProduct requestCreateProduct);
 
     @PUT(ApiEndpoint.createCart)
     Call<Product> createCart(@Path("id") String id, @Body RequestCreateCart requestCreateCart);

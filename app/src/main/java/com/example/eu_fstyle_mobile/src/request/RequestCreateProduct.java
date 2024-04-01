@@ -5,19 +5,22 @@ public class RequestCreateProduct {
     private String[] image64;
     private String brand;
     private Number price;
+    private int size;
     private String color;
-    private String quantity;
-    private String type;
+    private int quantity;
     private String description;
+    private String categoryId;
 
-    public RequestCreateProduct(String name, String[] image64, String brand, Number price, String color, String quantity, String type, String description) {
+
+    public RequestCreateProduct(String name, String[] image64, String brand, Number price,int size, String color, int quantity, String description, String categoryId) {
         this.name = name;
         this.image64 = image64;
         this.brand = brand;
         this.price = price;
+        this.size = size;
         this.color = color;
         this.quantity = quantity;
-        this.type = type;
+        this.categoryId = categoryId;
         this.description = description;
     }
 
@@ -53,6 +56,14 @@ public class RequestCreateProduct {
         this.price = price;
     }
 
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
     public String getColor() {
         return color;
     }
@@ -61,20 +72,20 @@ public class RequestCreateProduct {
         this.color = color;
     }
 
-    public String getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(String quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    public String getType() {
-        return type;
+    public String getIdCategory() {
+        return categoryId;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setIdCategory(String idCategory) {
+        this.categoryId = idCategory;
     }
 
     public String getDescription() {
