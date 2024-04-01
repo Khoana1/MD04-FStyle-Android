@@ -181,7 +181,6 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
 
                     base64Images = convertImagesToBase64(uriArrayList);
                     int productPriceNumber = Integer.parseInt(binding.edtPrice.getText().toString().replace(",", ""));
-                    User user = AdminPreManager.getInstance(getActivity()).getAdminData();
                     addProductViewModel.createProduct(productName, base64Images.toArray(new String[0]), productBrand, productPriceNumber, productColor, productQuantity, idProductType, productDescription);
                 }
             }

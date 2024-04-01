@@ -91,23 +91,6 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
         bottomNavigationView.setVisibility(View.GONE);
     }
 
-
-    protected void openScreenForAdmin(Fragment fragment, boolean addToBackStack) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-        transaction.setCustomAnimations(
-                R.anim.slide_in,
-                R.anim.fade_out,
-                R.anim.fade_in,
-                R.anim.slide_out
-        );
-        transaction.replace(R.id.container, fragment);
-        if (addToBackStack) {
-            transaction.addToBackStack(null);
-        }
-        transaction.commit();
-    }
-
     protected void openScreenAdmin(Fragment fragment, boolean addToBackStack) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
@@ -122,6 +105,8 @@ public abstract class BaseFragment<T extends ViewBinding> extends Fragment {
             transaction.addToBackStack(null);
         }
         transaction.commit();
+        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigation);
+        bottomNavigationView.setVisibility(View.VISIBLE);
     }
 
 
