@@ -96,27 +96,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/category_name_container">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginVertical="5dp"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:id="@+id/btn_delete_picker"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="10dp"
-                        android:layout_gravity="center"
-                        android:background="@color/colorAccent"
-                        android:gravity="center_horizontal"
-                        android:padding="10dp"
-                        android:text="Xóa ảnh"
-                        android:textColor="@color/colorWhite" />
-
-                </LinearLayout>
-
                 <TextView
                     android:id="@+id/tvErrorPickImage"
                     android:layout_width="match_parent"

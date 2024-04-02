@@ -16,12 +16,14 @@ import com.example.eu_fstyle_mobile.src.request.RequestCreateFavourite;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateProduct;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateUser;
 import com.example.eu_fstyle_mobile.src.request.RequestLoginUser;
+import com.example.eu_fstyle_mobile.src.request.RequestString;
 import com.example.eu_fstyle_mobile.src.request.RequestUpdateAddress;
 import com.example.eu_fstyle_mobile.src.request.RequestUpdateUser;
 import com.example.eu_fstyle_mobile.ultilties.ApiEndpoint;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -80,5 +82,13 @@ public interface ApiService {
 
     @GET(ApiEndpoint.deleteCart)
     Call<Cart> deleteCart(@Path("id") String id, @Path("id_product") String id_product);
-
+    @DELETE(ApiEndpoint.deleteCategories)
+    Call<RequestString> deleteCategory(
+        @Path("id") String id
+    );
+    @PUT(ApiEndpoint.updateCategories)
+    Call<RequestString> updateCategory(
+            @Path("id") String id,
+            @Body RequestCategory requestCategory
+    );
 }
