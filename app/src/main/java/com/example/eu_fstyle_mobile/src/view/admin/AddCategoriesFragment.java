@@ -250,8 +250,7 @@ public class AddCategoriesFragment extends BaseFragment<FragmentAddCategoriesBin
         if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
             startStorage();
         }else {
-            ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.MANAGE_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISSIONS_STORAGE);
+            startStorage();
         }
     }
     private void startStorage(){
