@@ -47,13 +47,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CartFragment extends BaseFragment<FragmentCartBinding> {
+public class CartFragment extends BaseFragment<FragmentCartBinding> implements CartAdapter.OnCartClickListener {
     private CartAdapter cartAdapter;
 
     private MayBeLikeAdapter mayBeLikeAdapter;
     private CartViewModel cartViewModel;
 
     boolean isUndoClicked = false;
+
+    private List<ProductCart> productCartList = new ArrayList<>();
 
     Dialog cartDialog;
 
@@ -115,8 +117,8 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
             public void onChanged(Cart cart) {
                 if (cart != null) {
                     hideLoadingDialog();
-                    List<ProductCart> productCartList = cart.getListProduct();
-                    cartAdapter = new CartAdapter(productCartList);
+                    productCartList = cart.getListProduct();
+                    cartAdapter = new CartAdapter(productCartList, CartFragment.this);
                     binding.rcvCart.setAdapter(cartAdapter);
                     int listSize = productCartList.size();
                     if (listSize == 0) {
@@ -179,20 +181,26 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
                                     if (!isUndoClicked && event != DISMISS_EVENT_ACTION) {
                                         User user = UserPrefManager.getInstance(getActivity()).getUser();
                                         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-                                        if (!productCartList.isEmpty()) {
-                                            Call<Cart> call = apiService.deleteCart(user.get_id(), productId);
-                                            call.enqueue(new Callback<Cart>() {
-                                                @Override
-                                                public void onResponse(Call<Cart> call, Response<Cart> response) {
+                                        Call<Cart> call = apiService.deleteCart(user.get_id(), productId);
+                                        call.enqueue(new Callback<Cart>() {
+                                            @Override
+                                            public void onResponse(Call<Cart> call, Response<Cart> response) {
+                                                if (!response.isSuccessful()) {
+                                                    productCartList.add(position, removedProduct);
+                                                    cartAdapter.notifyItemInserted(position);
+                                                    Toast.makeText(requireContext(), "Lỗi xóa sản phẩm khỏi giỏ hàng hãy thử lại", Toast.LENGTH_SHORT).show();
+                                                } else {
                                                     Toast.makeText(requireContext(), "Xóa sản phẩm khỏi giỏ hàng thành công", Toast.LENGTH_SHORT).show();
                                                 }
+                                            }
 
-                                                @Override
-                                                public void onFailure(Call<Cart> call, Throwable t) {
-                                                    showAlertDialog("Xóa sản phẩm khỏi giỏ hàng thất bại, sản phẩm sẽ trở lại sớm");
-                                                }
-                                            });
-                                        }
+                                            @Override
+                                            public void onFailure(Call<Cart> call, Throwable t) {
+                                                productCartList.add(position, removedProduct);
+                                                cartAdapter.notifyItemInserted(position);
+                                                Toast.makeText(requireContext(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                                     }
                                     super.onDismissed(transientBottomBar, event);
                                 }
@@ -310,5 +318,46 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> {
         binding.llQuantum.setVisibility(View.GONE);
         binding.btnPayment.setEnabled(false);
         binding.btnPayment.setAlpha(0.4f);
+    }
+
+    public void onDeleteCartClick(int position) {
+        showDialog("Xóa sản phẩm khỏi giỏ hàng", "Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?", new Runnable() {
+            @Override
+            public void run() {
+                ProductCart removedProduct = productCartList.get(position);
+
+                productCartList.remove(position);
+                cartAdapter.notifyItemRemoved(position);
+
+                if (productCartList.isEmpty()) {
+                    setStatusDisable();
+                } else {
+                    setStatusEnable();
+                }
+
+                User user = UserPrefManager.getInstance(getActivity()).getUser();
+                ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                Call<Cart> call = apiService.deleteCart(user.get_id(), removedProduct.getIdProduct());
+                call.enqueue(new Callback<Cart>() {
+                    @Override
+                    public void onResponse(Call<Cart> call, Response<Cart> response) {
+                        if (!response.isSuccessful()) {
+                            productCartList.add(position, removedProduct);
+                            cartAdapter.notifyItemInserted(position);
+                            Toast.makeText(requireContext(), "Lỗi xóa sản phẩm khỏi giỏ hàng hãy thử lại", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(requireContext(), "Xóa sản phẩm khỏi giỏ hàng thành công", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Cart> call, Throwable t) {
+                        productCartList.add(position, removedProduct);
+                        cartAdapter.notifyItemInserted(position);
+                        Toast.makeText(requireContext(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 }
