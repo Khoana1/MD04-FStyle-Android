@@ -1,11 +1,13 @@
 package com.example.eu_fstyle_mobile.src.view.user.home;
 
 import android.app.Dialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.icu.text.DecimalFormat;
 import android.os.Bundle;
-
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +15,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
@@ -32,7 +33,6 @@ import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.Cart;
 import com.example.eu_fstyle_mobile.src.model.ListProduct;
 import com.example.eu_fstyle_mobile.src.model.Product;
-import com.example.eu_fstyle_mobile.src.model.ProductCart;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateCart;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateFavourite;
@@ -46,13 +46,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DetailProductFragment extends BaseFragment<FragmentDetailProductBinding> implements ProductHomeAdapter.onClickItem{
+public class DetailProductFragment extends BaseFragment<FragmentDetailProductBinding> implements ProductHomeAdapter.onClickItem {
     public static final String Products = "product";
     FragmentDetailProductBinding binding;
     ViewPager_detail_Adapter adapter;
@@ -97,14 +96,14 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
             public void onChanged(ListProduct listProduct) {
                 ArrayList<Product> newList = new ArrayList<>();
                 listProduct1 = listProduct.getArrayList();
-                for (Product product1: listProduct1){
-                    if(product1.getIdCategory().equals(product.getIdCategory())){
+                for (Product product1 : listProduct1) {
+                    if (product1.getIdCategory().equals(product.getIdCategory())) {
                         newList.add(product1);
                     }
                 }
                 productdapter = new ProductHomeAdapter(getActivity(), newList, DetailProductFragment.this);
                 binding.recycleSanphamtuongtu.setAdapter(productdapter);
-                binding.recycleSanphamtuongtu.setLayoutManager(new GridLayoutManager(getActivity(),2));
+                binding.recycleSanphamtuongtu.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
             }
         });
@@ -253,11 +252,20 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
             size = "";
         }
         binding1.itemDialogCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
-        Picasso.get().load(product.getImage64()[0])
-                .placeholder(R.drawable.icon_home)
-                .error(R.drawable.icon_erro)
-                .into(binding1.itemImageDathang);
-        binding1.itemTxtGiaDathang.setText("Giá: " +decimalFormat.format(product.getPrice()) );
+        if (product.getImage64()[0] != null) {
+            if (product.getImage64()[0].startsWith("http")) {
+                Picasso.get().load(product.getImage64()[0])
+                        .error(R.drawable.icon_erro)
+                        .into(binding1.itemImageDathang);
+            } else {
+                byte[] decodedString = Base64.decode(product.getImage64()[0], Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                binding1.itemImageDathang.setImageBitmap(decodedByte);
+            }
+        } else {
+            binding1.itemImageDathang.setImageResource(R.drawable.icon_erro);
+        }
+        binding1.itemTxtGiaDathang.setText("Giá: " + decimalFormat.format(product.getPrice()));
         binding1.itemTxtKhoDathang.setText("Đã bán: " + product.getQuantity());
         binding1.banggoiysize.setOnClickListener(v -> {
             goiysize();
