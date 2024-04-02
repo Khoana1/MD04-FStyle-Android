@@ -1,21 +1,14 @@
 package com.example.eu_fstyle_mobile.src.view.admin;
 
 import android.util.Log;
-
-import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.example.eu_fstyle_mobile.src.model.ListCategories;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
-
-import java.io.Closeable;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 public class CategoriesViewModel extends ViewModel {
     private MutableLiveData<ListCategories> categorieData;
     private MutableLiveData<String> errorMessage;

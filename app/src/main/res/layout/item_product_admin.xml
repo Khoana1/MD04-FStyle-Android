@@ -47,6 +47,7 @@
             android:paddingLeft="3dp"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/item_btn_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:civ_border_color="@color/colorBlack"
