@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eu_fstyle_mobile.R;
+import com.example.eu_fstyle_mobile.databinding.ItemCategoryAdminBinding;
 import com.example.eu_fstyle_mobile.databinding.ItemProductAdminBinding;
 import com.example.eu_fstyle_mobile.src.model.Categories;
 import com.squareup.picasso.Picasso;
@@ -19,15 +20,17 @@ import java.util.List;
 public class CategoriesAdminAdapter extends RecyclerView.Adapter<CategoriesAdminAdapter.ViewHolder> {
 
     private List<Categories> categoriesList;
+    public onClickItem onClickItem;
 
-    public CategoriesAdminAdapter(List<Categories> categoriesList) {
+    public CategoriesAdminAdapter(List<Categories> categoriesList, onClickItem onClickItem) {
+        this.onClickItem = onClickItem;
         this.categoriesList = categoriesList;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemProductAdminBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(ItemCategoryAdminBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -37,26 +40,39 @@ public class CategoriesAdminAdapter extends RecyclerView.Adapter<CategoriesAdmin
             if(categories.getImage().startsWith("http")){
                 Picasso.get().load(categories.getImage())
                         .error(R.drawable.icon_erro)
-                        .into(holder.binding.itemImageProductHome);
+                        .into(holder.binding.itemImageCategoryAdmin);
             }else {
                 byte[] decodedString = Base64.decode(categories.getImage(), Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                holder.binding.itemImageProductHome.setImageBitmap(decodedByte);
+                holder.binding.itemImageCategoryAdmin.setImageBitmap(decodedByte);
             }
         }else {
-            holder.binding.itemImageProductHome.setImageResource(R.drawable.icon_erro);
+            holder.binding.itemImageCategoryAdmin.setImageResource(R.drawable.icon_erro);
         }
-        holder.binding.itemNameProductHome.setText(categories.getName());
+        holder.binding.itemNameCategoryAdmin.setText(categories.getName());
+        holder.binding.itemEditCategoryAdmin.setOnClickListener(v -> {
+            if(onClickItem!= null){
+                onClickItem.onClick(categories);
+            }
+        });
+        holder.binding.deleteCategoryAdmin.setOnClickListener(v -> {
+            if(onClickItem!= null){
+                onClickItem.onDelete(categories);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return categoriesList.size();
     }
-
+    public interface onClickItem{
+        void onClick(Categories categories);
+        void onDelete(Categories categories);
+    }
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ItemProductAdminBinding binding;
-        public ViewHolder(@NonNull  ItemProductAdminBinding binding) {
+        ItemCategoryAdminBinding binding;
+        public ViewHolder(@NonNull  ItemCategoryAdminBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
