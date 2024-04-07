@@ -2,6 +2,7 @@ package com.example.eu_fstyle_mobile.src.view.admin;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
-public class HomeAdminFragment extends BaseFragment<FragmentHomeAdminBinding> {
+public class HomeAdminFragment extends BaseFragment<FragmentHomeAdminBinding> implements HomeAdminAdapter.OnclickItem{
     private HomeAdminViewModel homeAdminViewModel;
     private HomeAdminAdapter homeAdminAdapter;
 
@@ -65,7 +66,7 @@ public class HomeAdminFragment extends BaseFragment<FragmentHomeAdminBinding> {
             @Override
             public void onChanged(ListProduct listProduct) {
                 List<Product> productList = listProduct.getArrayList();
-                homeAdminAdapter = new HomeAdminAdapter(productList);
+                homeAdminAdapter = new HomeAdminAdapter(productList, HomeAdminFragment.this);
                 binding.rcvProductAdmin.setAdapter(homeAdminAdapter);
                 hideLoadingDialog();
             }
@@ -74,6 +75,7 @@ public class HomeAdminFragment extends BaseFragment<FragmentHomeAdminBinding> {
             @Override
             public void onChanged(String s) {
                 Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+                Log.d("Huy", "onChanged: "+s);
                 hideLoadingDialog();
             }
         });
@@ -103,4 +105,14 @@ public class HomeAdminFragment extends BaseFragment<FragmentHomeAdminBinding> {
     }
 
 
+    @Override
+    public void onClickUpdate(Product product) {
+        AddProductFragment addProductFragment = AddProductFragment.getInstance(product);
+        openScreenAdmin(addProductFragment, true);
+    }
+
+    @Override
+    public void onDelete(Product product) {
+
+    }
 }
