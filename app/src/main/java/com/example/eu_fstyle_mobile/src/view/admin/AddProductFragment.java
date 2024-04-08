@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,16 +45,21 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> implements CustomSpinner.OnSpinnerEventsListener {
     ArrayList<Uri> uriArrayList = new ArrayList<>();
     ImageAdapter imageAdapter;
     private static final int READ_PERMISSION = 101;
+    private static final String PRODUCTS = "product";
     ArrayList<String> base64Images;
     private String productName;
     private String productBrand;
     private String productPrice;
+    private String productSize;
     private String productColor;
     private int productQuantity;
     private String idProductType;
@@ -63,7 +69,14 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
 
     private AddProductViewModel addProductViewModel;
     private CategoriesViewModel categoriesViewModel;
-
+    private boolean isCheckEdit= false;
+    public static AddProductFragment getInstance(Product product){
+        AddProductFragment addProductFragment = new AddProductFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(PRODUCTS, product);
+        addProductFragment.setArguments(bundle);
+        return addProductFragment;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -82,7 +95,30 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
         addProductViewModel = new ViewModelProvider(this).get(AddProductViewModel.class);
         observeViewModel();
     }
+    private void getDataUpdate(){
+        if(getArguments() != null){
+            Product product = (Product) getArguments().getSerializable(PRODUCTS);
+            if(product!= null){
+               isCheckEdit = true;
+               binding.edtProductName.setText(product.getName());
+               binding.edtBrand.setText(product.getBrand());
+               binding.edtPrice.setText(""+product.getPrice());
+               binding.edtColor.setText(product.getColor());
+               binding.edtDes.setText(product.getDescription());
+               binding.edtQuantity.setText(""+product.getQuantity());
 
+                StringBuilder arrSize = new StringBuilder();
+                for (int i = 0; i < product.getSize().size(); i++) {
+                    arrSize.append(product.getSize().get(i));
+                    if (i < product.getSize().size()-1) {
+                        arrSize.append(",");
+                    }
+                }
+               binding.edSzie.setText(""+arrSize);
+
+            }
+        }
+    }
     private void spinnerCategory() {
         categoriesViewModel.getCategorieData().observe(getViewLifecycleOwner(), new Observer<ListCategories>() {
             @Override
@@ -175,13 +211,15 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
             public void onClick(View v) {
                 validateAddProduct();
                 if (binding.productNameContainer.getHelperText() == null && binding.brandContainer.getHelperText() == null &&
-                        binding.priceContainer.getHelperText() == null && binding.colorContainer.getHelperText() == null &&
-                        binding.desContainer.getHelperText() == null && uriArrayList.size() >= 2) {
+                        binding.priceContainer.getHelperText() == null && binding.sizeContainer.getHelperText() == null &&
+                        binding.colorContainer.getHelperText() == null && binding.desContainer.getHelperText() == null &&
+                        uriArrayList.size() >= 2) {
                     idProductType = ((Categories) binding.spinnerType.getSelectedItem()).getId();
 
                     base64Images = convertImagesToBase64(uriArrayList);
                     int productPriceNumber = Integer.parseInt(binding.edtPrice.getText().toString().replace(",", ""));
-                    addProductViewModel.createProduct(productName, base64Images.toArray(new String[0]), productBrand, productPriceNumber, productColor, productQuantity, idProductType, productDescription);
+                    String[] sizeArrayString = binding.edSzie.getText().toString().split(",");
+                    addProductViewModel.createProduct(productName, base64Images.toArray(new String[0]), productBrand, productPriceNumber, sizeArray(sizeArrayString), productColor, productQuantity, idProductType, productDescription);
                 }
             }
         });
@@ -194,12 +232,24 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
             }
         });
     }
-
+    private List<Integer> sizeArray(String[] listString){
+        List<Integer> list = new ArrayList<>();
+        for(String size :listString){
+            try {
+                int sizeInt = Integer.parseInt(size.trim());
+                list.add(sizeInt);
+            }catch (NumberFormatException e){
+                Toast.makeText(getActivity(), "Chuỗi nhập vào không hợp lệ", Toast.LENGTH_SHORT).show();
+            }
+        }
+        return list;
+    }
     private void validateAddProduct() {
         String helperText = "";
         productName = binding.edtProductName.getText().toString();
         productBrand = binding.edtBrand.getText().toString();
         productPrice = binding.edtPrice.getText().toString();
+        productSize = binding.edSzie.getText().toString();
         productColor = binding.edtColor.getText().toString();
         productQuantity = Integer.parseInt(binding.edtQuantity.getText().toString());
         productDescription = binding.edtDes.getText().toString();
@@ -220,6 +270,21 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
             binding.priceContainer.setHelperText(helperText);
         } else {
             binding.priceContainer.setHelperText("");
+        }
+        if (productSize.isEmpty()) {
+            helperText = "Không được để trống size giày";
+            binding.sizeContainer.setHelperText(helperText);
+        } else {
+            binding.sizeContainer.setHelperText("");
+            Pattern pattern = Pattern.compile("[^0-9,]");
+            Matcher matcher = pattern.matcher(productSize);
+            if(matcher.find()){
+                helperText ="Chuỗi nhập vào chứa ký tự không phải số";
+                binding.sizeContainer.setHelperText(helperText);
+                return;
+            }else {
+                binding.sizeContainer.setHelperText("");
+            }
         }
         if (productColor.isEmpty()) {
             helperText = "Không được để trống màu giày";
@@ -254,6 +319,7 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
         binding.productNameContainer.setHelperText("");
         binding.brandContainer.setHelperText("");
         binding.priceContainer.setHelperText("");
+        binding.sizeContainer.setHelperText("");
         binding.colorContainer.setHelperText("");
         binding.quantityContainer.setHelperText("");
         binding.desContainer.setHelperText("");

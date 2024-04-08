@@ -20,9 +20,10 @@ import java.util.List;
 public class HomeAdminAdapter extends RecyclerView.Adapter<HomeAdminAdapter.ViewHolder> {
 
     private List<Product> productList;
-
-    public HomeAdminAdapter(List<Product> productList) {
+    private OnclickItem onclickItem;
+    public HomeAdminAdapter(List<Product> productList, OnclickItem onclickItem) {
         this.productList = productList;
+        this.onclickItem = onclickItem;
     }
 
     @NonNull
@@ -52,13 +53,21 @@ public class HomeAdminAdapter extends RecyclerView.Adapter<HomeAdminAdapter.View
         holder.binding.itemNameProductHome.setText(product.getName());
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         holder.binding.itemPriceProductHome.setText(decimalFormat.format(product.getPrice()) + "VNĐ");
+        holder.binding.itemBtnEdit.setOnClickListener(v -> {
+            if(onclickItem != null){
+                onclickItem.onClickUpdate(product);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return productList.size();
     }
-
+    public interface OnclickItem{
+        void onClickUpdate(Product product);
+        void onDelete(Product product);
+    }
     static class ViewHolder extends RecyclerView.ViewHolder {
         ItemProductAdminBinding binding;
         public ViewHolder(@NonNull  ItemProductAdminBinding binding) {

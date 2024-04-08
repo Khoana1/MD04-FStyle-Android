@@ -10,6 +10,8 @@ import com.example.eu_fstyle_mobile.src.request.RequestCreateProduct;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,10 +34,9 @@ public class AddProductViewModel extends ViewModel {
         return errorMessage;
     }
 
-    public void createProduct( String name, String[] image64, String brand, Number price, String color, int quantity, String Idtype, String description) {
+    public void createProduct(String name, String[] image64, String brand, Number price, List<Integer> size, String color, int quantity, String Idtype, String description) {
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        RequestCreateProduct requestCreateProduct = new RequestCreateProduct(name, image64, brand, price, 37, color, quantity, description, Idtype);
-        Log.d("Huy", "createProduct: "+name+"_"+ image64[0]+"_"+brand+"_"+"_"+price+"_"+color+"_"+quantity+"_"+description+"_"+Idtype);
+        RequestCreateProduct requestCreateProduct = new RequestCreateProduct(name, image64, brand, price, size, color, quantity, description, Idtype);
         Call<Product> call = apiService.createProduct(requestCreateProduct);
         call.enqueue(new Callback<Product>() {
             @Override

@@ -1,18 +1,20 @@
 package com.example.eu_fstyle_mobile.src.request;
 
+import java.util.List;
+
 public class RequestCreateProduct {
     private String name;
     private String[] image64;
     private String brand;
     private Number price;
-    private int size;
+    private List<Integer> size;
     private String color;
     private int quantity;
     private String description;
     private String categoryId;
 
 
-    public RequestCreateProduct(String name, String[] image64, String brand, Number price,int size, String color, int quantity, String description, String categoryId) {
+    public RequestCreateProduct(String name, String[] image64, String brand, Number price,List<Integer> size, String color, int quantity, String description, String categoryId) {
         this.name = name;
         this.image64 = image64;
         this.brand = brand;
@@ -56,12 +58,20 @@ public class RequestCreateProduct {
         this.price = price;
     }
 
-    public int getSize() {
+    public List<Integer> getSize() {
         return size;
     }
 
-    public void setSize(int size) {
+    public void setSize(List<Integer> size) {
         this.size = size;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getColor() {

@@ -3,6 +3,7 @@ package com.example.eu_fstyle_mobile.src.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Product implements Serializable {
 
@@ -17,7 +18,7 @@ public class Product implements Serializable {
     @SerializedName("price")
     private Number price;
     @SerializedName("size")
-    private Number size;
+    private ArrayList<Integer> size;
     @SerializedName("color")
     private String color;
     @SerializedName("quantity")
@@ -29,7 +30,7 @@ public class Product implements Serializable {
     @SerializedName("description")
     private String description;
 
-    public Product(String _id, String name, String[] image64, String brand, Number price, Number size, String color, String quantity, String status, String idCategory, String description) {
+    public Product(String _id, String name, String[] image64, String brand, Number price, ArrayList<Integer> size, String color, String quantity, String status, String idCategory, String description) {
         this._id = _id;
         this.name = name;
         this.image64 = image64;
@@ -84,11 +85,11 @@ public class Product implements Serializable {
         this.price = price;
     }
 
-    public Number getSize() {
+    public ArrayList<Integer> getSize() {
         return size;
     }
 
-    public void setSize(Number size) {
+    public void setSize(ArrayList<Integer> size) {
         this.size = size;
     }
 
