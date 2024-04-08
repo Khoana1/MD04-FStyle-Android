@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.ItemCartProductBinding;
+import com.example.eu_fstyle_mobile.src.model.Address;
 import com.example.eu_fstyle_mobile.src.model.ProductCart;
 import com.squareup.picasso.Picasso;
 
@@ -22,8 +23,11 @@ import java.util.List;
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     private List<ProductCart> productCartList;
 
-    public CartAdapter(List<ProductCart> productCartList) {
+    private OnCartClickListener onCartClickListener;
+
+    public CartAdapter(List<ProductCart> productCartList, OnCartClickListener onCartClickListener) {
         this.productCartList = productCartList;
+        this.onCartClickListener = onCartClickListener;
     }
 
     @NonNull
@@ -78,6 +82,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             holder.binding.priceCart.setText(decimalFormat.format(totalPrice) + " VNĐ");
         });
 
+        holder.binding.btnDelCart.setOnClickListener(v -> {
+            onCartClickListener.onDeleteCartClick(position);
+        });
+
 
     }
 
@@ -98,6 +106,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             super(binding.getRoot());
             this.binding = binding;
         }
+    }
+
+    public interface OnCartClickListener {
+        void onDeleteCartClick(int position);
     }
 
 }
