@@ -107,9 +107,6 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         return binding.getRoot();
     }
 
-
-
-
     private void initView() {
         binding.avatarHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,19 +120,24 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                 getProduct();
                 getCategory();
                 getAvatar();
+                getUserName();
                 showLoadingDialog();
                 binding.swipeRefreshLayout.setRefreshing(false);
             }
         });
-        User user = UserPrefManager.getInstance(getActivity()).getUser();
-        String lastName = getLastName(user.getName());
-        binding.textviewNameUser.setText(lastName);
         binding.cardView3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openScreen(new CartFragment(), true);
             }
         });
+        getUserName();
+    }
+
+    public void getUserName() {
+        User user = UserPrefManager.getInstance(getActivity()).getUser();
+        String lastName = getLastName(user.getName());
+        binding.textviewNameUser.setText(lastName);
     }
 
     public String getLastName(String fullName) {
