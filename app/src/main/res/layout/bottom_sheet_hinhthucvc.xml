@@ -102,17 +102,34 @@
             app:layout_constraintStart_toEndOf="@+id/textView20"
             app:layout_constraintTop_toBottomOf="@+id/textView19" />
 
-        <TextView
-            android:id="@+id/price_bottom_sheet_htvc_tietkiem"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="5,000 VNĐ"
-            android:textColor="#FF00"
-            android:textSize="20dp"
-            android:textStyle="bold"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView19"
-            android:layout_marginRight="10dp"/>
+            >
+            <TextView
+                android:id="@+id/price_bottom_sheet_htvc_tietkiem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FF00"
+                android:text="5,000"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" VNĐ"
+                android:textColor="#FF00"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:layout_marginRight="10dp"/>
+
+        </LinearLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
@@ -161,17 +178,33 @@
             app:layout_constraintStart_toEndOf="@+id/textView16"
             app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
-        <TextView
-            android:id="@+id/price_bottom_sheet_htvc"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="15,000 VNĐ"
-            android:textColor="#FF00"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/textView15"
-            android:layout_marginRight="10dp"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+            <TextView
+                android:id="@+id/price_bottom_sheet_htvc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="15,000"
+                android:textColor="#FF00"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" VNĐ"
+                android:textColor="#FF00"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:layout_marginRight="10dp"/>
+        </LinearLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

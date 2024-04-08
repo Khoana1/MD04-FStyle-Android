@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,8 +28,8 @@ import com.example.eu_fstyle_mobile.databinding.FragmentCartBinding;
 import com.example.eu_fstyle_mobile.src.adapter.CartAdapter;
 import com.example.eu_fstyle_mobile.src.adapter.MayBeLikeAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
-import com.example.eu_fstyle_mobile.src.model.Address;
 import com.example.eu_fstyle_mobile.src.model.Cart;
+import com.example.eu_fstyle_mobile.src.model.ListCart;
 import com.example.eu_fstyle_mobile.src.model.ListProduct;
 import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.ProductCart;
@@ -39,6 +40,7 @@ import com.example.eu_fstyle_mobile.src.view.user.home.HomeFragment;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,6 +103,22 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
                     mayBeLikeAdapter = new MayBeLikeAdapter(listProduct);
                     binding.rcvMaybeLike.setLayoutManager(new GridLayoutManager(getActivity(), 2));
                     binding.rcvMaybeLike.setAdapter(mayBeLikeAdapter);
+                    binding.rcvMaybeLike.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                            super.onScrolled(recyclerView, dx, dy);
+
+                            GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
+                            int lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition();
+                            int totalItemCount = layoutManager.getItemCount();
+
+                            if (lastVisibleItemPosition == totalItemCount - 1) {
+                                binding.cstTotal.setVisibility(View.GONE);
+                            } else {
+                                binding.cstTotal.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
                 }
             }
 
@@ -134,14 +152,9 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
                     }
 
                     String totalPrice = cart.getTotalCart().toString();
-                    int maxLength = 6;
-                    if (totalPrice.length() > maxLength) {
-                        String truncatedPrice = totalPrice.substring(0, maxLength) + "..." + "VNĐ";
-                        binding.tvTotal.setText(truncatedPrice);
-                    } else {
-                        binding.tvTotal.setText(cart.getTotalCart().toString() + "VNĐ");
-                    }
-                    binding.tvTotalDetail.setText(cart.getTotalCart().toString() + "VNĐ");
+                    setTotalPriceText(totalPrice, binding.tvTotal);
+                    DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+                    binding.tvTotalDetail.setText(decimalFormat.format(cart.getTotalCart()) + "VNĐ");
                     if (productCartList.isEmpty()) {
                         setStatusDisable();
                     } else {
@@ -229,6 +242,13 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
                     };
                     new ItemTouchHelper(simpleCallback).attachToRecyclerView(binding.rcvCart);
                 }
+                binding.btnPayment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PaymentFragment paymentFragment = PaymentFragment.newInstance(cart);
+                        openScreen(paymentFragment, true);
+                    }
+                });
             }
         });
         cartViewModel.getErrorMessage().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -245,12 +265,6 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
         });
         binding.icHint.setOnClickListener(v -> {
             showHintDialog();
-        });
-        binding.btnPayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openScreen(new PaymentFragment(), true);
-            }
         });
         binding.btnEmpty.setOnClickListener(v -> {
             openScreenHome(new HomeFragment(), true);
@@ -320,6 +334,17 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
         binding.btnPayment.setAlpha(0.4f);
     }
 
+    public void setTotalPriceText(String totalPrice, TextView textView) {
+        int maxLength = 6;
+        if (totalPrice.length() > maxLength) {
+            String truncatedPrice = totalPrice.substring(0, maxLength) + "..." + "VNĐ";
+            textView.setText(truncatedPrice);
+        } else {
+            textView.setText(totalPrice + "VNĐ");
+        }
+    }
+
+
     public void onDeleteCartClick(int position) {
         showDialog("Xóa sản phẩm khỏi giỏ hàng", "Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?", new Runnable() {
             @Override
@@ -357,6 +382,65 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
                         Toast.makeText(requireContext(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+            }
+        });
+    }
+
+    @Override
+    public void onReduceCartClick(int position) {
+        User user = UserPrefManager.getInstance(getActivity()).getUser();
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        Call<ListCart> call = apiService.reduceCart(user.get_id(), productCartList.get(position).getIdProduct());
+        call.enqueue(new Callback<ListCart>() {
+            @Override
+            public void onResponse(Call<ListCart> call, Response<ListCart> response) {
+                if (response.isSuccessful()) {
+                    ProductCart product = productCartList.get(position);
+                    product.setSoLuong(product.getSoLuong().intValue() + 1);
+                    cartAdapter.notifyItemChanged(position);
+
+                    Cart cartList = (Cart) response.body().getListCart();
+                    String totalPrice = cartList.getTotalCart().toString();
+                    setTotalPriceText(totalPrice, binding.tvTotal);
+                    DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+                    binding.tvTotalDetail.setText(decimalFormat.format(cartList.getTotalCart()) + "VNĐ");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ListCart> call, Throwable t) {
+                User user = UserPrefManager.getInstance(getActivity()).getUser();
+                cartViewModel.getCart(user.get_id());
+            }
+        });
+
+    }
+
+    @Override
+    public void onIncreaseCartClick(int position) {
+        User user = UserPrefManager.getInstance(getActivity()).getUser();
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        Call<ListCart> call = apiService.increaseCart(user.get_id(), productCartList.get(position).getIdProduct());
+        call.enqueue(new Callback<ListCart>() {
+            @Override
+            public void onResponse(Call<ListCart> call, Response<ListCart> response) {
+                if (response.isSuccessful()) {
+                    ProductCart product = productCartList.get(position);
+                    product.setSoLuong(product.getSoLuong().intValue() + 1);
+                    cartAdapter.notifyItemChanged(position);
+
+                    Cart cartList = (Cart) response.body().getListCart();
+                    String totalPrice = cartList.getTotalCart().toString();
+                    setTotalPriceText(totalPrice, binding.tvTotal);
+                    DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+                    binding.tvTotalDetail.setText(decimalFormat.format(cartList.getTotalCart()) + "VNĐ");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ListCart> call, Throwable t) {
+                User user = UserPrefManager.getInstance(getActivity()).getUser();
+                cartViewModel.getCart(user.get_id());
             }
         });
     }

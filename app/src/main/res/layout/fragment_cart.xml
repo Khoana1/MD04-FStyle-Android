@@ -174,10 +174,12 @@
                 android:layout_below="@id/tv_maybe_like"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="2"
-                tools:listitem="@layout/item_maybe_like" />
+                tools:listitem="@layout/item_maybe_like"
+                tools:ignore="NotSibling" />
         </RelativeLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cst_total"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorWhite"

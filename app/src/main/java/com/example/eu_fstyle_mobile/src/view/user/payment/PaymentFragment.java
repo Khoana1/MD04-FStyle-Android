@@ -18,17 +18,27 @@ import com.example.eu_fstyle_mobile.databinding.BottomSheetChoosePaymentBinding;
 import com.example.eu_fstyle_mobile.databinding.BottomSheetHinhthucvcBinding;
 import com.example.eu_fstyle_mobile.databinding.ChooseAvatarBottomsheetBinding;
 import com.example.eu_fstyle_mobile.databinding.FragmentPaymentBinding;
+import com.example.eu_fstyle_mobile.src.adapter.PaymentProductAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.Address;
+import com.example.eu_fstyle_mobile.src.model.Cart;
+import com.example.eu_fstyle_mobile.src.model.Product;
+import com.example.eu_fstyle_mobile.src.view.user.address.EditAddressFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implements AddressSelectionListener {
-    private AddressBottomSheetDialogFragment bottomSheet;
+import retrofit2.Call;
 
+public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implements AddressSelectionListener {
+    public static final String CART = "CART";
+    private AddressBottomSheetDialogFragment bottomSheet;
     private BottomSheetHinhthucvcBinding binding1;
+    private Cart cart;
+
+    private String paymentMethod = "COD";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -36,10 +46,24 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implem
         return binding.getRoot();
     }
 
+    public static PaymentFragment newInstance(Cart cart) {
+        PaymentFragment fragment = new PaymentFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(CART, cart);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initData();
+        cart = (Cart) getArguments().getSerializable(CART);
+        binding.tvDetailQuantumPayment.setText(String.valueOf(cart.getListProduct().size()));
+        binding.tvTotalPayment.setText(cart.getTotalCart().toString() + "VNĐ");
+        getTotalPaymentDetail();
+        binding.rcvPayment.setAdapter(new PaymentProductAdapter(cart.getListProduct()));
         binding.tvEditItemAddress.setOnClickListener(v -> {
             List<Address> addressList = new ArrayList<>();
             bottomSheet = new AddressBottomSheetDialogFragment(this, addressList);
@@ -59,12 +83,14 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implem
                 binding.tvTitleShip.setText("Nhanh");
                 binding.tvPriceShip.setText("15,000");
                 binding.tvTimeShip.setText("3 ngày");
+                getTotalPaymentDetail();
                 dialog.dismiss();
             });
             binding1.constraintLayoutTietkiem.setOnClickListener(v1 -> {
                 binding.tvTitleShip.setText("Tiết kiệm");
                 binding.tvPriceShip.setText("5,000");
                 binding.tvTimeShip.setText("7 ngày");
+                getTotalPaymentDetail();
                 dialog.dismiss();
             });
             dialog.show();
@@ -74,6 +100,10 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implem
         });
         binding.rltSelectPayment.setOnClickListener(v -> {
             showSelectPaymentBottomSheet();
+        });
+        binding.btnPayment.setOnClickListener(v -> {
+            ConfirmPaymentFragment confirmPaymentFragment = ConfirmPaymentFragment.newInstance(cart, paymentMethod);
+            openScreenHome(confirmPaymentFragment, true);
         });
     }
 
@@ -102,11 +132,13 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implem
     private void selectMomoPayment() {
         binding.tvSelectPayment.setText("Ví Momo");
         binding.imgSelectPayment.setImageDrawable(requireContext().getDrawable(R.drawable.ic_momo));
+        paymentMethod = "Momo";
     }
 
     private void selectShipCodPayment() {
         binding.tvSelectPayment.setText("COD");
         binding.imgSelectPayment.setImageDrawable(requireContext().getDrawable(R.drawable.ic_payment_money));
+        paymentMethod = "COD";
     }
 
     private void showSelectPaymentBottomSheet() {
@@ -133,5 +165,15 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implem
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogBottomSheetAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
+
+    private void getTotalPaymentDetail() {
+        String shippingFeeStr = binding.tvPriceShip.getText().toString().replaceAll("[^0-9]", "");
+        int shippingFee = Integer.parseInt(shippingFeeStr);
+        int totalCart = cart.getTotalCart().intValue();
+        int totalPayment = totalCart + shippingFee;
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+        binding.tvTotalPaymentDetail.setText(decimalFormat.format(totalPayment) + "VNĐ");
+    }
+
 
 }
