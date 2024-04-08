@@ -2,9 +2,10 @@ package com.example.eu_fstyle_mobile.src.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Cart {
+public class Cart implements Serializable {
     @SerializedName("_id")
     private String _id;
     @SerializedName("idUser")

@@ -55,31 +55,19 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         holder.binding.nameCart.setMaxLines(1);
         holder.binding.nameCart.setEllipsize(TextUtils.TruncateAt.END);
         holder.binding.nameCart.setText(productCart.getName());
-        holder.binding.sizeCart.setText("size: "+productCart.getSize());
+        holder.binding.sizeCart.setText("Size: "+productCart.getSize());
+
+        int totalPrice = productCart.getPrice().intValue() * productCart.getSoLuong().intValue();
 
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        holder.binding.priceCart.setText(decimalFormat.format(productCart.getPrice()) + " VNĐ");
+        holder.binding.priceCart.setText(decimalFormat.format(totalPrice) + " VNĐ");
         holder.binding.btnGiatriCart.setText(productCart.getSoLuong().toString());
         holder.binding.btntruCart.setOnClickListener(v -> {
-            int currentQuantity = productCart.getSoLuong().intValue();
-            if (currentQuantity > 1) {
-                currentQuantity--;
-                productCart.setSoLuong(currentQuantity);
-                holder.binding.btnGiatriCart.setText(String.valueOf(currentQuantity));
-                double pricePerItem = productCart.getPrice().doubleValue();
-                double totalPrice = currentQuantity * pricePerItem;
-                holder.binding.priceCart.setText(decimalFormat.format(totalPrice) + " VNĐ");
-            }
+            onCartClickListener.onReduceCartClick(position);
         });
 
         holder.binding.btncongCart.setOnClickListener(v -> {
-            int currentQuantity = productCart.getSoLuong().intValue();
-            currentQuantity++;
-            productCart.setSoLuong(currentQuantity);
-            holder.binding.btnGiatriCart.setText(String.valueOf(currentQuantity));
-            double pricePerItem = productCart.getPrice().doubleValue();
-            double totalPrice = currentQuantity * pricePerItem;
-            holder.binding.priceCart.setText(decimalFormat.format(totalPrice) + " VNĐ");
+            onCartClickListener.onIncreaseCartClick(position);
         });
 
         holder.binding.btnDelCart.setOnClickListener(v -> {
@@ -110,6 +98,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     public interface OnCartClickListener {
         void onDeleteCartClick(int position);
+        void onReduceCartClick(int position);
+        void onIncreaseCartClick(int position);
     }
 
 }

@@ -55,7 +55,7 @@ public class AddAddressFragment extends BaseFragment<FragmentAddAddressBinding> 
                 binding.edtCity.setText("");
                 binding.edtPhone.setText("");
                 Toast.makeText(getActivity(), "Thêm địa chỉ thành công", Toast.LENGTH_SHORT).show();
-                openScreen(new MyAddressFragment(), true);
+                openScreen(new MyAddressFragment(), false);
             }
         });
         addAddressViewModel.getErrorLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {

@@ -22,4 +22,6 @@ public class ApiEndpoint {
     public static final String createCategories = "/api/post/categories";
     public static final String deleteCategories = "/api/delete/categories/{id}";
     public static final String updateCategories = "/api/put/categories/{id}";
+    public static final String reduceCart = "/api/cart/reduce/{id}/{id_product}";
+    public static final String increaseCart = "/api/cart/increase/{id}/{id_product}";
 }

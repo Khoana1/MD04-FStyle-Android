@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentTransaction;
+
+import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentAddressBottomSheetDialogBinding;
 import com.example.eu_fstyle_mobile.src.adapter.BsSelectAddressAdapter;
 import com.example.eu_fstyle_mobile.src.model.Address;
@@ -13,6 +16,7 @@ import com.example.eu_fstyle_mobile.src.model.AddressRespone;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
+import com.example.eu_fstyle_mobile.src.view.user.address.AddAddressFragment;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -50,6 +54,29 @@ public class AddressBottomSheetDialogFragment extends BottomSheetDialogFragment 
             public void onResponse(Call<AddressRespone> call, retrofit2.Response<AddressRespone> response) {
                 if (response.isSuccessful()) {
                     addressList = response.body().getListAddress();
+                    if (addressList != null && !addressList.isEmpty()) {
+                        if (binding.rcvChooseAddress != null) {
+                            binding.rcvChooseAddress.setVisibility(View.VISIBLE);
+                        }
+                        if (binding.llEmptyAddress != null) {
+                            binding.llEmptyAddress.setVisibility(View.GONE);
+                        }
+                    } else {
+                        if (binding.rcvChooseAddress != null) {
+                            binding.rcvChooseAddress.setVisibility(View.GONE);
+                        }
+                        if (binding.llEmptyAddress != null) {
+                            binding.llEmptyAddress.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    binding.btnEmptyAddress.setOnClickListener(v -> {
+                        dismiss();
+                        AddAddressFragment addAddressFragment = new AddAddressFragment();
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.fragment_container, addAddressFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    });
                     BsSelectAddressAdapter adapter = new BsSelectAddressAdapter(addressList, listener::onAddressSelected);
                     binding.rcvChooseAddress.setAdapter(adapter);
                 }

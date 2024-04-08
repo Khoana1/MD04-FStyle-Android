@@ -5,6 +5,7 @@ import com.example.eu_fstyle_mobile.src.model.AddressRespone;
 import com.example.eu_fstyle_mobile.src.model.Cart;
 import com.example.eu_fstyle_mobile.src.model.Categories;
 import com.example.eu_fstyle_mobile.src.model.Favourite;
+import com.example.eu_fstyle_mobile.src.model.ListCart;
 import com.example.eu_fstyle_mobile.src.model.ListCategories;
 import com.example.eu_fstyle_mobile.src.model.ListProduct;
 import com.example.eu_fstyle_mobile.src.model.Product;
@@ -91,4 +92,8 @@ public interface ApiService {
             @Path("id") String id,
             @Body RequestCategory requestCategory
     );
+    @GET(ApiEndpoint.reduceCart)
+    Call<ListCart> reduceCart(@Path("id") String id, @Path("id_product") String id_product);
+    @GET(ApiEndpoint.increaseCart)
+    Call<ListCart> increaseCart(@Path("id") String id, @Path("id_product") String id_product);
 }

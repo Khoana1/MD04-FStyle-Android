@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
     <LinearLayout
@@ -11,7 +10,6 @@
         android:orientation="horizontal"
         android:weightSum="5"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:padding="5dp"
         android:background="@color/colorWhite">
         <ImageView
@@ -19,11 +17,10 @@
             android:layout_weight="2"
             android:layout_height="110dp"
             android:src="@drawable/giay1"
-            android:id="@+id/image_cart"
-            android:layout_marginHorizontal="5dp"/>
+            android:id="@+id/image_cart" />
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="140dp"
+            android:layout_height="130dp"
             android:layout_weight="3"
             android:padding="5dp">
             <RelativeLayout
@@ -36,7 +33,7 @@
                     android:layout_height="wrap_content"
                     tools:text="cart"
                     android:fontFamily="@font/inter_medium"
-                    android:textSize="25dp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     android:id="@+id/name_cart"/>
                 <TextView
@@ -57,14 +54,14 @@
                 android:layout_below="@id/rlt_name_cart"
                 android:fontFamily="@font/inter_medium"
                 android:text="Size"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/price_cart"
-                android:textSize="20dp"
+                android:textSize="18sp"
                 android:fontFamily="@font/inter_medium"
-                android:text="Giá"
+                tools:text="Giá"
                 android:textColor="@color/colorRed"
                 android:textStyle="bold"
                 android:layout_below="@+id/size_cart"/>
@@ -80,15 +77,15 @@
                     android:id="@+id/btncong_cart"
                     android:layout_alignParentEnd="true"
                     />
+
                 <TextView
+                    android:id="@+id/btnGiatri_cart"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
-                    android:text="1"
-                    android:textSize="20dp"
                     android:layout_toLeftOf="@id/btncong_cart"
                     android:gravity="center"
-                    android:id="@+id/btnGiatri_cart"
-                    />
+                    android:text="1"
+                    android:textSize="18sp" />
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="30dp"
