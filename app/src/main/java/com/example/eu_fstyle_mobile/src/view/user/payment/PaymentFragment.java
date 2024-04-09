@@ -58,7 +58,7 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implem
         initData();
         cart = (Cart) getArguments().getSerializable(CART);
         binding.tvDetailQuantumPayment.setText(String.valueOf(cart.getListProduct().size()));
-        binding.tvTotalPayment.setText(cart.getTotalCart().toString() + "VNĐ");
+        binding.tvTotalPayment.setText(cart.getTotalCart().toString() + " VNĐ");
         getTotalPaymentDetail();
         binding.rcvPayment.setAdapter(new PaymentProductAdapter(cart.getListProduct()));
         binding.tvEditItemAddress.setOnClickListener(v -> {
@@ -187,7 +187,7 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implem
         int totalCart = cart.getTotalCart().intValue();
         int totalPayment = totalCart + shippingFee;
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        binding.tvTotalPaymentDetail.setText(decimalFormat.format(totalPayment) + "VNĐ");
+        binding.tvTotalPaymentDetail.setText(decimalFormat.format(totalPayment) + " VNĐ");
         this.totalPayment = String.valueOf(totalPayment);
     }
 

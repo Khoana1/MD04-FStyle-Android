@@ -51,7 +51,7 @@ public class PaymentProductAdapter extends RecyclerView.Adapter<PaymentProductAd
         holder.binding.namePayment.setText(productCart.getName());
         holder.binding.sizePayment.setText(productCart.getSize());
         holder.binding.quantumPayment.setText(productCart.getSoLuong().toString());
-        holder.binding.pricePayment.setText(productCart.getPrice().toString() + "   VNĐ");
+        holder.binding.pricePayment.setText(productCart.getPrice().toString() + " VNĐ");
     }
 
     @Override
