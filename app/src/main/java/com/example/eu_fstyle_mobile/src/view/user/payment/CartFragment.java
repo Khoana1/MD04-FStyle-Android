@@ -154,7 +154,7 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
                     String totalPrice = cart.getTotalCart().toString();
                     setTotalPriceText(totalPrice, binding.tvTotal);
                     DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-                    binding.tvTotalDetail.setText(decimalFormat.format(cart.getTotalCart()) + "VNĐ");
+                    binding.tvTotalDetail.setText(decimalFormat.format(cart.getTotalCart()) + " VNĐ");
                     if (productCartList.isEmpty()) {
                         setStatusDisable();
                     } else {
@@ -337,7 +337,7 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
     public void setTotalPriceText(String totalPrice, TextView textView) {
         int maxLength = 6;
         if (totalPrice.length() > maxLength) {
-            String truncatedPrice = totalPrice.substring(0, maxLength) + "..." + "VNĐ";
+            String truncatedPrice = totalPrice.substring(0, maxLength) + "..." + " VNĐ";
             textView.setText(truncatedPrice);
         } else {
             textView.setText(totalPrice + "VNĐ");
@@ -403,7 +403,7 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
                     String totalPrice = cartList.getTotalCart().toString();
                     setTotalPriceText(totalPrice, binding.tvTotal);
                     DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-                    binding.tvTotalDetail.setText(decimalFormat.format(cartList.getTotalCart()) + "VNĐ");
+                    binding.tvTotalDetail.setText(decimalFormat.format(cartList.getTotalCart()) + " VNĐ");
                 }
             }
 
