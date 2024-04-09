@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.example.eu_fstyle_mobile.src.view.user.IntroFragment;
 import com.example.eu_fstyle_mobile.src.view.user.SplashFragment;
+import com.example.eu_fstyle_mobile.src.view.user.home.HomeFragment;
+import com.example.eu_fstyle_mobile.src.view.user.payment.CartFragment;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_NOTIFICATION_PERMISSION = 1001;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        String fragmentName = getIntent().getStringExtra("FRAGMENT_NAME");
 
         handler = new Handler();
 
@@ -41,9 +44,19 @@ public class MainActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
                     != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_NOTIFICATION_PERMISSION);
-            } else {
             }
             sharedPreferences.edit().putBoolean("isFirstRun", false).apply();
+        } else if (fragmentName != null) {
+            switch (fragmentName) {
+                case "HomeFragment":
+                    replaceFragment(new HomeFragment());
+                    break;
+                case "CartFragment":
+                    replaceFragment(new CartFragment());
+                    break;
+                default:
+                    break;
+            }
         } else {
             replaceFragment(new SplashFragment());
         }
@@ -52,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.popBackStack();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.commit();

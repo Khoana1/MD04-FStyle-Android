@@ -28,16 +28,17 @@
         android:background="#4D000000" />
 
     <LinearLayout
-        android:id="@+id/ln_momo"
+        android:id="@+id/ln_zalo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:paddingVertical="10dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_momo" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_zalo_pay" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -45,7 +46,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dp"
             android:fontFamily="@font/inter_medium"
-            android:text="Thanh toán qua Momo"
+            android:text="Thanh toán qua ví ZaloPay"
             android:textColor="@color/colorBlack"
             android:textSize="16sp" />
 

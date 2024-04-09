@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -89,6 +90,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     boolean isDuo1trieuSelected = false;
     boolean isDuo2trieuSelected =false;
     Dialog dialogSearch;
+    private boolean doubleBackToExitPressedOnce = false;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -132,6 +134,26 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
             }
         });
         getUserName();
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (doubleBackToExitPressedOnce) {
+                    setEnabled(false);
+                    requireActivity().finishAffinity();
+                    return;
+                }
+
+                doubleBackToExitPressedOnce = true;
+                Toast.makeText(getActivity(), "Nhấn BACK một lần nữa để thoát", Toast.LENGTH_SHORT).show();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce = false;
+                    }
+                }, 2000);
+            }
+        });
     }
 
     public void getUserName() {
