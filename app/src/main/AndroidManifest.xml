@@ -25,6 +25,22 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".src.view.user.payment.PaymentSuccessActivity"
+            android:exported="false" />
+        <activity
+            android:name=".src.view.user.payment.ConfirmPaymentActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.EU_FStyle_Mobile">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="demozpdk"
+                    android:host="app"/>
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".AdminActivity"
             android:exported="false" />
         <activity
@@ -36,7 +52,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <service
             android:name=".src.firebase.MyFirebaseMessagingService"
             android:exported="false">

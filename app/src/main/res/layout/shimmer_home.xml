@@ -72,7 +72,7 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="3dp"
                     android:background="@color/colorDDDDDD"
-                    android:drawableRight="@drawable/ic_arrow_down"
+                    android:drawableRight="@drawable/baseline_keyboard_arrow_down_24"
                     android:text="Xem sản phẩm "
                     android:textColor="@color/colorDDDDDD"
                     android:textSize="15dp"
