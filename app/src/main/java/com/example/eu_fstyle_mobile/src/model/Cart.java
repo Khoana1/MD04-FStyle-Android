@@ -14,15 +14,27 @@ public class Cart implements Serializable {
     private List<ProductCart> listProduct;
     @SerializedName("__v")
     private String __v;
+    @SerializedName("totalProduct")
+    private Number totalProduct;
+
     @SerializedName("totalCart")
     private Number totalCart;
 
-    public Cart(String _id, String idUser, List<ProductCart> listProduct, String __v, Number totalCart) {
+    public Cart(String _id, String idUser, List<ProductCart> listProduct, String __v, Number totalProduct, Number totalCart) {
         this._id = _id;
         this.idUser = idUser;
         this.listProduct = listProduct;
         this.__v = __v;
+        this.totalProduct = totalProduct;
         this.totalCart = totalCart;
+    }
+
+    public Number getTotalProduct() {
+        return totalProduct;
+    }
+
+    public void setTotalProduct(Number totalProduct) {
+        this.totalProduct = totalProduct;
     }
 
     public String get_id() {

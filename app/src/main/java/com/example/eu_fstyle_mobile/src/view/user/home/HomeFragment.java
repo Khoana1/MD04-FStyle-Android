@@ -67,7 +67,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements ProductHomeAdapter.onClickItem{
+public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements ProductHomeAdapter.onClickItem {
     FragmentHomeBinding binding;
     CategoryFillerAdapter fillerAdapter;
     CategoriesViewModel categoriesViewModel;
@@ -84,13 +84,14 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     private final long PERIOD_MS = 5000;
     private Handler handler;
     private Runnable runnable;
-    String textButton="";
-    boolean isThapToiCaoSelected= false;
-    boolean isCaoToiThapSelected= false;
+    String textButton = "";
+    boolean isThapToiCaoSelected = false;
+    boolean isCaoToiThapSelected = false;
     boolean isDuo1trieuSelected = false;
-    boolean isDuo2trieuSelected =false;
+    boolean isDuo2trieuSelected = false;
     Dialog dialogSearch;
     private boolean doubleBackToExitPressedOnce = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -98,8 +99,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         showShimmerEffect();
         categoriesViewModel = new ViewModelProvider(this).get(CategoriesViewModel.class);
         categoriesViewModel.getAllCategories();
+        swipeSearch();
         Banner();
-        openSearch();
         openFilter();
         getAvatar();
         getCategory();
@@ -107,6 +108,35 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         getCartCountNumber();
         initView();
         return binding.getRoot();
+    }
+
+    private void swipeSearch() {
+        binding.textviewShowsproduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.constraintLayout.animate()
+                        .scaleX(1.2f)
+                        .scaleY(1.2f)
+                        .setDuration(1000)
+                        .withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                binding.constraintLayout.animate()
+                                        .scaleX(1f)
+                                        .scaleY(1f)
+                                        .setDuration(1000)
+                                        .withEndAction(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                openSearch();
+                                            }
+                                        })
+                                        .start();
+                            }
+                        })
+                        .start();
+            }
+        });
     }
 
     private void initView() {
@@ -132,6 +162,9 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
             public void onClick(View v) {
                 openScreen(new CartFragment(), true);
             }
+        });
+        binding.searchHome.setOnClickListener(v -> {
+            openSearch();
         });
         getUserName();
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
@@ -183,7 +216,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
 
     @Override
     protected FragmentHomeBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
-        return FragmentHomeBinding.inflate(inflater,container,false);
+        return FragmentHomeBinding.inflate(inflater, container, false);
     }
 
 
@@ -193,19 +226,19 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         call.enqueue(new Callback<ListProduct>() {
             @Override
             public void onResponse(Call<ListProduct> call, Response<ListProduct> response) {
-                if(response.isSuccessful()&& response.body()!= null){
+                if (response.isSuccessful() && response.body() != null) {
                     hideLoadingDialog();
                     listProduct = response.body().getArrayList();
-                    Log.d("Huy", "onResponse: "+listProduct.get(0).getName());
-                    productAdapter = new ProductHomeAdapter(getActivity(), listProduct,HomeFragment.this);
-                    binding.recycleProductHame.setLayoutManager(new GridLayoutManager(getActivity(),2));
+                    Log.d("Huy", "onResponse: " + listProduct.get(0).getName());
+                    productAdapter = new ProductHomeAdapter(getActivity(), listProduct, HomeFragment.this);
+                    binding.recycleProductHame.setLayoutManager(new GridLayoutManager(getActivity(), 2));
                     binding.recycleProductHame.setAdapter(productAdapter);
                 }
             }
 
             @Override
             public void onFailure(Call<ListProduct> call, Throwable t) {
-                Log.d("Huy", "onFailure: "+t.getMessage());
+                Log.d("Huy", "onFailure: " + t.getMessage());
             }
         });
 
@@ -217,12 +250,13 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
             public void onChanged(ListCategories listCategories) {
                 listCategory = listCategories.getArrayList();
                 adapter = new CategoryHomeAdapter(getActivity(), listCategory);
-                binding.recycleCategoryHome.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+                binding.recycleCategoryHome.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
                 binding.recycleCategoryHome.setAdapter(adapter);
             }
         });
 
     }
+
     private void openFilter() {
         listSize = new ArrayList<>();
         listByCategory = new ArrayList<>();
@@ -235,27 +269,28 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
             params.height = (int) (getResources().getDisplayMetrics().heightPixels * 0.6);
             bottomsetView.setLayoutParams(params);
             //
-            getListFiller(listCategory, binding1,bottomSheetDialog);
+            getListFiller(listCategory, binding1, bottomSheetDialog);
             //
             binding1.btnThietlaplaiFilter.setOnClickListener(v1 -> {
-             reset(binding1);
+                reset(binding1);
             });
             binding1.btnApdungFilter.setOnClickListener(v1 -> {
-                if(listSize.size() != 0) {
-                    ResultSearchFragment resultSearchFragment = ResultSearchFragment.newInstance(listSize ,textButton);
-                    openScreenHome(resultSearchFragment,true);
+                if (listSize.size() != 0) {
+                    ResultSearchFragment resultSearchFragment = ResultSearchFragment.newInstance(listSize, textButton);
+                    openScreenHome(resultSearchFragment, true);
                     bottomSheetDialog.dismiss();
-                }else {
+                } else {
                     showAlertDialog("chưa chọn size");
                 }
             });
-            if(!bottomSheetDialog.isShowing()){
+            if (!bottomSheetDialog.isShowing()) {
                 reset(binding1);
             }
             bottomSheetDialog.show();
         });
     }
-    private void reset(BottomDialogFilterBinding binding1){
+
+    private void reset(BottomDialogFilterBinding binding1) {
         fillerAdapter.clearSelection();
         listByCategory.clear();
         listSize.clear();
@@ -265,7 +300,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         toggleButton(binding1.btnDuoi2trieuFilter, false);
         textButton = "";
     }
-    private void getListFiller(ArrayList<Categories> listCategory, BottomDialogFilterBinding binding1,BottomSheetDialog bottomSheetDialog){
+
+    private void getListFiller(ArrayList<Categories> listCategory, BottomDialogFilterBinding binding1, BottomSheetDialog bottomSheetDialog) {
         fillerAdapter = new CategoryFillerAdapter(listCategory);
         binding1.recycleFiller.setAdapter(fillerAdapter);
         binding1.recycleFiller.setLayoutManager(new GridLayoutManager(getActivity(), 2));
@@ -273,24 +309,25 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         fillerAdapter.setOnClickItem(new CategoryFillerAdapter.onClickItem() {
             @Override
             public void onClick(String idCategory) {
-                Log.d("Huy", "onClick: "+idCategory);
-             for(Product product : listProduct){
-                 if(product.getIdCategory().equals(idCategory)){
-                     listByCategory.add(product);
-                 }else {
-                     listByCategory.clear();
-                 }
-             }
-                if(listByCategory.size()>0){
-                  buttonPrice(binding1);
-                }else {
+                Log.d("Huy", "onClick: " + idCategory);
+                for (Product product : listProduct) {
+                    if (product.getIdCategory().equals(idCategory)) {
+                        listByCategory.add(product);
+                    } else {
+                        listByCategory.clear();
+                    }
+                }
+                if (listByCategory.size() > 0) {
+                    buttonPrice(binding1);
+                } else {
                     showAlertDialog("Không có sản phẩm nào thuộc thể loại này");
 
                 }
             }
         });
     }
-    private void buttonPrice(@NonNull BottomDialogFilterBinding binding1){
+
+    private void buttonPrice(@NonNull BottomDialogFilterBinding binding1) {
         binding1.btnThaptoicaoFilter.setOnClickListener(v1 -> {
             isThapToiCaoSelected = !isThapToiCaoSelected;
             toggleButton(binding1.btnThaptoicaoFilter, isThapToiCaoSelected);
@@ -303,8 +340,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                 toggleButton(binding1.btnDuoi2trieuFilter, false);
                 textButton = String.valueOf(binding1.btnThaptoicaoFilter.getText());
                 getThaptoiCao();
-            }else {
-                textButton="";
+            } else {
+                textButton = "";
                 listSize.clear();
             }
         });
@@ -320,8 +357,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                 toggleButton(binding1.btnDuoi2trieuFilter, false);
                 textButton = String.valueOf(binding1.btnCaotoithapFilter.getText());
                 getCaotoiThap();
-            }else {
-                textButton="";
+            } else {
+                textButton = "";
                 listSize.clear();
             }
         });
@@ -337,8 +374,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                 toggleButton(binding1.btnDuoi2trieuFilter, false);
                 textButton = String.valueOf(binding1.btnDuoi1trieuFilter.getText());
                 getDuoi1trieu();
-            }else {
-                textButton="";
+            } else {
+                textButton = "";
                 listSize.clear();
             }
 
@@ -355,12 +392,13 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                 toggleButton(binding1.btnDuoi1trieuFilter, false);
                 textButton = String.valueOf(binding1.btnDuoi2trieuFilter.getText());
                 getDuoi2trieu();
-            }else {
-                textButton="";
+            } else {
+                textButton = "";
                 listSize.clear();
             }
         });
     }
+
     private void toggleButton(Button button, boolean isSelected) {
         if (isSelected) {
             button.setBackgroundResource(R.drawable.bg_corner20_silver);
@@ -370,29 +408,32 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
             button.setTextColor(Color.BLACK);
         }
     }
-    private void getDuoi2trieu(){
+
+    private void getDuoi2trieu() {
         float maxPrice = 2000000;
         ArrayList<Product> listDuoi2Trieu = new ArrayList<>();
-       for(Product product: listByCategory){
-           if(Float.parseFloat(product.getPrice().toString())<maxPrice){
-               listDuoi2Trieu.add(product);
-           }
-       }
-       listSize.clear();
-       listSize.addAll(listDuoi2Trieu);
+        for (Product product : listByCategory) {
+            if (Float.parseFloat(product.getPrice().toString()) < maxPrice) {
+                listDuoi2Trieu.add(product);
+            }
+        }
+        listSize.clear();
+        listSize.addAll(listDuoi2Trieu);
     }
-    private void getDuoi1trieu(){
+
+    private void getDuoi1trieu() {
         float maxPrice = 1000000;
         ArrayList<Product> listDuoi1Trieu = new ArrayList<>();
-        for(Product product: listByCategory){
-            if(Float.parseFloat(product.getPrice().toString())<maxPrice){
+        for (Product product : listByCategory) {
+            if (Float.parseFloat(product.getPrice().toString()) < maxPrice) {
                 listDuoi1Trieu.add(product);
             }
         }
         listSize.clear();
         listSize.addAll(listDuoi1Trieu);
     }
-    private void getThaptoiCao(){
+
+    private void getThaptoiCao() {
         ArrayList<Product> sortList = new ArrayList<>(listByCategory);
         Collections.sort(sortList, new Comparator<Product>() {
             @Override
@@ -405,7 +446,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         listSize.clear();
         listSize.addAll(sortList);
     }
-    private void getCaotoiThap(){
+
+    private void getCaotoiThap() {
         ArrayList<Product> sortList = new ArrayList<>(listByCategory);
         Collections.sort(sortList, new Comparator<Product>() {
             @Override
@@ -418,103 +460,104 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         listSize.clear();
         listSize.addAll(sortList);
     }
-    private void openSearch(){
-        binding.searchHome.setOnClickListener(v -> {
-            dialogSearch = new Dialog(getActivity());
-            dialogSearch.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialogSearch.setContentView(R.layout.dialog_search);
-            Window window = dialogSearch.getWindow();
-            if(window == null)
-                return;
-            WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-            layoutParams.copyFrom(window.getAttributes());
 
-            layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-            layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-            layoutParams.gravity = Gravity.CENTER; // Căn giữa dialog
+    private void openSearch() {
+        dialogSearch = new Dialog(getActivity());
+        dialogSearch.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogSearch.setContentView(R.layout.dialog_search);
+        Window window = dialogSearch.getWindow();
+        if (window == null)
+            return;
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(window.getAttributes());
 
-            window.setAttributes(layoutParams);
-            window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+        layoutParams.gravity = Gravity.CENTER; // Căn giữa dialog
 
-            ImageButton imageButton = dialogSearch.findViewById(R.id.back_home);
-            imageButton.setOnClickListener(v1 -> {
-                dialogSearch.dismiss();
-            });
-            RecyclerView recyclerView = dialogSearch.findViewById(R.id.recycle_search_home);
-            LinearLayout layout = dialogSearch.findViewById(R.id.view_not_found);
-            productAdapter = new ProductHomeAdapter(getActivity(), listProduct, HomeFragment.this);
-            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-            recyclerView.setAdapter(productAdapter);
-            recyclerView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                   hideKeyboard(v);
-                    return false;
-                }
-            });
-            dialogSearch.show();
-            EditText editText = dialogSearch.findViewById(R.id.edit_search_home);
-            editText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        window.setAttributes(layoutParams);
+        window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
 
-                }
+        ImageButton imageButton = dialogSearch.findViewById(R.id.back_home);
+        imageButton.setOnClickListener(v1 -> {
+            dialogSearch.dismiss();
+        });
+        RecyclerView recyclerView = dialogSearch.findViewById(R.id.recycle_search_home);
+        LinearLayout layout = dialogSearch.findViewById(R.id.view_not_found);
+        productAdapter = new ProductHomeAdapter(getActivity(), listProduct, HomeFragment.this);
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        recyclerView.setAdapter(productAdapter);
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                hideKeyboard(v);
+                return false;
+            }
+        });
+        dialogSearch.show();
+        EditText editText = dialogSearch.findViewById(R.id.edit_search_home);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                  String str = s.toString().toLowerCase();
-                  String queryWithoutAccents = SearchUltils.removeAccents(str); // Loại bỏ dấu từ chuỗi tìm kiếm
+            }
 
-                    ArrayList<Product> list = new ArrayList<>();
-                  for (Product product : listProduct){
-                      String productName = product.getName().toLowerCase();
-                      String productNameWithoutAccents = SearchUltils.removeAccents(productName);
-                      if (productNameWithoutAccents.contains(queryWithoutAccents)) {
-                          list.add(product);
-                      }
-                      if (list.isEmpty()) {
-                          recyclerView.setVisibility(View.GONE);
-                          layout.setVisibility(View.VISIBLE);
-                      } else {
-                          recyclerView.setVisibility(View.VISIBLE);
-                          layout.setVisibility(View.GONE);
-                          searchAdapter = new SearchAdapter(getActivity(), list);
-                          recyclerView.setAdapter(searchAdapter);
-                          recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-                          searchAdapter.setOnclickItem(new SearchAdapter.onclickItem() {
-                              @Override
-                              public void onclick(Product product) {
-                                  DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
-                                  openScreenHome(detailProductFragment, true);
-                                  dialogSearch.dismiss();
-                              }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String str = s.toString().toLowerCase();
+                String queryWithoutAccents = SearchUltils.removeAccents(str); // Loại bỏ dấu từ chuỗi tìm kiếm
 
-                              @Override
-                              public void onClickFavourite(Product product)     {
+                ArrayList<Product> list = new ArrayList<>();
+                for (Product product : listProduct) {
+                    String productName = product.getName().toLowerCase();
+                    String productNameWithoutAccents = SearchUltils.removeAccents(productName);
+                    if (productNameWithoutAccents.contains(queryWithoutAccents)) {
+                        list.add(product);
+                    }
+                    if (list.isEmpty()) {
+                        recyclerView.setVisibility(View.GONE);
+                        layout.setVisibility(View.VISIBLE);
+                    } else {
+                        recyclerView.setVisibility(View.VISIBLE);
+                        layout.setVisibility(View.GONE);
+                        searchAdapter = new SearchAdapter(getActivity(), list);
+                        recyclerView.setAdapter(searchAdapter);
+                        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                        searchAdapter.setOnclickItem(new SearchAdapter.onclickItem() {
+                            @Override
+                            public void onclick(Product product) {
+                                DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
+                                openScreenHome(detailProductFragment, true);
+                                dialogSearch.dismiss();
+                            }
 
-                              }
-                          });
-                      }
+                            @Override
+                            public void onClickFavourite(Product product) {
 
-                  }
+                            }
+                        });
+                    }
 
                 }
 
-                @Override
-                public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
 
 
-                }
-            });
+            }
         });
 
     }
+
     @NonNull
     @Override
     public CreationExtras getDefaultViewModelCreationExtras() {
         return super.getDefaultViewModelCreationExtras();
     }
-      private void getAvatar() {
+
+    private void getAvatar() {
         String avatarUrl = "http://10.64.5.110:3000/api/user/avatar/image/%s"; // thay IPv4 của máy tính chạy server vào đây để test
         User user = UserPrefManager.getInstance(getActivity()).getUser();
         String userId = user.get_id();
@@ -548,6 +591,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
             handler.removeCallbacks(runnable);
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -562,13 +606,13 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
 
     @Override
     public void onClick(Product product) {
-        if(dialogSearch != null&& dialogSearch.isShowing()){
+        if (dialogSearch != null && dialogSearch.isShowing()) {
             DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
             openScreenHome(detailProductFragment, true);
             dialogSearch.dismiss();
         }
-          DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
-          openScreenHome(detailProductFragment, true);
+        DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
+        openScreenHome(detailProductFragment, true);
     }
 
     @Override
@@ -596,7 +640,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
 
     @Override
     public void onClickCart(Product product) {
-        if(dialogSearch != null&& dialogSearch.isShowing()){
+        if (dialogSearch != null && dialogSearch.isShowing()) {
             DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
             openScreenHome(detailProductFragment, true);
             dialogSearch.dismiss();
@@ -614,7 +658,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
             public void onResponse(Call<Cart> call, Response<Cart> response) {
                 if (response.isSuccessful()) {
                     int numberCart = response.body().getListProduct().size();
-                    if(numberCart == 0){
+                    if (numberCart == 0) {
                         binding.tvNumberCart.setText("0");
                     }
                     binding.tvNumberCart.setText(String.valueOf(numberCart));

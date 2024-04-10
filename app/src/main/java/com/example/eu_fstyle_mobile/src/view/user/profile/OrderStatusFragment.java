@@ -1,4 +1,4 @@
-package com.example.eu_fstyle_mobile.src.view.user;
+package com.example.eu_fstyle_mobile.src.view.user.profile;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

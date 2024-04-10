@@ -144,28 +144,18 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
 
                         @Override
                         public void onPaymentCanceled(String zpTransToken, String appTransID) {
-                            new AlertDialog.Builder(ConfirmPaymentActivity.this)
-                                    .setTitle("Người dùng từ chối thanh toán")
-                                    .setMessage(String.format("zpTransToken: %s \n", zpTransToken))
-                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                        }
-                                    })
-                                    .setNegativeButton("Cancel", null).show();
+                            showAlertDialog(String.format("Người dùng từ chối thanh toán\nMã giao dịch: %s", zpTransToken), new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(ConfirmPaymentActivity.this, "Vui lòng thử lại sau !!!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
 
                         @Override
                         public void onPaymentError(ZaloPayError zaloPayError, String zpTransToken, String appTransID) {
-                            new AlertDialog.Builder(ConfirmPaymentActivity.this)
-                                    .setTitle("Thanh toán thất bại")
-                                    .setMessage(String.format("ZaloPayErrorCode: %s \nTransToken: %s", zaloPayError.toString(), zpTransToken))
-                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                        }
-                                    })
-                                    .setNegativeButton("Cancel", null).show();
+                            Toast.makeText(ConfirmPaymentActivity.this, "Thanh toán thất bại, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+                            IsLoading();
                         }
                     });
                     break;
@@ -223,6 +213,26 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onConfirm.run();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    private void showAlertDialog(String content, Runnable onFailed) {
+        Dialog dialog = new Dialog(this);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.setContentView(R.layout.error_dialog);
+        dialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.custom_dialog_background));
+        TextView tvContent = dialog.findViewById(R.id.tv_alert_content);
+        tvContent.setText(content);
+
+        Button btnConfirm = dialog.findViewById(R.id.btn_alert_ok);
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onFailed.run();
                 dialog.dismiss();
             }
         });
