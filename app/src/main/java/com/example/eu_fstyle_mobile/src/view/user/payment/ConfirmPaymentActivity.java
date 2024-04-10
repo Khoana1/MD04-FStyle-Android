@@ -26,12 +26,21 @@ import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.ActivityConfirmPaymentBinding;
 import com.example.eu_fstyle_mobile.src.dialog.Loading100Dialog;
 import com.example.eu_fstyle_mobile.src.model.Cart;
+import com.example.eu_fstyle_mobile.src.model.Orders;
+import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.model.zalopay.CreateOrder;
+import com.example.eu_fstyle_mobile.src.request.RequestCreateOrder;
+import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
+import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
+import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import vn.zalopay.sdk.Environment;
 import vn.zalopay.sdk.ZaloPayError;
 import vn.zalopay.sdk.ZaloPaySDK;
@@ -41,6 +50,8 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
     public static final String CART = "CART";
     public ActivityConfirmPaymentBinding binding;
     private Dialog loading100Dialog;
+
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +64,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         String paymentMethod = intent.getStringExtra("PAYMENT_METHOD");
         String totalPayment = intent.getStringExtra("TOTAL");
         String paymentAddress = intent.getStringExtra("PAYMENT_ADDRESS");
+        user = UserPrefManager.getInstance(this).getUser();
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         ZaloPaySDK.init(554, Environment.SANDBOX);
@@ -103,12 +115,34 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                 case "COD":
                     showLoading100Dialog();
                     new Handler().postDelayed(() -> {
-                        hideLoading100Dialog();
-                        Intent intent1 = new Intent(ConfirmPaymentActivity.this, PaymentSuccessActivity.class);
-                        intent1.putExtra(CART, cart);
-                        intent1.putExtra("TOTAL", totalPayment);
-                        startActivity(intent1);
-                        finish();
+                        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                        RequestCreateOrder requestCreateOrder = new RequestCreateOrder(paymentAddress, cart.getListProduct(), user.get_id(), user.getPhone(), "COD", totalPayment, "pending");
+                        Call<Orders> call = apiService.createOrder(user.get_id(), requestCreateOrder);
+                        call.enqueue(new Callback<Orders>() {
+                            @Override
+                            public void onResponse(Call<Orders> call, Response<Orders> response) {
+                                if (response.isSuccessful()) {
+                                    hideLoading100Dialog();
+                                    Intent intent1 = new Intent(ConfirmPaymentActivity.this, PaymentSuccessActivity.class);
+                                    intent1.putExtra(CART, cart);
+                                    intent1.putExtra("TOTAL", totalPayment);
+                                    startActivity(intent1);
+                                    finish();
+                                } else {
+                                    hideLoading100Dialog();
+                                    Intent intent = new Intent(ConfirmPaymentActivity.this, PaymentFailActivity.class);
+                                    intent.putExtra("MESSAGE", response.message());
+                                    startActivity(intent);
+                                }
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<Orders> call, Throwable t) {
+                                Toast.makeText(ConfirmPaymentActivity.this, "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
                     }, 2000);
 
                     break;
@@ -127,12 +161,33 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                                         public void run() {
                                             showLoading100Dialog();
                                             new Handler().postDelayed(() -> {
-                                                hideLoading100Dialog();
-                                                Intent intent1 = new Intent(ConfirmPaymentActivity.this, PaymentSuccessActivity.class);
-                                                intent1.putExtra(CART, cart);
-                                                intent1.putExtra("TOTAL", totalPayment);
-                                                startActivity(intent1);
-                                                finish();
+                                                ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                                                RequestCreateOrder requestCreateOrder = new RequestCreateOrder(paymentAddress, cart.getListProduct(), user.get_id(), user.getPhone(), "Sandbox", totalPayment, "pending");
+                                                Call<Orders> call = apiService.createOrder(user.get_id(), requestCreateOrder);
+                                                call.enqueue(new Callback<Orders>() {
+                                                    @Override
+                                                    public void onResponse(Call<Orders> call, Response<Orders> response) {
+                                                        if (response.isSuccessful()) {
+                                                            hideLoading100Dialog();
+                                                            Intent intent1 = new Intent(ConfirmPaymentActivity.this, PaymentSuccessActivity.class);
+                                                            intent1.putExtra(CART, cart);
+                                                            intent1.putExtra("TOTAL", totalPayment);
+                                                            startActivity(intent1);
+                                                            finish();
+                                                        } else {
+                                                            hideLoading100Dialog();
+                                                            Intent intent = new Intent(ConfirmPaymentActivity.this, PaymentFailActivity.class);
+                                                            intent.putExtra("MESSAGE", response.message());
+                                                            startActivity(intent);
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<Orders> call, Throwable t) {
+
+                                                    }
+                                                });
+
                                             }, 2000);
                                         }
                                     });
