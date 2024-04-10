@@ -93,6 +93,7 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
 
 
     private void getDataMayBeLike() {
+        binding.cstTotal.setVisibility(View.VISIBLE);
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
         Call<ListProduct> call = apiService.getAllProducts();
         call.enqueue(new Callback<ListProduct>() {
@@ -148,7 +149,7 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
                         binding.rltTotal.setVisibility(View.VISIBLE);
                         binding.rltTotal.setVisibility(View.VISIBLE);
                         binding.tvQuantum.setText(String.valueOf(listSize));
-                        binding.tvDetailQuantum.setText(String.valueOf(listSize));
+                        binding.tvDetailQuantum.setText(cart.getTotalProduct().toString());
                     }
 
                     String totalPrice = cart.getTotalCart().toString();
@@ -277,6 +278,7 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
                 cartViewModel.getCart(user.get_id());
                 getDataMayBeLike();
                 showLoadingDialog();
+                binding.cstTotal.setVisibility(View.VISIBLE);
             }
         });
     }

@@ -57,7 +57,7 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implem
         super.onViewCreated(view, savedInstanceState);
         initData();
         cart = (Cart) getArguments().getSerializable(CART);
-        binding.tvDetailQuantumPayment.setText(String.valueOf(cart.getListProduct().size()));
+        binding.tvDetailQuantumPayment.setText(cart.getTotalProduct().toString());
         binding.tvTotalPayment.setText(cart.getTotalCart().toString() + " VNĐ");
         getTotalPaymentDetail();
         binding.rcvPayment.setAdapter(new PaymentProductAdapter(cart.getListProduct()));

@@ -19,6 +19,7 @@ import com.example.eu_fstyle_mobile.src.view.user.IntroFragment;
 import com.example.eu_fstyle_mobile.src.view.user.SplashFragment;
 import com.example.eu_fstyle_mobile.src.view.user.home.HomeFragment;
 import com.example.eu_fstyle_mobile.src.view.user.payment.CartFragment;
+import com.example.eu_fstyle_mobile.src.view.user.payment.PaymentFragment;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_NOTIFICATION_PERMISSION = 1001;
@@ -51,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
                 case "HomeFragment":
                     replaceFragment(new HomeFragment());
                     break;
-                case "CartFragment":
-                    replaceFragment(new CartFragment());
+                case "PaymentFragment":
+                    replaceFragment(new PaymentFragment());
                     break;
                 default:
                     break;
