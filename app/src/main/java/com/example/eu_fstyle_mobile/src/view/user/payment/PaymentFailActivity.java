@@ -17,6 +17,8 @@ public class PaymentFailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityPaymentFailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        String message= intent.getStringExtra("MESSAGE");
+        binding.tvMessage.setText(message);
         binding.btnRepay.setOnClickListener(v -> {
             intent = new Intent(PaymentFailActivity.this, MainActivity.class);
             intent.putExtra("FRAGMENT_NAME", "PaymentFragment");
