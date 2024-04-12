@@ -66,6 +66,10 @@ public class ProfileAdminFragment extends BaseFragment<FragmentProfileAdminBindi
         binding.icBack.setOnClickListener(v -> {
             showAlertDialog("Hãy đảm bảo rằng thông tin đăng nhập của bạn được bảo mật và không chia sẻ với bất kỳ ai khác. Việc bảo vệ tài khoản quản lý là chìa khóa cho sự ổn định và tăng trưởng của cửa hàng.");
         });
+        binding.llBill.setOnClickListener(v -> {
+            openScreenAdmin(new BillAdminFragment(), true);
+        });
+
         binding.constraintLogOut.setOnClickListener(v -> {
             showDialog("Đăng xuất", "Bạn có chắc chắn muốn đăng xuất không?", new Runnable() {
                 @Override

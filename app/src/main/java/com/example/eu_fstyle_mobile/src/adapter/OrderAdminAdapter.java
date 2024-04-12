@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eu_fstyle_mobile.R;
-import com.example.eu_fstyle_mobile.databinding.ItemOrderStatusBinding;
+import com.example.eu_fstyle_mobile.databinding.ItemOrderAdminBinding;
 import com.example.eu_fstyle_mobile.src.model.Orders;
 
 import java.text.ParseException;
@@ -18,34 +18,35 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class MyOrderStatusAdapter extends RecyclerView.Adapter<MyOrderStatusAdapter.ViewHolder> {
+public class OrderAdminAdapter extends RecyclerView.Adapter<OrderAdminAdapter.ViewHolder> {
     private List<Orders> ordersList;
+
     private OnItemOrderClickListener onItemOrderClickListener;
 
-    public MyOrderStatusAdapter(List<Orders> ordersList, OnItemOrderClickListener onItemOrderClickListener) {
+
+    public OrderAdminAdapter(List<Orders> ordersList, OnItemOrderClickListener onItemOrderClickListener) {
         this.ordersList = ordersList;
         this.onItemOrderClickListener = onItemOrderClickListener;
     }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemOrderStatusBinding.inflate(parent.getContext().getSystemService(LayoutInflater.class), parent, false));
+        return new OrderAdminAdapter.ViewHolder(ItemOrderAdminBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Orders orders = ordersList.get(position);
         holder.binding.tvOrderId.setText(orders.get_id());
-        if (orders.getStatus().equals("active")) {
+        if (orders.getStatus().equals("active")){
             holder.binding.tvOrderStatus.setText("Xác nhận");
             holder.binding.tvOrderStatus.setTextColor(Color.parseColor("#00CC00"));
             holder.binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_active);
-        } else if (orders.getStatus().equals("deactive")) {
+        } else if (orders.getStatus().equals("deactive")){
             holder.binding.tvOrderStatus.setText("Đã hủy");
-            holder.binding.tvOrderStatus.setTextColor(Color.parseColor("#000000"));
+        holder.binding.tvOrderStatus.setTextColor(Color.parseColor("#000000"));
             holder.binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_deactive);
-        } else if (orders.getStatus().equals("pending")) {
+        } else if (orders.getStatus().equals("pending")){
             holder.binding.tvOrderStatus.setText("Chờ xác nhận");
             holder.binding.tvOrderStatus.setTextColor(Color.parseColor("#C67C4E"));
             holder.binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_pending);
@@ -76,7 +77,6 @@ public class MyOrderStatusAdapter extends RecyclerView.Adapter<MyOrderStatusAdap
         holder.itemView.setOnClickListener(v -> {
             onItemOrderClickListener.onOrderClick(ordersList.get(position).get_id());
         });
-
     }
 
     @Override
@@ -84,11 +84,9 @@ public class MyOrderStatusAdapter extends RecyclerView.Adapter<MyOrderStatusAdap
         return ordersList.size();
     }
 
-
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ItemOrderStatusBinding binding;
-
-        public ViewHolder(@NonNull ItemOrderStatusBinding binding) {
+        ItemOrderAdminBinding binding;
+        public ViewHolder(@NonNull ItemOrderAdminBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

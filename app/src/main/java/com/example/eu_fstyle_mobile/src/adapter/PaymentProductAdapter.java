@@ -15,13 +15,17 @@ import com.example.eu_fstyle_mobile.databinding.ItemPaymentBinding;
 import com.example.eu_fstyle_mobile.src.model.ProductCart;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class PaymentProductAdapter extends RecyclerView.Adapter<PaymentProductAdapter.ViewHolder> {
     private List<ProductCart> productCartList;
 
-    public PaymentProductAdapter(List<ProductCart> productCartList) {
+    private OnItemClickListener onItemClickListener;
+
+    public PaymentProductAdapter(List<ProductCart> productCartList, OnItemClickListener onItemClickListener) {
         this.productCartList = productCartList;
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -46,12 +50,18 @@ public class PaymentProductAdapter extends RecyclerView.Adapter<PaymentProductAd
         }else {
             holder.binding.imgPayment.setImageResource(R.drawable.error_shoe);
         }
-        holder.binding.namePayment.setMaxLines(1);
-        holder.binding.namePayment.setEllipsize(TextUtils.TruncateAt.END);
-        holder.binding.namePayment.setText(productCart.getName());
+        String productName = productCart.getName();
+        if (productName.length() > 7) {
+            productName = productName.substring(0, 20) + "...";
+        } else {
+            productName = productCart.getName();
+        }
+        holder.binding.namePayment.setText(productName);
         holder.binding.sizePayment.setText(productCart.getSize());
         holder.binding.quantumPayment.setText(productCart.getSoLuong().toString());
-        holder.binding.pricePayment.setText(productCart.getPrice().toString() + " VNĐ");
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+        holder.binding.pricePayment.setText(decimalFormat.format(productCart.getPrice()) + " VNĐ");
+        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(productCart) );
     }
 
     @Override
@@ -66,5 +76,9 @@ public class PaymentProductAdapter extends RecyclerView.Adapter<PaymentProductAd
             super(binding.getRoot());
             this.binding = binding;
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(ProductCart productCart);
     }
 }

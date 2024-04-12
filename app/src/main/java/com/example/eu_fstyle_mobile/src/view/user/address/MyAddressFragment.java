@@ -14,14 +14,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.eu_fstyle_mobile.databinding.FragmentMyAddressBinding;
 import com.example.eu_fstyle_mobile.src.adapter.MyAddressAdapter;
-import com.example.eu_fstyle_mobile.src.adapter.ProductHomeAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.Address;
 import com.example.eu_fstyle_mobile.src.model.AddressRespone;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MyAddressFragment extends BaseFragment<FragmentMyAddressBinding> implements MyAddressAdapter.OnEditClickListener {

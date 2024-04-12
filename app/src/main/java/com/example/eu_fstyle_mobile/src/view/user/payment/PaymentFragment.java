@@ -9,10 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.BottomSheetChoosePaymentBinding;
@@ -22,13 +22,14 @@ import com.example.eu_fstyle_mobile.src.adapter.PaymentProductAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.Address;
 import com.example.eu_fstyle_mobile.src.model.Cart;
+import com.example.eu_fstyle_mobile.src.model.ProductCart;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implements AddressSelectionListener {
+public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implements AddressSelectionListener, PaymentProductAdapter.OnItemClickListener {
     public static final String CART = "CART";
     private AddressBottomSheetDialogFragment bottomSheet;
     private BottomSheetHinhthucvcBinding binding1;
@@ -60,7 +61,7 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implem
         binding.tvDetailQuantumPayment.setText(cart.getTotalProduct().toString());
         binding.tvTotalPayment.setText(cart.getTotalCart().toString() + " VNĐ");
         getTotalPaymentDetail();
-        binding.rcvPayment.setAdapter(new PaymentProductAdapter(cart.getListProduct()));
+        binding.rcvPayment.setAdapter(new PaymentProductAdapter(cart.getListProduct(), this));
         binding.tvEditItemAddress.setOnClickListener(v -> {
             List<Address> addressList = new ArrayList<>();
             bottomSheet = new AddressBottomSheetDialogFragment(this, addressList);
@@ -107,11 +108,20 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implem
                     @Override
                     public void run() {
                         hideLoadingDialog();
+                        String titleShip = binding.tvTitleShip.getText().toString();
+                        String getTitleShip = "";
+                        if (titleShip.equals("Nhanh")) {
+                            getTitleShip = "express";
+                        }
+                        if (titleShip.equals("Tiết kiệm")) {
+                            getTitleShip = "standard";
+                        }
                         Intent intent = new Intent(requireContext(), ConfirmPaymentActivity.class);
                         intent.putExtra(CART, cart);
                         intent.putExtra("PAYMENT_METHOD", paymentMethod);
                         intent.putExtra("TOTAL", totalPayment);
                         intent.putExtra("PAYMENT_ADDRESS", paymentAddress);
+                        intent.putExtra("SHIPPING_METHOD", getTitleShip);
                         startActivity(intent);
                     }
                 }, 2000);
@@ -192,4 +202,12 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implem
     }
 
 
+    @Override
+    public void onItemClick(ProductCart productCart) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Thông tin chi tiết sản phẩm");
+        builder.setMessage("Mã sản phẩm: " + productCart.getIdProduct() + "\nTên sản phẩm: "+ productCart.getName() + "\nGiá sản phẩm: "+ productCart.getPrice() + "\nSize: " + productCart.getSize() + "\nSố lượng: " + productCart.getSoLuong());
+        builder.setPositiveButton("OK", null);
+        builder.show();
+    }
 }

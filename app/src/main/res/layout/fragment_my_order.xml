@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@color/colorWhite"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".src.view.user.MyOrderFragment">
+    tools:context=".src.view.user.profile.MyOrderFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"

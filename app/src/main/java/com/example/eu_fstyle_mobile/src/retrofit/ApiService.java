@@ -8,6 +8,7 @@ import com.example.eu_fstyle_mobile.src.model.Favourite;
 import com.example.eu_fstyle_mobile.src.model.ListCart;
 import com.example.eu_fstyle_mobile.src.model.ListCategories;
 import com.example.eu_fstyle_mobile.src.model.ListOrder;
+import com.example.eu_fstyle_mobile.src.model.ListOrderID;
 import com.example.eu_fstyle_mobile.src.model.ListProduct;
 import com.example.eu_fstyle_mobile.src.model.Orders;
 import com.example.eu_fstyle_mobile.src.model.Product;
@@ -22,6 +23,7 @@ import com.example.eu_fstyle_mobile.src.request.RequestCreateUser;
 import com.example.eu_fstyle_mobile.src.request.RequestLoginUser;
 import com.example.eu_fstyle_mobile.src.request.RequestString;
 import com.example.eu_fstyle_mobile.src.request.RequestUpdateAddress;
+import com.example.eu_fstyle_mobile.src.request.RequestUpdateStatus;
 import com.example.eu_fstyle_mobile.src.request.RequestUpdateUser;
 import com.example.eu_fstyle_mobile.ultilties.ApiEndpoint;
 
@@ -99,10 +101,14 @@ public interface ApiService {
     Call<ListCart> reduceCart(@Path("id") String id, @Path("id_product") String id_product);
     @GET(ApiEndpoint.increaseCart)
     Call<ListCart> increaseCart(@Path("id") String id, @Path("id_product") String id_product);
-    @GET(ApiEndpoint.createOrder)
+    @GET(ApiEndpoint.getAllOrder)
     Call<ListOrder> getAllOrder();
+    @GET(ApiEndpoint.getOrderByID)
+    Call<ListOrderID> getOrderByID(@Path("orderId") String orderId);
     @POST(ApiEndpoint.createOrder)
     Call<Orders> createOrder(@Path("id") String id, @Body RequestCreateOrder requestCreateOrder);
     @PUT(ApiEndpoint.updateOrderStatus)
-    Call<Orders> updateOrderStatus(@Path("id") String id);
+    Call<Orders> updateOrderStatus(@Path("id") String id, @Body RequestUpdateStatus status);
+    @GET(ApiEndpoint.getOrderByUserID)
+    Call<ListOrder> getOrderByUserID(@Path("id") String id);
 }

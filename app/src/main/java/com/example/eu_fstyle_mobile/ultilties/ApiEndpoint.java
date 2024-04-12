@@ -25,5 +25,8 @@ public class ApiEndpoint {
     public static final String reduceCart = "/api/cart/reduce/{id}/{id_product}";
     public static final String increaseCart = "/api/cart/increase/{id}/{id_product}";
     public static final String createOrder = "/api/orders/{id}";
+    public static final String getAllOrder = "/api/orders";
+    public static final String getOrderByID = "/api/orders/{orderId}";
     public static final String updateOrderStatus = "/api/orders/{id}";
+    public static final String getOrderByUserID = "/api/orders/getbyuser/{id}";
 }

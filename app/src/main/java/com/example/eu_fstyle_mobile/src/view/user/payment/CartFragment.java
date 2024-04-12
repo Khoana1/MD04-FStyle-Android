@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -445,5 +446,14 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
                 cartViewModel.getCart(user.get_id());
             }
         });
+    }
+
+    @Override
+    public void onItemCartClick(ProductCart productCart) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Thông tin chi tiết sản phẩm");
+        builder.setMessage("Mã sản phẩm: " + productCart.getIdProduct() + "\nTên sản phẩm: " + productCart.getName() + "\nGiá sản phẩm: " + productCart.getPrice() + "\nSize: " + productCart.getSize() + "\nSố lượng: " + productCart.getSoLuong());
+        builder.setPositiveButton("OK", null);
+        builder.show();
     }
 }

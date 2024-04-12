@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_choose_payment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_medium"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Thay đổi trạng thái đơn hàng"
+        android:textColor="@color/colorBlack"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:background="#4D000000" />
+
+    <TextView
+        android:id="@+id/tv_order_active"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_order_active"
+        android:fontFamily="@font/inter_medium"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="5dp"
+        android:text="Xác nhận"
+        android:textColor="#00CC00"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center"
+        android:background="#4D000000" />
+
+    <TextView
+        android:id="@+id/tv_order_deactive"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/bg_order_deactive"
+        android:fontFamily="@font/inter_medium"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="5dp"
+        android:text="Đã hủy"
+        android:textColor="@color/colorBlack"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:background="#4D000000" />
+
+    <TextView
+        android:id="@+id/tv_order_pending"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/bg_order_pending"
+        android:fontFamily="@font/inter_medium"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="5dp"
+        android:text="Đang xử lý"
+        android:textColor="#C67C4E"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_order_trading"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/bg_order_trading"
+        android:fontFamily="@font/inter_medium"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="5dp"
+        android:text="Đang giao"
+        android:textColor="#FFA500"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:background="#4D000000" />
+
+    <TextView
+        android:id="@+id/tv_order_delivered"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/bg_order_success"
+        android:fontFamily="@font/inter_medium"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="5dp"
+        android:text="Đã giao"
+        android:textColor="#FF0000 "
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:background="#4D000000" />
+
+
+</LinearLayout>
+

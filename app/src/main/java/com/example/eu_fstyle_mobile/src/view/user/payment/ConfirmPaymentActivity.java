@@ -64,6 +64,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         String paymentMethod = intent.getStringExtra("PAYMENT_METHOD");
         String totalPayment = intent.getStringExtra("TOTAL");
         String paymentAddress = intent.getStringExtra("PAYMENT_ADDRESS");
+        String shippingMethod = intent.getStringExtra("SHIPPING_METHOD");
         user = UserPrefManager.getInstance(this).getUser();
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -116,7 +117,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                     showLoading100Dialog();
                     new Handler().postDelayed(() -> {
                         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-                        RequestCreateOrder requestCreateOrder = new RequestCreateOrder(paymentAddress, cart.getListProduct(), user.get_id(), user.getPhone(), "COD", totalPayment, "pending");
+                        RequestCreateOrder requestCreateOrder = new RequestCreateOrder(paymentAddress, cart.getListProduct(), user.get_id(), user.getPhone(), "COD", shippingMethod, totalPayment, "pending");
                         Call<Orders> call = apiService.createOrder(user.get_id(), requestCreateOrder);
                         call.enqueue(new Callback<Orders>() {
                             @Override
@@ -162,7 +163,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                                             showLoading100Dialog();
                                             new Handler().postDelayed(() -> {
                                                 ApiService apiService = ApiClient.getClient().create(ApiService.class);
-                                                RequestCreateOrder requestCreateOrder = new RequestCreateOrder(paymentAddress, cart.getListProduct(), user.get_id(), user.getPhone(), "Sandbox", totalPayment, "pending");
+                                                RequestCreateOrder requestCreateOrder = new RequestCreateOrder(paymentAddress, cart.getListProduct(), user.get_id(), user.getPhone(), "Sandbox", shippingMethod, totalPayment, "pending");
                                                 Call<Orders> call = apiService.createOrder(user.get_id(), requestCreateOrder);
                                                 call.enqueue(new Callback<Orders>() {
                                                     @Override
