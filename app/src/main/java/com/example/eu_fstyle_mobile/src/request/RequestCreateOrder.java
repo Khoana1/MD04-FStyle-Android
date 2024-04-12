@@ -10,18 +10,21 @@ public class RequestCreateOrder {
     private String idUser;
     private String phone;
     private String paymentMethods;
+    private String shippingMethod;
     private String totalPrice;
     private String status;
 
-    public RequestCreateOrder(String address, List<ProductCart> listProduct, String idUser, String phone, String paymentMethods, String totalPrice, String status) {
+    public RequestCreateOrder(String address, List<ProductCart> listProduct, String idUser, String phone, String paymentMethods, String shippingMethod, String totalPrice, String status) {
         this.address = address;
         this.listProduct = listProduct;
         this.idUser = idUser;
         this.phone = phone;
         this.paymentMethods = paymentMethods;
+        this.shippingMethod = shippingMethod;
         this.totalPrice = totalPrice;
         this.status = status;
     }
+
     public String getAddress() {
         return address;
     }
@@ -60,6 +63,14 @@ public class RequestCreateOrder {
 
     public void setPaymentMethods(String paymentMethods) {
         this.paymentMethods = paymentMethods;
+    }
+
+    public String getShippingMethod() {
+        return shippingMethod;
+    }
+
+    public void setShippingMethod(String shippingMethod) {
+        this.shippingMethod = shippingMethod;
     }
 
     public String getTotalPrice() {

@@ -2,29 +2,30 @@ package com.example.eu_fstyle_mobile.src.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
-
-public class  ProductCart implements Serializable {
+public class ProductOrder {
     @SerializedName("idProduct")
     private String idProduct;
     @SerializedName("name")
     private String name;
-    @SerializedName("soLuong")
-    private Number soLuong;
+    @SerializedName("quantity")
+    private Number quantity;
     @SerializedName("price")
     private Number price;
     @SerializedName("size")
     private String size;
     @SerializedName("imageDefault")
     private String imageDefault;
+    @SerializedName("_id")
+    private String _id;
 
-    public ProductCart(String idProduct, String name, Number soLuong, Number price, String size, String imageDefault) {
+    public ProductOrder(String idProduct, String name, Number quantity, Number price, String size, String imageDefault, String _id) {
         this.idProduct = idProduct;
         this.name = name;
-        this.soLuong = soLuong;
+        this.quantity = quantity;
         this.price = price;
         this.size = size;
         this.imageDefault = imageDefault;
+        this._id = _id;
     }
 
     public String getIdProduct() {
@@ -43,19 +44,12 @@ public class  ProductCart implements Serializable {
         this.name = name;
     }
 
-    public Number getSoLuong() {
-        return soLuong;
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
-    public void setSoLuong(Number soLuong) {
-        this.soLuong = soLuong;
-    }
-
-    public Number getPrice() {
-        return price;
-    }
-
-    public void setPrice(Number price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
@@ -74,4 +68,21 @@ public class  ProductCart implements Serializable {
     public void setImageDefault(String imageDefault) {
         this.imageDefault = imageDefault;
     }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+    public Number getQuantity() {
+        return quantity;
+    }
+
+    public Number getPrice() {
+        return price;
+    }
 }
+

@@ -4,18 +4,18 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class ListOrder {
+public class ListOrderID  {
     @SerializedName("status")
     private String status;
     @SerializedName("message")
     private String message;
-    @SerializedName("orders")
-    private List<Orders> orders;
+    @SerializedName("order")
+    private Orders order;
 
-    public ListOrder(String status, String message, List<Orders> orders) {
+    public ListOrderID(String status, String message, Orders order) {
         this.status = status;
         this.message = message;
-        this.orders = orders;
+        this.order = order;
     }
 
     public String getStatus() {
@@ -34,11 +34,11 @@ public class ListOrder {
         this.message = message;
     }
 
-    public List<Orders> getOrders() {
-        return orders;
+    public Orders getOrder() {
+        return order;
     }
 
-    public void setOrders(List<Orders> orders) {
-        this.orders = orders;
+    public void setOrder(Orders order) {
+        this.order = order;
     }
 }

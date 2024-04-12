@@ -44,7 +44,6 @@ import com.example.eu_fstyle_mobile.src.request.RequestUpdateUser;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
 import com.example.eu_fstyle_mobile.src.view.user.ContactFragment;
-import com.example.eu_fstyle_mobile.src.view.user.MyOrderFragment;
 import com.example.eu_fstyle_mobile.src.view.user.address.MyAddressFragment;
 import com.example.eu_fstyle_mobile.src.view.user.login.LoginFragment;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
@@ -193,7 +192,7 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
         binding.llYourOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openScreen(new MyOrderFragment(), true);
+                openScreen(new OrderStatusFragment(), true);
             }
         });
         binding.llFavourite.setOnClickListener(new View.OnClickListener() {

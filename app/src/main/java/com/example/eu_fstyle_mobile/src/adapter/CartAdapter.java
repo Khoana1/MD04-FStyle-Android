@@ -52,9 +52,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         }else {
             holder.binding.imageCart.setImageResource(R.drawable.error_shoe);
         }
+        String productName = productCart.getName();
+        if (productName.length() > 7) {
+            productName = productName.substring(0, 13) + "...";
+        } else {
+            productName = productCart.getName();
+        }
         holder.binding.nameCart.setMaxLines(1);
-        holder.binding.nameCart.setEllipsize(TextUtils.TruncateAt.END);
-        holder.binding.nameCart.setText(productCart.getName());
+        holder.binding.nameCart.setText(productName);
         holder.binding.sizeCart.setText("Size: "+productCart.getSize());
 
         int totalPrice = productCart.getPrice().intValue() * productCart.getSoLuong().intValue();
@@ -73,6 +78,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         holder.binding.btnDelCart.setOnClickListener(v -> {
             onCartClickListener.onDeleteCartClick(position);
         });
+
+        holder.itemView.setOnClickListener(v -> onCartClickListener.onItemCartClick(productCart));
 
 
     }
@@ -100,6 +107,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         void onDeleteCartClick(int position);
         void onReduceCartClick(int position);
         void onIncreaseCartClick(int position);
+        void onItemCartClick(ProductCart productCart);
     }
 
 }

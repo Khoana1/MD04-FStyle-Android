@@ -2,33 +2,37 @@ package com.example.eu_fstyle_mobile.src.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Orders {
+import java.io.Serializable;
+import java.util.List;
+
+public class Orders implements Serializable {
+    @SerializedName("_id")
+    private String _id;
     @SerializedName("address")
     private String address;
     @SerializedName("listProduct")
-    private ProductCart listProduct;
+    private List<ProductOrder> listProduct;
     @SerializedName("idUser")
     private String idUser;
     @SerializedName("quantity")
-    private Number quantity;
+    private int quantity;
     @SerializedName("totalPrice")
-    private Number totalPrice;
+    private String totalPrice;
     @SerializedName("phone")
     private String phone;
     @SerializedName("paymentMethods")
     private String paymentMethods;
-    @SerializedName("timeOrder")
-    private String timeOrder;
-    @SerializedName("timeDelivery")
-    private String timeDelivery;
-    @SerializedName("timeCancel")
-    private String timeCancel;
-    @SerializedName("thoiGianDangGiao")
-    private String thoiGianDangGiao;
+    @SerializedName("shippingMethod")
+    private String shippingMethod;
     @SerializedName("status")
     private String status;
+    @SerializedName("timeOrder")
+    private String timeOrder;
+    @SerializedName("__v")
+    private int __v;
 
-    public Orders(String address, ProductCart listProduct, String idUser, Number quantity, Number totalPrice, String phone, String paymentMethods, String timeOrder, String timeDelivery, String timeCancel, String thoiGianDangGiao, String status) {
+    public Orders(String _id, String address, List<ProductOrder> listProduct, String idUser, int quantity, String totalPrice, String phone, String paymentMethods, String shippingMethod, String status, String timeOrder, int __v) {
+        this._id = _id;
         this.address = address;
         this.listProduct = listProduct;
         this.idUser = idUser;
@@ -36,11 +40,18 @@ public class Orders {
         this.totalPrice = totalPrice;
         this.phone = phone;
         this.paymentMethods = paymentMethods;
-        this.timeOrder = timeOrder;
-        this.timeDelivery = timeDelivery;
-        this.timeCancel = timeCancel;
-        this.thoiGianDangGiao = thoiGianDangGiao;
+        this.shippingMethod = shippingMethod;
         this.status = status;
+        this.timeOrder = timeOrder;
+        this.__v = __v;
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public String getAddress() {
@@ -51,12 +62,11 @@ public class Orders {
         this.address = address;
     }
 
-
-    public ProductCart getListProduct() {
+    public List<ProductOrder> getListProduct() {
         return listProduct;
     }
 
-    public void setListProduct(ProductCart listProduct) {
+    public void setListProduct(List<ProductOrder> listProduct) {
         this.listProduct = listProduct;
     }
 
@@ -68,19 +78,19 @@ public class Orders {
         this.idUser = idUser;
     }
 
-    public Number getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Number quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    public Number getTotalPrice() {
+    public String getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Number totalPrice) {
+    public void setTotalPrice(String totalPrice) {
         this.totalPrice = totalPrice;
     }
 
@@ -100,36 +110,12 @@ public class Orders {
         this.paymentMethods = paymentMethods;
     }
 
-    public String getTimeOrder() {
-        return timeOrder;
+    public String getShippingMethod() {
+        return shippingMethod;
     }
 
-    public void setTimeOrder(String timeOrder) {
-        this.timeOrder = timeOrder;
-    }
-
-    public String getTimeDelivery() {
-        return timeDelivery;
-    }
-
-    public void setTimeDelivery(String timeDelivery) {
-        this.timeDelivery = timeDelivery;
-    }
-
-    public String getTimeCancel() {
-        return timeCancel;
-    }
-
-    public void setTimeCancel(String timeCancel) {
-        this.timeCancel = timeCancel;
-    }
-
-    public String getThoiGianDangGiao() {
-        return thoiGianDangGiao;
-    }
-
-    public void setThoiGianDangGiao(String thoiGianDangGiao) {
-        this.thoiGianDangGiao = thoiGianDangGiao;
+    public void setShippingMethod(String shippingMethod) {
+        this.shippingMethod = shippingMethod;
     }
 
     public String getStatus() {
@@ -138,5 +124,21 @@ public class Orders {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getTimeOrder() {
+        return timeOrder;
+    }
+
+    public void setTimeOrder(String timeOrder) {
+        this.timeOrder = timeOrder;
+    }
+
+    public int get__v() {
+        return __v;
+    }
+
+    public void set__v(int __v) {
+        this.__v = __v;
     }
 }
