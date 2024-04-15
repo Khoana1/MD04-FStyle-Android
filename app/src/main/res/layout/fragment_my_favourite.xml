@@ -1,53 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/colorWhite"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipeRefreshLayout"
     tools:context=".src.view.user.profile.MyFavouriteFragment">
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorWhite"
+        >
 
-        <ImageView
-            android:id="@+id/icBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:src="@drawable/ic_back" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/icBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/inter_semi_bold"
+                android:text="@string/tv_favourite"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:text="Đảm bảo 100% chính hãng"
+            android:textColor="@color/colorWhite"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:padding="5dp"
             android:fontFamily="@font/inter_semi_bold"
-            android:text="@string/tv_favourite"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-    </RelativeLayout>
+            android:background="@color/colorButtonBrown" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Đảm bảo 100% chính hãng"
-        android:textColor="@color/colorWhite"
-        android:textSize="15sp"
-        android:gravity="center"
-        android:padding="5dp"
-        android:fontFamily="@font/inter_semi_bold"
-        android:background="@color/colorButtonBrown" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcvFavourite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:spanCount="2"
+            tools:listitem="@layout/item_favourite"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcvFavourite"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:spanCount="2"
-        tools:listitem="@layout/item_favourite"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        />
+    </LinearLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</LinearLayout>

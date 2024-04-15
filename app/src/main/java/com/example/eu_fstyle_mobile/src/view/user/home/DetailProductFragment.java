@@ -1,6 +1,7 @@
 package com.example.eu_fstyle_mobile.src.view.user.home;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -115,17 +116,17 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
             @Override
             public void onClick(View v) {
                 ApiService apiService = ApiClient.getClient().create(ApiService.class);
-                RequestCreateFavourite requestCreateFavourite = new RequestCreateFavourite(product.getName(), product.getQuantity(), product.getPrice().toString(), product.getImage64()[0]);
+                RequestCreateFavourite requestCreateFavourite = new RequestCreateFavourite(product.get_id(),product.getName(), product.getQuantity(), product.getPrice().toString(), product.getImage64()[0]);
                 Call<Product> call = apiService.createFavorite(user.get_id(), requestCreateFavourite);
                 call.enqueue(new Callback<Product>() {
                     @Override
                     public void onResponse(Call<Product> call, Response<Product> response) {
                         if (response.isSuccessful()) {
                             binding.btnFavourite.setImageResource(R.drawable.icon_heart_red);
-                            Toast.makeText(getActivity(), "Thêm vào yêu thích thành công", Toast.LENGTH_SHORT).show();
+                            showSuccessDialog("Thêm vào yêu thích thành công");
                         } else {
-                            binding.btnFavourite.setImageResource(R.drawable.icon_heart);
-                            Toast.makeText(getActivity(), "Thêm vào yêu thích thất bại", Toast.LENGTH_SHORT).show();
+                            binding.btnFavourite.setImageResource(R.drawable.ic_border_heart);
+                            showAlertDialog("Thêm vào yêu thích thất bại");
                         }
                     }
 
@@ -192,6 +193,7 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
                 openScreenHome(new MyFavouriteFragment(), true);
             }
         });
+
     }
 
 
@@ -232,6 +234,15 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
 
             @Override
             public void onPageScrollStateChanged(int state) {
+            }
+        });
+        binding.cardView7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, String.format("Sản phẩm %s của ứng dụng FStyle", product.getName()));
+                startActivity(Intent.createChooser(shareIntent, "Share using"));
             }
         });
     }
@@ -457,15 +468,15 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
     public void onClickFavourite(Product product) {
         User user = UserPrefManager.getInstance(getActivity()).getUser();
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        RequestCreateFavourite requestCreateFavourite = new RequestCreateFavourite(product.getName(), product.getQuantity(), product.getPrice().toString(), product.getImage64()[0]);
+        RequestCreateFavourite requestCreateFavourite = new RequestCreateFavourite(product.get_id(),product.getName(), product.getQuantity(), product.getPrice().toString(), product.getImage64()[0]);
         Call<Product> call = apiService.createFavorite(user.get_id(), requestCreateFavourite);
         call.enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(getActivity(), "Thêm vào yêu thích thành công", Toast.LENGTH_SHORT).show();
+                    showSuccessDialog("Thêm vào yêu thích thành công");
                 } else {
-                    Toast.makeText(getActivity(), "Thêm vào yêu thích thất bại", Toast.LENGTH_SHORT).show();
+                    showAlertDialog("Thêm vào yêu thích thất bại");
                 }
             }
 

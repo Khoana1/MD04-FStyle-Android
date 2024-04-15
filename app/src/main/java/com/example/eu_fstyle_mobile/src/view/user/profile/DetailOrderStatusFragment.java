@@ -124,7 +124,9 @@ public class DetailOrderStatusFragment extends BaseFragment<FragmentDetailOrderS
                 String formattedDate = outputFormat.format(date);
 
                 binding.tvOrderTime.setText(formattedDate);
-                binding.tvOrderTotalPrice.setText(order.getTotalPrice() + " VNĐ");
+                DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+                double totalPrice = Double.parseDouble(order.getTotalPrice());
+                binding.tvOrderTotalPrice.setText(decimalFormat.format(totalPrice) + " VNĐ");
                 binding.tvOrderConsigneeName.setText(order.getIdUser());
                 binding.tvOrderPhone.setText(order.getPhone());
                 binding.tvOrderAddress.setText(order.getAddress());
@@ -145,8 +147,7 @@ public class DetailOrderStatusFragment extends BaseFragment<FragmentDetailOrderS
                     binding.tvOrderShipPrice.setText("5.000 VNĐ");
                 }
                 binding.rcvOrderProduct.setAdapter(new OrderAdminProductAdapter(order.getListProduct()));
-                DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-                binding.tvDetailOrderTotalPrice.setText(decimalFormat.format(order.getTotalPrice()) + " VNĐ");
+                binding.tvDetailOrderTotalPrice.setText(decimalFormat.format(totalPrice) + " VNĐ");
                 if (order.getStatus().equals("deactive") || order.getStatus().equals("trading") || order.getStatus().equals("delivered")) {
                     setDisableCancelOrder();
                 } else {

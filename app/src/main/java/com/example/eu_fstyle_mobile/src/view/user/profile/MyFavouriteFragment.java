@@ -15,13 +15,18 @@ import com.example.eu_fstyle_mobile.databinding.FragmentMyFavouriteBinding;
 import com.example.eu_fstyle_mobile.src.adapter.MyFavouriteAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.Favourite;
+import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.ProductFavourite;
 import com.example.eu_fstyle_mobile.src.model.User;
+import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
+import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 
 import java.util.List;
 
-public class MyFavouriteFragment extends BaseFragment<FragmentMyFavouriteBinding> {
+import retrofit2.Call;
+
+public class MyFavouriteFragment extends BaseFragment<FragmentMyFavouriteBinding> implements MyFavouriteAdapter.onItemFavouriteClickListener {
     private MyFavouriteAdapter myFavouriteAdapter;
 
     private MyFavouriteViewModel myFavouriteViewModel;
@@ -49,11 +54,11 @@ public class MyFavouriteFragment extends BaseFragment<FragmentMyFavouriteBinding
             public void onChanged(Favourite favourite) {
                 if (favourite != null) {
                     List<ProductFavourite> productList = favourite.getListProduct();
-                    myFavouriteAdapter = new MyFavouriteAdapter(productList);
+                    myFavouriteAdapter = new MyFavouriteAdapter(productList, MyFavouriteFragment.this);
                     binding.rcvFavourite.setAdapter(myFavouriteAdapter);
                 }
             }
-    });
+        });
         myFavouriteViewModel.getErrorLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
@@ -69,10 +74,48 @@ public class MyFavouriteFragment extends BaseFragment<FragmentMyFavouriteBinding
                 getActivity().onBackPressed();
             }
         });
+        binding.swipeRefreshLayout.setOnRefreshListener(new androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                User user = UserPrefManager.getInstance(getActivity()).getUser();
+                myFavouriteViewModel.getFavourite(user.get_id());
+                binding.swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override
     protected FragmentMyFavouriteBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
         return FragmentMyFavouriteBinding.inflate(inflater, container, false);
+    }
+
+    @Override
+    public void onItemFavouriteClick(String productId) {
+        showDialog("Xóa sản phẩm khỏi danh sách", "Bạn có chắc chắn muốn xóa sản phẩm khỏi danh sách yêu thích không?", new Runnable() {
+            @Override
+            public void run() {
+                ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                User user = UserPrefManager.getInstance(getActivity()).getUser();
+                Call<Product> call = apiService.deleteFavorite(user.get_id(), productId);
+                call.enqueue(new retrofit2.Callback<Product>() {
+                    @Override
+                    public void onResponse(Call<Product> call, retrofit2.Response<Product> response) {
+                        if (response.isSuccessful()) {
+                            myFavouriteViewModel.getFavourite(user.get_id());
+                            showSuccessDialog("Xóa sản phẩm khỏi danh sách yêu thích thành công");
+                        } else {
+                            myFavouriteViewModel.getFavourite(user.get_id());
+                            showAlertDialog("Xóa sản phẩm khỏi danh sách yêu thích thất bại");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Product> call, Throwable t) {
+                        Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
     }
 }

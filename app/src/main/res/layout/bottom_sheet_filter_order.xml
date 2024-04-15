@@ -4,7 +4,11 @@
     android:id="@+id/ll_choose_payment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
 
     <TextView
         android:layout_width="match_parent"
@@ -12,8 +16,31 @@
         android:fontFamily="@font/inter_medium"
         android:gravity="center"
         android:padding="10dp"
-        android:text="Thay đổi trạng thái đơn hàng"
+        android:text="Lọc đơn hàng theo trạng thái"
         android:textColor="@color/colorBlack"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:background="#4D000000" />
+
+    <TextView
+        android:id="@+id/tv_order_all"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_tv_with_border"
+        android:fontFamily="@font/inter_medium"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="5dp"
+        android:text="Tất cả"
+        android:textColor="@color/colorButtonBrown"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -133,6 +160,4 @@
         android:layout_marginBottom="10dp"
         android:background="#4D000000" />
 
-
 </LinearLayout>
-
