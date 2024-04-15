@@ -77,6 +77,9 @@ public interface ApiService {
     @POST(ApiEndpoint.createFavorite)
     Call<Product> createFavorite(@Path("id") String id, @Body RequestCreateFavourite requestCreateFavourite);
 
+    @DELETE(ApiEndpoint.deleteFavorite)
+    Call<Product> deleteFavorite(@Path("id") String id, @Path("id_product") String id_product);
+
     @GET(ApiEndpoint.getAllCategories)
     Call<ListCategories> getAllCategories();
 
@@ -111,4 +114,5 @@ public interface ApiService {
     Call<Orders> updateOrderStatus(@Path("id") String id, @Body RequestUpdateStatus status);
     @GET(ApiEndpoint.getOrderByUserID)
     Call<ListOrder> getOrderByUserID(@Path("id") String id);
+
 }

@@ -23,8 +23,11 @@ public class MyFavouriteAdapter extends RecyclerView.Adapter<MyFavouriteAdapter.
 
     private List<ProductFavourite> productList;
 
-    public MyFavouriteAdapter(List<ProductFavourite> productList) {
+    private onItemFavouriteClickListener onItemFavouriteClickListener;
+
+    public MyFavouriteAdapter(List<ProductFavourite> productList, onItemFavouriteClickListener onItemFavouriteClickListener) {
         this.productList = productList;
+        this.onItemFavouriteClickListener = onItemFavouriteClickListener;
     }
 
     @NonNull
@@ -53,6 +56,7 @@ public class MyFavouriteAdapter extends RecyclerView.Adapter<MyFavouriteAdapter.
         }else {
             holder.binding.itemImageProductHome.setImageResource(R.drawable.error_shoe);
         }
+        holder.itemView.setOnClickListener(v -> onItemFavouriteClickListener.onItemFavouriteClick(product.getIdProduct()));
     }
 
     @Override
@@ -67,6 +71,10 @@ public class MyFavouriteAdapter extends RecyclerView.Adapter<MyFavouriteAdapter.
             super(binding.getRoot());
             this.binding = binding;
         }
+    }
+
+    public interface onItemFavouriteClickListener {
+        void onItemFavouriteClick(String productId);
     }
 
 }

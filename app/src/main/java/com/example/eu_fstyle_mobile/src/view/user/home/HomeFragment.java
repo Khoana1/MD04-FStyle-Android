@@ -101,7 +101,6 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         categoriesViewModel.getAllCategories();
         swipeSearch();
         Banner();
-        openFilter();
         getAvatar();
         getCategory();
         getProduct();
@@ -255,39 +254,6 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
             }
         });
 
-    }
-
-    private void openFilter() {
-        listSize = new ArrayList<>();
-        listByCategory = new ArrayList<>();
-        binding.filterHome.setOnClickListener(v -> {
-            BottomDialogFilterBinding binding1 = BottomDialogFilterBinding.inflate(getLayoutInflater());
-            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity());
-            View bottomsetView = binding1.getRoot();
-            bottomSheetDialog.setContentView(bottomsetView);
-            ViewGroup.LayoutParams params = bottomsetView.getLayoutParams();
-            params.height = (int) (getResources().getDisplayMetrics().heightPixels * 0.6);
-            bottomsetView.setLayoutParams(params);
-            //
-            getListFiller(listCategory, binding1, bottomSheetDialog);
-            //
-            binding1.btnThietlaplaiFilter.setOnClickListener(v1 -> {
-                reset(binding1);
-            });
-            binding1.btnApdungFilter.setOnClickListener(v1 -> {
-                if (listSize.size() != 0) {
-                    ResultSearchFragment resultSearchFragment = ResultSearchFragment.newInstance(listSize, textButton);
-                    openScreenHome(resultSearchFragment, true);
-                    bottomSheetDialog.dismiss();
-                } else {
-                    showAlertDialog("chưa chọn size");
-                }
-            });
-            if (!bottomSheetDialog.isShowing()) {
-                reset(binding1);
-            }
-            bottomSheetDialog.show();
-        });
     }
 
     private void reset(BottomDialogFilterBinding binding1) {
@@ -462,6 +428,8 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     }
 
     private void openSearch() {
+        listSize = new ArrayList<>();
+        listByCategory = new ArrayList<>();
         dialogSearch = new Dialog(getActivity());
         dialogSearch.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogSearch.setContentView(R.layout.dialog_search);
@@ -479,8 +447,39 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
 
         ImageButton imageButton = dialogSearch.findViewById(R.id.back_home);
+        ImageButton btnFilter = dialogSearch.findViewById(R.id.btn_filter);
         imageButton.setOnClickListener(v1 -> {
             dialogSearch.dismiss();
+        });
+        btnFilter.setOnClickListener(v1 -> {
+            BottomDialogFilterBinding binding1 = BottomDialogFilterBinding.inflate(getLayoutInflater());
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity());
+            View bottomsetView = binding1.getRoot();
+            bottomSheetDialog.setContentView(bottomsetView);
+            getListFiller(listCategory, binding1, bottomSheetDialog);
+            binding1.btnThietlaplaiFilter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    reset(binding1);
+                }
+            });
+            binding1.btnApdungFilter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listSize.size() != 0) {
+                        ResultSearchFragment resultSearchFragment = ResultSearchFragment.newInstance(listSize, textButton);
+                        openScreenHome(resultSearchFragment, true);
+                        bottomSheetDialog.dismiss();
+                        dialogSearch.dismiss();
+                    } else {
+                        showAlertDialog("chưa chọn size");
+                    }
+                }
+            });
+            if (!bottomSheetDialog.isShowing()) {
+                reset(binding1);
+            }
+            bottomSheetDialog.show();
         });
         RecyclerView recyclerView = dialogSearch.findViewById(R.id.recycle_search_home);
         LinearLayout layout = dialogSearch.findViewById(R.id.view_not_found);
@@ -558,7 +557,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     }
 
     private void getAvatar() {
-        String avatarUrl = "http://10.64.5.110:3000/api/user/avatar/image/%s"; // thay IPv4 của máy tính chạy server vào đây để test
+        String avatarUrl = "http://192.168.55.104:3000/api/user/avatar/image/%s"; // thay IPv4 của máy tính chạy server vào đây để test
         User user = UserPrefManager.getInstance(getActivity()).getUser();
         String userId = user.get_id();
         String apiUrl = String.format(avatarUrl, userId);
@@ -619,15 +618,15 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
     public void onClickFavourite(Product product) {
         User user = UserPrefManager.getInstance(getActivity()).getUser();
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        RequestCreateFavourite requestCreateFavourite = new RequestCreateFavourite(product.getName(), product.getQuantity(), product.getPrice().toString(), product.getImage64()[0]);
+        RequestCreateFavourite requestCreateFavourite = new RequestCreateFavourite(product.get_id(), product.getName(), product.getQuantity(), product.getPrice().toString(), product.getImage64()[0]);
         Call<Product> call = apiService.createFavorite(user.get_id(), requestCreateFavourite);
         call.enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(getActivity(), "Thêm vào yêu thích thành công", Toast.LENGTH_SHORT).show();
+                    showSuccessDialog("Thêm vào yêu thích thành công");
                 } else {
-                    Toast.makeText(getActivity(), "Thêm vào yêu thích thất bại", Toast.LENGTH_SHORT).show();
+                    showAlertDialog("Thêm vào yêu thích thất bại");
                 }
             }
 

@@ -79,15 +79,15 @@ public class ResultSearchFragment extends BaseFragment<FragmentResultSearchBindi
     public void onClickFavourite(Product product) {
         User user = UserPrefManager.getInstance(getActivity()).getUser();
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        RequestCreateFavourite requestCreateFavourite = new RequestCreateFavourite(product.getName(), product.getQuantity(), product.getPrice().toString(), product.getImage64()[0]);
+        RequestCreateFavourite requestCreateFavourite = new RequestCreateFavourite(product.get_id(),product.getName(), product.getQuantity(), product.getPrice().toString(), product.getImage64()[0]);
         Call<Product> call = apiService.createFavorite(user.get_id(), requestCreateFavourite);
         call.enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(getActivity(), "Thêm vào yêu thích thành công", Toast.LENGTH_SHORT).show();
+                    showSuccessDialog("Thêm vào yêu thích thành công");
                 } else {
-                    Toast.makeText(getActivity(), "Thêm vào yêu thích thất bại", Toast.LENGTH_SHORT).show();
+                    showAlertDialog("Thêm vào yêu thích thất bại");
                 }
             }
 

@@ -130,10 +130,8 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                                     startActivity(intent1);
                                     finish();
                                 } else {
+                                    Toast.makeText(ConfirmPaymentActivity.this, "Thanh toán thất bại", Toast.LENGTH_SHORT).show();
                                     hideLoading100Dialog();
-                                    Intent intent = new Intent(ConfirmPaymentActivity.this, PaymentFailActivity.class);
-                                    intent.putExtra("MESSAGE", response.message());
-                                    startActivity(intent);
                                 }
 
                             }
@@ -176,10 +174,8 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                                                             startActivity(intent1);
                                                             finish();
                                                         } else {
+                                                            Toast.makeText(ConfirmPaymentActivity.this, "Thanh toán thất bại", Toast.LENGTH_SHORT).show();
                                                             hideLoading100Dialog();
-                                                            Intent intent = new Intent(ConfirmPaymentActivity.this, PaymentFailActivity.class);
-                                                            intent.putExtra("MESSAGE", response.message());
-                                                            startActivity(intent);
                                                         }
                                                     }
 

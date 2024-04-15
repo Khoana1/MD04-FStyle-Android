@@ -13,13 +13,16 @@ public class ProductFavourite {
     private String defaultImage;
     @SerializedName("_id")
     private String _id;
+    @SerializedName("idProduct")
+    private String idProduct;
 
-    public ProductFavourite(String name, String quantity, Number price, String defaultImage, String _id) {
+    public ProductFavourite(String name, String quantity, Number price, String defaultImage, String _id, String idProduct) {
         this.name = name;
         this.quantity = quantity;
         this.price = price;
         this.defaultImage = defaultImage;
         this._id = _id;
+        this.idProduct = idProduct;
     }
 
     public String getName() {
@@ -60,6 +63,10 @@ public class ProductFavourite {
 
     public void set_id(String _id) {
         this._id = _id;
+    }
+
+    public String getIdProduct() {
+        return idProduct;
     }
 
 }
