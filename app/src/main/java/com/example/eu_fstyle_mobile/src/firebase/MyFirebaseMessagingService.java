@@ -57,7 +57,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent)
-                        .setStyle(new NotificationCompat.BigTextStyle().bigText(messageData.get("key2")));
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(messageData.get("key2")))
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.baseline_shopping_cart_24))
+                        .addAction(R.drawable.ic_shoe, "Mở", pendingIntent);
+
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
