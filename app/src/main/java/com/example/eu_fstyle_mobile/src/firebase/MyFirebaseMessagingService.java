@@ -58,7 +58,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent)
                         .setStyle(new NotificationCompat.BigTextStyle().bigText(messageData.get("key2")))
-                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.baseline_shopping_cart_24))
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon_noti))
                         .addAction(R.drawable.ic_shoe, "Mở", pendingIntent);
 
 
