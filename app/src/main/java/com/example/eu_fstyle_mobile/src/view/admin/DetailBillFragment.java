@@ -128,6 +128,8 @@ public class DetailBillFragment extends BaseFragment<FragmentDetailBillBinding> 
                 String formattedDate = outputFormat.format(date);
 
                 binding.tvOrderTime.setText(formattedDate);
+                DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+                double totalPrice = Double.parseDouble(order.getTotalPrice());
                 binding.tvOrderTotalPrice.setText(order.getTotalPrice() + " VNĐ");
                 binding.tvOrderConsigneeName.setText(order.getIdUser());
                 binding.tvOrderPhone.setText(order.getPhone());
@@ -149,8 +151,7 @@ public class DetailBillFragment extends BaseFragment<FragmentDetailBillBinding> 
                     binding.tvOrderShipPrice.setText("5.000 VNĐ");
                 }
                 binding.rcvOrderProduct.setAdapter(new OrderAdminProductAdapter(order.getListProduct()));
-                DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-                binding.tvDetailOrderTotalPrice.setText(decimalFormat.format(order.getTotalPrice()) + " VNĐ");
+                binding.tvDetailOrderTotalPrice.setText(decimalFormat.format(totalPrice) + " VNĐ");
                 binding.btnChangeOrderStatus.setOnClickListener(v -> {
                     Dialog dialog = new Dialog(getContext());
                     DialogUpdateStatusOrderBinding dialogBinding = DialogUpdateStatusOrderBinding.inflate(LayoutInflater.from(getContext()));
