@@ -24,12 +24,15 @@ import java.util.ArrayList;
 public class CategoryHomeAdapter extends RecyclerView.Adapter<CategoryHomeAdapter.Viewholder> {
     Context context;
     ArrayList<Categories> arrayList;
+    OnclickCategory onclickCategory;
 
     public CategoryHomeAdapter(Context context, ArrayList<Categories> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
     }
-
+    public void setOnclickCategory(OnclickCategory onclickCategory){
+        this.onclickCategory = onclickCategory;
+    }
     @NonNull
     @Override
     public Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -57,6 +60,9 @@ public class CategoryHomeAdapter extends RecyclerView.Adapter<CategoryHomeAdapte
         holder.txtname.setText(category.getName());
         holder.txtname.setMaxLines(2);
         holder.txtname.setEllipsize(TextUtils.TruncateAt.END);
+        holder.itemView.setOnClickListener(v -> {
+            onclickCategory.onclick();
+        });
     }
 
     @Override
@@ -72,5 +78,8 @@ public class CategoryHomeAdapter extends RecyclerView.Adapter<CategoryHomeAdapte
             imageView = itemView.findViewById(R.id.item_category_image_home);
             txtname = itemView.findViewById(R.id.item_category_name_home);
         }
+    }
+    public interface OnclickCategory{
+        void onclick();
     }
 }

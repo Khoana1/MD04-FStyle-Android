@@ -64,7 +64,8 @@ public interface ApiService {
 
     @GET(ApiEndpoint.getAllProducts)
     Call<ListProduct> getAllProducts();
-
+    @GET(ApiEndpoint.getProductsById)
+    Call<ListProduct> getProductsById(@Path("id")String id);
     @POST(ApiEndpoint.createProduct)
     Call<Product> createProduct(@Body RequestCreateProduct requestCreateProduct);
 

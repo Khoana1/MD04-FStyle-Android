@@ -7,11 +7,17 @@ import java.util.ArrayList;
 public class ListProduct {
     @SerializedName("status")
     int status;
+    @SerializedName("message")
+    String message;
     @SerializedName("products")
     ArrayList<Product> arrayList;
 
     public int getStatus() {
         return status;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     public ArrayList<Product> getArrayList() {
