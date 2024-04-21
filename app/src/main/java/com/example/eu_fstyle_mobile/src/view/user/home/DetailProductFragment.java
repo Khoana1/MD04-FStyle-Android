@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.eu_fstyle_mobile.R;
@@ -29,6 +30,7 @@ import com.example.eu_fstyle_mobile.databinding.BottomSheetHinhthucvcBinding;
 import com.example.eu_fstyle_mobile.databinding.DialogGoiysizeBinding;
 import com.example.eu_fstyle_mobile.databinding.FragmentDetailProductBinding;
 import com.example.eu_fstyle_mobile.src.adapter.ProductHomeAdapter;
+import com.example.eu_fstyle_mobile.src.adapter.SizeAdapter;
 import com.example.eu_fstyle_mobile.src.adapter.ViewPager_detail_Adapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.Cart;
@@ -54,19 +56,20 @@ import retrofit2.Response;
 
 public class DetailProductFragment extends BaseFragment<FragmentDetailProductBinding> implements ProductHomeAdapter.onClickItem {
     public static final String Products = "product";
-    FragmentDetailProductBinding binding;
-    ViewPager_detail_Adapter adapter;
-    ProductHomeAdapter productdapter;
-    User user;
-    DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-    boolean isCheckDetail = false;
-    Product product;
-    String size = "";
-    int orderCheck = 0;
-    boolean isSize36, isSize37, isSize38, isSize39 = false;
-    int soluong;
-    ArrayList<Product> listProduct1;
-    HomeAdminViewModel homeAdminViewModel;
+    private FragmentDetailProductBinding binding;
+    private ViewPager_detail_Adapter adapter;
+    private SizeAdapter sizeAdapter;
+    private ProductHomeAdapter productdapter;
+    private User user;
+    private DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+    private boolean isCheckDetail = false;
+    private Product product;
+    private String size = "";
+    private int orderCheck = 0;
+    private boolean isSize36, isSize37, isSize38, isSize39 = false;
+    private int soluong;
+    private ArrayList<Product> listProduct1;
+    private HomeAdminViewModel homeAdminViewModel;
 
     public static DetailProductFragment newInstance(Product product) {
         DetailProductFragment detail = new DetailProductFragment();
@@ -281,65 +284,8 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
         binding1.banggoiysize.setOnClickListener(v -> {
             goiysize();
         });
-        binding1.itemBtn36.setOnClickListener(v -> {
-            isSize36 = !isSize36;
-            toggleButton(binding1.itemBtn36, isSize36);
-            if (isSize36) {
-                isSize38 = false;
-                isSize37 = false;
-                isSize39 = false;
-                toggleButton(binding1.itemBtn37, false);
-                toggleButton(binding1.itemBtn38, false);
-                toggleButton(binding1.itemBtn39, false);
-                size = "36";
-            } else {
-                size = "";
-            }
-        });
-        binding1.itemBtn37.setOnClickListener(v -> {
-            isSize37 = !isSize37;
-            toggleButton(binding1.itemBtn37, isSize37);
-            if (isSize37) {
-                isSize38 = false;
-                isSize36 = false;
-                isSize39 = false;
-                toggleButton(binding1.itemBtn36, false);
-                toggleButton(binding1.itemBtn38, false);
-                size = "37";
-            } else {
-                size = "";
-            }
-        });
-        binding1.itemBtn38.setOnClickListener(v -> {
-            isSize38 = !isSize38;
-            toggleButton(binding1.itemBtn38, isSize38);
-            if (isSize38) {
-                isSize36 = false;
-                isSize37 = false;
-                isSize39 = false;
-                toggleButton(binding1.itemBtn37, false);
-                toggleButton(binding1.itemBtn36, false);
-                toggleButton(binding1.itemBtn39, false);
-                size = "38";
-            } else {
-                size = "";
-            }
-        });
-        binding1.itemBtn39.setOnClickListener(v -> {
-            isSize39 = !isSize39;
-            toggleButton(binding1.itemBtn39, isSize39);
-            if (isSize39) {
-                isSize38 = false;
-                isSize37 = false;
-                isSize36 = false;
-                toggleButton(binding1.itemBtn37, false);
-                toggleButton(binding1.itemBtn38, false);
-                toggleButton(binding1.itemBtn36, false);
-                size = "39";
-            } else {
-                size = "";
-            }
-        });
+        //get size
+        getSize(binding1);
         //
         int sl = Integer.parseInt(binding1.itemBtnGiatri.getText().toString());
         if (sl == 1) {
@@ -411,17 +357,17 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
         });
         bottomSheetDialog.show();
     }
-
-    private void toggleButton(Button button, boolean isSelected) {
-        if (isSelected) {
-            button.setBackgroundResource(R.drawable.bg_corner20_silver);
-            button.setTextColor(Color.WHITE);
-        } else {
-            button.setBackgroundResource(R.drawable.bg_btn_size_color);
-            button.setTextColor(Color.BLACK);
-        }
+    private void getSize(BottomSheetDathangBinding binding1){
+        sizeAdapter = new SizeAdapter(product.getSize());
+        binding1.recycleSizeDetail.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+        binding1.recycleSizeDetail.setAdapter(sizeAdapter);
+        sizeAdapter.setOnClickItem(new SizeAdapter.onClickItem() {
+            @Override
+            public void onClick(String sizeStr) {
+                size = sizeStr.toString();
+            }
+        });
     }
-
     private void goiysize() {
         Dialog dialog = new Dialog(getActivity());
         DialogGoiysizeBinding binding1 = DialogGoiysizeBinding.inflate(getLayoutInflater());
