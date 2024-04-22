@@ -11,6 +11,7 @@ public class ApiEndpoint {
     public static final String deleteAddress = "/api/user/address/del/{id}/{id_address}";
     public static final String getAddress = "/api/user/address/list/{id}";
     public static final String getAllProducts = "/api/products";
+    public static final String getProductsById = "/api/get/productsById/{id}";
     public static final String createProduct = "/api/products";
     public static final String getCart = "/api/cart/{id}";
     public static final String createCart = "/api/add/product/cart/{id}";

@@ -251,6 +251,12 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                 adapter = new CategoryHomeAdapter(getActivity(), listCategory);
                 binding.recycleCategoryHome.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
                 binding.recycleCategoryHome.setAdapter(adapter);
+                adapter.setOnclickCategory(new CategoryHomeAdapter.OnclickCategory() {
+                    @Override
+                    public void onclick() {
+                        openSearch();
+                    }
+                });
             }
         });
 
@@ -275,20 +281,30 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
         fillerAdapter.setOnClickItem(new CategoryFillerAdapter.onClickItem() {
             @Override
             public void onClick(String idCategory) {
-                Log.d("Huy", "onClick: " + idCategory);
-                for (Product product : listProduct) {
-                    if (product.getIdCategory().equals(idCategory)) {
-                        listByCategory.add(product);
-                    } else {
-                        listByCategory.clear();
+                Log.d("Huy", "idCategory: " + idCategory);
+            ApiService apiService = ApiClient.getClient().create(ApiService.class);
+            Call<ListProduct> call = apiService.getProductsById(idCategory);
+            call.enqueue(new Callback<ListProduct>() {
+                @Override
+                public void onResponse(Call<ListProduct> call, Response<ListProduct> response) {
+                    if(response.isSuccessful()&& response.body() != null&& response.body().getArrayList().size()>0) {
+                        Log.d("Huy", "onResponse_mess: " + response.body().getMessage());
+                        if (response.body().getMessage().equals("thành công")) {
+                            listByCategory = response.body().getArrayList();
+                            if (listByCategory.size() > 0) {
+                                buttonPrice(binding1);
+                            }
+                        }
+                    }else {
+                        showAlertDialog("Không có sản phẩm nào thuộc thể loại này");
+                        reset(binding1);
                     }
                 }
-                if (listByCategory.size() > 0) {
-                    buttonPrice(binding1);
-                } else {
-                    showAlertDialog("Không có sản phẩm nào thuộc thể loại này");
-
+                @Override
+                public void onFailure(Call<ListProduct> call, Throwable t) {
+                    Log.d("Huy", "listByCategory_fail: "+t.getMessage());
                 }
+            });
             }
         });
     }
@@ -472,7 +488,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                         bottomSheetDialog.dismiss();
                         dialogSearch.dismiss();
                     } else {
-                        showAlertDialog("chưa chọn size");
+                        showAlertDialog("chưa đủ điều kiện áp dụng");
                     }
                 }
             });

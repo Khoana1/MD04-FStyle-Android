@@ -69,46 +69,12 @@
             android:textSize="15dp"
             android:layout_margin="10dp"
             android:id="@+id/item_txtsize"/>
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="60dp"
-            android:layout_height="40dp"
-            android:text="36"
-            android:background="@drawable/bg_btn_size_color"
-            android:gravity="center"
-            android:layout_below="@+id/item_txtsize"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/item_btn36"
-            />
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="60dp"
-            android:layout_height="40dp"
-            android:text="37"
-            android:background="@drawable/bg_btn_size_color"
-            android:gravity="center"
-            android:layout_below="@+id/item_txtsize"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/item_btn37"
-            android:layout_toRightOf="@+id/item_btn36"/>
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="60dp"
-            android:layout_height="40dp"
-            android:text="38"
-            android:background="@drawable/bg_btn_size_color"
-            android:gravity="center"
-            android:layout_below="@+id/item_txtsize"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/item_btn38"
-            android:layout_toRightOf="@+id/item_btn37"/>
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="60dp"
-            android:layout_height="40dp"
-            android:text="39"
-            android:background="@drawable/bg_btn_size_color"
-            android:gravity="center"
-            android:layout_below="@+id/item_txtsize"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/item_btn39"
-            android:layout_toRightOf="@+id/item_btn38"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recycle_size_detail"
+            android:layout_below="@+id/item_txtsize"/>
+
     </RelativeLayout>
 
     <TextView
