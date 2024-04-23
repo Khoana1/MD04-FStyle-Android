@@ -30,6 +30,9 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
         this.arrayList = arrayList;
         this.onClickItem = onClickItem;
     }
+    public void setOnClickItem( onClickItem onClickItem){
+        this.onClickItem = onClickItem;
+    }
     @NonNull
     @Override
     public Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -59,6 +62,11 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
         DecimalFormat dcf = new DecimalFormat("###,###,###");
         holder.txtPrice.setText(dcf.format(product.getPrice())+" VNĐ");
         holder.txtName.setText(product.getName());
+        if (Integer.parseInt(product.getQuantity()) == 0) {
+            holder.imageView_sold_out.setVisibility(View.VISIBLE);
+        } else {
+            holder.imageView_sold_out.setVisibility(View.INVISIBLE);
+        }
         holder.btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,8 +77,10 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
             onClickItem.onClickFavourite(product);
         });
         holder.itemView.setOnClickListener(v -> {
-            if(onClickItem != null){
-                onClickItem.onClick(product);
+            if(Integer.parseInt(product.getQuantity())!= 0){
+                if(onClickItem != null){
+                    onClickItem.onClick(product);
+                }
             }
         });
 
@@ -90,11 +100,12 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
         void onClickCart(Product product);
     }
     public class Viewholder extends RecyclerView.ViewHolder{
-        ImageView imageView;
+        ImageView imageView,imageView_sold_out;
         TextView txtName,txtPrice;
         LinearLayout btn_add, ll_favourite;
         public Viewholder(@NonNull View itemView) {
             super(itemView);
+            imageView_sold_out = itemView.findViewById(R.id.item_image_sold_out_product_home);
             imageView = itemView.findViewById(R.id.item_image_product_home);
             txtName = itemView.findViewById(R.id.item_name_product_home);
             txtPrice = itemView.findViewById(R.id.item_price_product_home);

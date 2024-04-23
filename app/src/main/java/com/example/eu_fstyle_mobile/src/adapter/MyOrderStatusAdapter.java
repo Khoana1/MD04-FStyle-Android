@@ -11,6 +11,7 @@ import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.ItemOrderStatusBinding;
 import com.example.eu_fstyle_mobile.src.model.Orders;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -72,7 +73,8 @@ public class MyOrderStatusAdapter extends RecyclerView.Adapter<MyOrderStatusAdap
 
         holder.binding.tvOrderTime.setText(formattedDate);
         holder.binding.tvOrderCustomerName.setText(orders.getIdUser());
-        holder.binding.tvOrderTotalPrice.setText(orders.getTotalPrice() + " VNĐ");
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+        holder.binding.tvOrderTotalPrice.setText(decimalFormat.format(Integer.parseInt(orders.getTotalPrice())) + " VNĐ");
         holder.itemView.setOnClickListener(v -> {
             onItemOrderClickListener.onOrderClick(ordersList.get(position).get_id());
         });
