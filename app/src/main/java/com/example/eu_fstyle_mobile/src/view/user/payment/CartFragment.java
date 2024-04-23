@@ -28,6 +28,7 @@ import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentCartBinding;
 import com.example.eu_fstyle_mobile.src.adapter.CartAdapter;
 import com.example.eu_fstyle_mobile.src.adapter.MayBeLikeAdapter;
+import com.example.eu_fstyle_mobile.src.adapter.ProductHomeAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.Cart;
 import com.example.eu_fstyle_mobile.src.model.ListCart;
@@ -37,6 +38,7 @@ import com.example.eu_fstyle_mobile.src.model.ProductCart;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
+import com.example.eu_fstyle_mobile.src.view.user.home.DetailProductFragment;
 import com.example.eu_fstyle_mobile.src.view.user.home.HomeFragment;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 import com.google.android.material.snackbar.Snackbar;
@@ -53,7 +55,7 @@ import retrofit2.Response;
 public class CartFragment extends BaseFragment<FragmentCartBinding> implements CartAdapter.OnCartClickListener {
     private CartAdapter cartAdapter;
 
-    private MayBeLikeAdapter mayBeLikeAdapter;
+    private ProductHomeAdapter mayBeLikeAdapter;
     private CartViewModel cartViewModel;
 
     boolean isUndoClicked = false;
@@ -102,9 +104,26 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
             public void onResponse(Call<ListProduct> call, Response<ListProduct> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     ArrayList<Product> listProduct = response.body().getArrayList();
-                    mayBeLikeAdapter = new MayBeLikeAdapter(listProduct);
+                    mayBeLikeAdapter = new ProductHomeAdapter(getActivity(),listProduct,null);
                     binding.rcvMaybeLike.setLayoutManager(new GridLayoutManager(getActivity(), 2));
                     binding.rcvMaybeLike.setAdapter(mayBeLikeAdapter);
+                    mayBeLikeAdapter.setOnClickItem(new ProductHomeAdapter.onClickItem() {
+                        @Override
+                        public void onClick(Product product) {
+                            DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
+                            openScreenHome(detailProductFragment, true);
+                        }
+
+                        @Override
+                        public void onClickFavourite(Product product) {
+
+                        }
+
+                        @Override
+                        public void onClickCart(Product product) {
+
+                        }
+                    });
                     binding.rcvMaybeLike.addOnScrollListener(new RecyclerView.OnScrollListener() {
                         @Override
                         public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {

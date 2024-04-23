@@ -2,8 +2,10 @@ package com.example.eu_fstyle_mobile.src.adapter;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.icu.text.DecimalFormat;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -50,7 +52,9 @@ public class OrderAdminProductAdapter extends RecyclerView.Adapter<OrderAdminPro
         holder.binding.namePayment.setText(orders.getName());
         holder.binding.sizePayment.setText(orders.getSize());
         holder.binding.quantumPayment.setText(orders.getQuantity().toString());
-        holder.binding.pricePayment.setText(orders.getPrice().toString() + " VNĐ");
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+        int price = Integer.parseInt(orders.getPrice().toString());
+        holder.binding.pricePayment.setText(decimalFormat.format(price) + " VNĐ");
     }
 
     @Override

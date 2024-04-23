@@ -45,6 +45,9 @@ public class OrderStatusFragment extends BaseFragment<FragmentOrderStatusBinding
     }
 
     private void initView() {
+        binding.icBack.setOnClickListener(v -> {
+           getActivity().onBackPressed();
+        });
         binding.rltFilterOrder.setVisibility(View.GONE);
         binding.tvCancelFilterOrder.setOnClickListener(v -> {
             binding.rltFilterOrder.setVisibility(View.GONE);

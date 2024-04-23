@@ -9,16 +9,26 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp">
+        android:padding="5dp"
+        >
 
         <ImageView
             android:id="@+id/item_image_product_home"
-            android:layout_width="match_parent"
+            android:layout_width="162dp"
             android:layout_height="162dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/giay1" />
+
+        <ImageView
+            android:id="@+id/item_image_sold_out_product_home"
+            android:layout_width="162dp"
+            android:layout_height="162dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/icon_het_hang" />
 
         <LinearLayout
             android:id="@+id/ll_favourite"
@@ -27,7 +37,7 @@
             android:layout_height="20dp"
             android:background="@drawable/bg_corner10"
             android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="@+id/item_image_product_home"
+            app:layout_constraintBottom_toBottomOf="@+id/item_image_sold_out_product_home"
             app:layout_constraintEnd_toEndOf="parent">
 
             <ImageView
@@ -39,6 +49,7 @@
 
 
         <TextView
+            android:layout_marginTop="10dp"
             android:id="@+id/item_name_product_home"
             android:maxWidth="154dp"
             android:layout_width="wrap_content"
@@ -46,7 +57,7 @@
             tools:text="Giày thể thao nam cao cấp màu đen "
             android:textSize="14dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_image_product_home"
+            app:layout_constraintTop_toBottomOf="@+id/item_image_sold_out_product_home"
             android:paddingLeft="3dp"/>
         <TextView
             android:id="@+id/item_price_product_home"
