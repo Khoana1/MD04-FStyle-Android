@@ -25,7 +25,6 @@ public class PaymentSuccessActivity extends AppCompatActivity {
         binding = ActivityPaymentSuccessBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         intent = getIntent();
-        Cart cart = (Cart) intent.getSerializableExtra(CART);
         String totalPayment = intent.getStringExtra(TOTAL);
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         double totalPaymentDouble = Double.parseDouble(totalPayment);

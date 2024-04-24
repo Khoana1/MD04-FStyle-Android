@@ -44,6 +44,7 @@ import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -357,12 +358,19 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
     }
 
     public void setTotalPriceText(String totalPrice, TextView textView) {
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         int maxLength = 6;
-        if (totalPrice.length() > maxLength) {
-            String truncatedPrice = totalPrice.substring(0, maxLength) + "..." + " VNĐ";
-            textView.setText(truncatedPrice);
-        } else {
-            textView.setText(totalPrice + "VNĐ");
+        try {
+            Number number = decimalFormat.parse(totalPrice);
+            String formattedPrice = decimalFormat.format(number);
+            if (formattedPrice.length() > maxLength) {
+                String truncatedPrice = formattedPrice.substring(0, maxLength) + "..." + " VNĐ";
+                textView.setText(truncatedPrice);
+            } else {
+                textView.setText(formattedPrice + " VNĐ");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 

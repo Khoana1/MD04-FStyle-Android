@@ -105,6 +105,8 @@ public interface ApiService {
     Call<ListCart> reduceCart(@Path("id") String id, @Path("id_product") String id_product);
     @GET(ApiEndpoint.increaseCart)
     Call<ListCart> increaseCart(@Path("id") String id, @Path("id_product") String id_product);
+    @GET(ApiEndpoint.clearCart)
+    Call<ListCart> clearCart(@Path("id") String id, @Path("id_product") String id_product);
     @GET(ApiEndpoint.getAllOrder)
     Call<ListOrder> getAllOrder();
     @GET(ApiEndpoint.getOrderByID)
