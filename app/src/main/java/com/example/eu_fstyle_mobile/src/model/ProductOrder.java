@@ -7,7 +7,7 @@ public class ProductOrder {
     private String idProduct;
     @SerializedName("name")
     private String name;
-    @SerializedName("quantity")
+    @SerializedName("soLuong")
     private Number quantity;
     @SerializedName("price")
     private Number price;
