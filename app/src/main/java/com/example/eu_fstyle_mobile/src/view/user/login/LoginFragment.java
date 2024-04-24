@@ -27,6 +27,9 @@ import com.example.eu_fstyle_mobile.AdminActivity;
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentLoginBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
+import com.example.eu_fstyle_mobile.src.dialog.Loading100Dialog;
+import com.example.eu_fstyle_mobile.src.dialog.LoadingDialog;
+import com.example.eu_fstyle_mobile.src.dialog.LoginLoadingDialog;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.view.user.home.HomeFragment;
 import com.example.eu_fstyle_mobile.src.view.user.register.RegisterFragment;
@@ -39,7 +42,6 @@ import java.util.regex.Pattern;
 
 public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
     private boolean doubleBackToExitPressedOnce = false;
-    private Dialog loginDialog;
     private String email;
     private String password;
     private LoginViewModel loginViewModel;
@@ -47,6 +49,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
     private BiometricPrompt biometricPrompt;
     private BiometricPrompt.PromptInfo promptInfo;
     private String tokenDevice;
+    private LoginLoadingDialog loginDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -276,12 +279,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
 
 
     private void showLoginLoadingAnimation() {
-        loginDialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
-        loginDialog.setContentView(R.layout.dialog_login_loading);
-        LottieAnimationView animationView = loginDialog.findViewById(R.id.ltAnimationView);
-        animationView.setAnimation(R.raw.lottile_loading);
-        animationView.setSpeed(4f);
-        animationView.playAnimation();
+        loginDialog = new LoginLoadingDialog(getContext());
         loginDialog.show();
     }
 
