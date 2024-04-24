@@ -6,13 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.BottomSheetFilterOrderBinding;
 import com.example.eu_fstyle_mobile.databinding.FragmentBillAdminBinding;
 import com.example.eu_fstyle_mobile.src.adapter.MyOrderStatusAdapter;
@@ -20,12 +18,12 @@ import com.example.eu_fstyle_mobile.src.adapter.OrderAdminAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.ListOrder;
 import com.example.eu_fstyle_mobile.src.model.Orders;
-import com.example.eu_fstyle_mobile.src.view.user.address.EditAddressFragment;
 import com.example.eu_fstyle_mobile.src.view.user.profile.OrderStatusFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class BillAdminFragment extends BaseFragment<FragmentBillAdminBinding> implements OrderAdminAdapter.OnItemOrderClickListener{
@@ -52,13 +50,13 @@ public class BillAdminFragment extends BaseFragment<FragmentBillAdminBinding> im
             @Override
             public void onChanged(ListOrder listOrder) {
                 if (listOrder != null) {
-                    binding.rcvOrderAdmin.setAdapter(new OrderAdminAdapter(listOrder.getOrders(), BillAdminFragment.this));
+                    updateOrder(listOrder.getOrders());
                     binding.ivFilter.setOnClickListener(v -> {
                         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity());
                         BottomSheetFilterOrderBinding bottomSheetFilterOrderBinding = BottomSheetFilterOrderBinding.inflate(LayoutInflater.from(getContext()));
                         bottomSheetDialog.setContentView(bottomSheetFilterOrderBinding.getRoot());
                         bottomSheetFilterOrderBinding.tvOrderAll.setOnClickListener(v1 -> {
-                            binding.rcvOrderAdmin.setAdapter(new OrderAdminAdapter(listOrder.getOrders(), BillAdminFragment.this));
+                            updateOrder(listOrder.getOrders());
                             binding.rltFilterOrder.setVisibility(View.GONE);
                             bottomSheetDialog.dismiss();
                         });
@@ -69,7 +67,7 @@ public class BillAdminFragment extends BaseFragment<FragmentBillAdminBinding> im
                                     activeOrders.add(order);
                                 }
                             }
-                            binding.rcvOrderAdmin.setAdapter(new OrderAdminAdapter(activeOrders, BillAdminFragment.this));
+                            updateOrder(activeOrders);
                             binding.rltFilterOrder.setVisibility(View.VISIBLE);
                             binding.tvFilterOrder.setText("Lọc theo: Đơn hàng đã xác nhận");
                             bottomSheetDialog.dismiss();
@@ -81,7 +79,7 @@ public class BillAdminFragment extends BaseFragment<FragmentBillAdminBinding> im
                                     cancelOrders.add(order);
                                 }
                             }
-                            binding.rcvOrderAdmin.setAdapter(new OrderAdminAdapter(cancelOrders, BillAdminFragment.this));
+                            updateOrder(cancelOrders);
                             binding.rltFilterOrder.setVisibility(View.VISIBLE);
                             binding.tvFilterOrder.setText("Lọc theo: Đơn hàng đã hủy");
                             bottomSheetDialog.dismiss();
@@ -93,7 +91,7 @@ public class BillAdminFragment extends BaseFragment<FragmentBillAdminBinding> im
                                     cancelOrders.add(order);
                                 }
                             }
-                            binding.rcvOrderAdmin.setAdapter(new OrderAdminAdapter(cancelOrders, BillAdminFragment.this));
+                            updateOrder(cancelOrders);
                             binding.rltFilterOrder.setVisibility(View.VISIBLE);
                             binding.tvFilterOrder.setText("Lọc theo: Đơn hàng chờ xác nhận");
                             bottomSheetDialog.dismiss();
@@ -105,7 +103,7 @@ public class BillAdminFragment extends BaseFragment<FragmentBillAdminBinding> im
                                     cancelOrders.add(order);
                                 }
                             }
-                            binding.rcvOrderAdmin.setAdapter(new OrderAdminAdapter(cancelOrders, BillAdminFragment.this));
+                            updateOrder(cancelOrders);
                             binding.rltFilterOrder.setVisibility(View.VISIBLE);
                             binding.tvFilterOrder.setText("Lọc theo: Đơn hàng đang giao");
                             bottomSheetDialog.dismiss();
@@ -117,9 +115,35 @@ public class BillAdminFragment extends BaseFragment<FragmentBillAdminBinding> im
                                     cancelOrders.add(order);
                                 }
                             }
-                            binding.rcvOrderAdmin.setAdapter(new OrderAdminAdapter(cancelOrders, BillAdminFragment.this));
+                            updateOrder(cancelOrders);
                             binding.rltFilterOrder.setVisibility(View.VISIBLE);
                             binding.tvFilterOrder.setText("Lọc theo: Đơn hàng đã giao");
+                            bottomSheetDialog.dismiss();
+                        });
+                        bottomSheetFilterOrderBinding.btnNew.setOnClickListener(v1 -> {
+                            List<Orders> sortedOrders = new ArrayList<>(listOrder.getOrders());
+                            Collections.sort(sortedOrders, new Comparator<Orders>() {
+                                @Override
+                                public int compare(Orders o1, Orders o2) {
+                                    return o2.getTimeOrder().compareTo(o1.getTimeOrder());
+                                }
+                            });
+                            binding.rcvOrderAdmin.setAdapter(new OrderAdminAdapter(sortedOrders, BillAdminFragment.this));
+                            binding.rltFilterOrder.setVisibility(View.VISIBLE);
+                            binding.tvFilterOrder.setText("Lọc theo: Mới nhất → Cũ nhất");
+                            bottomSheetDialog.dismiss();
+                        });
+                        bottomSheetFilterOrderBinding.btnOld.setOnClickListener(v1 -> {
+                            List<Orders> sortedOrders = new ArrayList<>(listOrder.getOrders());
+                            Collections.sort(sortedOrders, new Comparator<Orders>() {
+                                @Override
+                                public int compare(Orders o1, Orders o2) {
+                                    return o1.getTimeOrder().compareTo(o2.getTimeOrder());
+                                }
+                            });
+                            binding.rcvOrderAdmin.setAdapter(new OrderAdminAdapter(sortedOrders, BillAdminFragment.this));
+                            binding.rltFilterOrder.setVisibility(View.VISIBLE);
+                            binding.tvFilterOrder.setText("Lọc theo: Cũ nhất → Mới nhất");
                             bottomSheetDialog.dismiss();
                         });
                         bottomSheetDialog.show();
@@ -140,6 +164,17 @@ public class BillAdminFragment extends BaseFragment<FragmentBillAdminBinding> im
     @Override
     protected FragmentBillAdminBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
         return FragmentBillAdminBinding.inflate(inflater, container, false);
+    }
+
+    private void updateOrder(List<Orders> orders) {
+        if (orders.isEmpty()) {
+            binding.viewEmpty.setVisibility(View.VISIBLE);
+            binding.rcvOrderAdmin.setVisibility(View.GONE);
+        } else {
+            binding.viewEmpty.setVisibility(View.GONE);
+            binding.rcvOrderAdmin.setVisibility(View.VISIBLE);
+            binding.rcvOrderAdmin.setAdapter(new OrderAdminAdapter(orders, BillAdminFragment.this));
+        }
     }
 
     @Override

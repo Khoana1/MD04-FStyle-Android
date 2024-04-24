@@ -115,6 +115,11 @@ public class DetailBillFragment extends BaseFragment<FragmentDetailBillBinding> 
                     binding.tvOrderStatus.setTextColor(Color.parseColor("#FF0000"));
                     binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_success);
                 }
+                if (order.getStatus().equals("delivered")) {
+                    setDisableOrderButton();
+                } else {
+                    setEnableCancelButton();
+                }
                 SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
                 inputFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
                 Date date = null;
@@ -350,5 +355,13 @@ public class DetailBillFragment extends BaseFragment<FragmentDetailBillBinding> 
         return totalPrice - shippingCost;
     }
 
+    private void setDisableOrderButton() {
+        binding.btnChangeOrderStatus.setEnabled(false);
+        binding.btnChangeOrderStatus.setAlpha(0.4f);
+    }
 
+    private void setEnableCancelButton() {
+        binding.btnChangeOrderStatus.setEnabled(true);
+        binding.btnChangeOrderStatus.setAlpha(1f);
+    }
 }

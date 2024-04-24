@@ -78,10 +78,12 @@
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/tv_line"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         style="@style/Widget.AppCompat.AutoCompleteTextView"/>
     <RelativeLayout
+        android:id="@+id/rlt_quantity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
