@@ -36,6 +36,7 @@ import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.Cart;
 import com.example.eu_fstyle_mobile.src.model.ListProduct;
 import com.example.eu_fstyle_mobile.src.model.Product;
+import com.example.eu_fstyle_mobile.src.model.ProductCart;
 import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateCart;
 import com.example.eu_fstyle_mobile.src.request.RequestCreateFavourite;
@@ -43,12 +44,14 @@ import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
 import com.example.eu_fstyle_mobile.src.view.admin.HomeAdminViewModel;
 import com.example.eu_fstyle_mobile.src.view.user.payment.CartFragment;
+import com.example.eu_fstyle_mobile.src.view.user.payment.PaymentFragment;
 import com.example.eu_fstyle_mobile.src.view.user.profile.MyFavouriteFragment;
 import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -66,7 +69,6 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
     private Product product;
     private String size = "";
     private int orderCheck = 0;
-    private boolean isSize36, isSize37, isSize38, isSize39 = false;
     private int soluong;
     private ArrayList<Product> listProduct1;
     private HomeAdminViewModel homeAdminViewModel;
@@ -208,6 +210,11 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
         binding.detailTxtPhivanchuyen.setText(decimalFormat.format(15000));
         binding.tenDetail.setText(product.getName());
         binding.giaDetail.setText(decimalFormat.format(product.getPrice()) + " VNĐ");
+        if (product.getSoldQuantity() != null) {
+            binding.dabanDetail.setText("Đã bán: " + product.getSoldQuantity());
+        } else {
+            binding.dabanDetail.setText("Đã bán: 0");
+        }
         binding.detailTxtMota.setText(product.getDescription());
         binding.detailTextview.setText("1" + "/" + product.getImage64().length);
         binding.textShowMore.setOnClickListener(v -> {
@@ -280,7 +287,7 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
             binding1.itemImageDathang.setImageResource(R.drawable.icon_erro);
         }
         binding1.itemTxtGiaDathang.setText("Giá: " + decimalFormat.format(product.getPrice()));
-        binding1.itemTxtKhoDathang.setText("Đã bán: " + product.getQuantity());
+        binding1.itemTxtKhoDathang.setText("Kho: " + product.getQuantity());
         binding1.banggoiysize.setOnClickListener(v -> {
             goiysize();
         });
@@ -314,6 +321,17 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
             }
         });
         //
+        switch (orderCheck) {
+            case 1:
+                binding1.itemBtnDathang.setText("Thêm vào giỏ hàng");
+                binding1.rltQuantity.setVisibility(View.VISIBLE);
+                break;
+            case 2:
+                binding1.itemBtnDathang.setText("Đặt mua ngay");
+                binding1.rltQuantity.setVisibility(View.GONE);
+                binding1.tvLine.setVisibility(View.GONE);
+                break;
+        }
         binding1.itemBtnDathang.setOnClickListener(v -> {
             Log.d("Huy", "Themgiohang: " + size);
             Log.d("Huy", "Themgiohang: " + binding1.itemBtnGiatri.getText().toString());
@@ -344,7 +362,16 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
                         bottomSheetDialog.dismiss();
                         break;
                     case 2:
-                        // xử lý mua hàng
+                        ProductCart productCart = new ProductCart(
+                                product.get_id(),
+                                product.getName(),
+                                Integer.parseInt(binding1.itemBtnGiatri.getText().toString()),
+                                product.getPrice(),
+                                size,
+                                product.getImage64()[0]
+                        );
+                        PaymentFragment paymentFragment = PaymentFragment.newInstance(productCart);
+                        openScreen(paymentFragment, true);
                         if (orderCheck == 1 || orderCheck == 2) {
                             orderCheck = 0;
                         }

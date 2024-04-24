@@ -15,7 +15,6 @@ import java.text.DecimalFormat;
 
 public class PaymentSuccessActivity extends AppCompatActivity {
     private ActivityPaymentSuccessBinding binding;
-    public static final String CART = "CART";
     public static final String TOTAL = "TOTAL";
     private Intent intent;
 

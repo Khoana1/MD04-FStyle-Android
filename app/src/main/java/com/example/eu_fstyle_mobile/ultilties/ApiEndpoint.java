@@ -18,7 +18,6 @@ public class ApiEndpoint {
     public static final String deleteCart = "/api/del/cart/{id}/{id_product}";
     public static final String getFavorite = "/api/favorite/get/{id}";
     public static final String createFavorite = "/api/favorite/post/{id}";
-    public static final String updateFavorite = "/api/favorite/put/{id}/{id_product}";
     public static final String deleteFavorite = "/api/favorite/delete/{id}/{id_product}";
     public static final String getAllCategories = "/api/get/categories";
     public static final String createCategories = "/api/post/categories";

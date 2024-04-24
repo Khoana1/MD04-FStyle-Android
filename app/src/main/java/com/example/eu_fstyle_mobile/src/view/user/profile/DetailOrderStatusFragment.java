@@ -66,7 +66,6 @@ public class DetailOrderStatusFragment extends BaseFragment<FragmentDetailOrderS
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        showHintOrderDialog();
         detailBillViewModel = new ViewModelProvider(this).get(DetailBillViewModel.class);
         orders = getArguments().getString(ORDERS);
         detailBillViewModel.getOrderID(orders);
@@ -77,9 +76,6 @@ public class DetailOrderStatusFragment extends BaseFragment<FragmentDetailOrderS
     private void initView() {
         binding.icBack.setOnClickListener(v -> {
             requireActivity().onBackPressed();
-        });
-        binding.icHint.setOnClickListener(v -> {
-            getHintOrderDialog();
         });
     }
 
@@ -135,8 +131,8 @@ public class DetailOrderStatusFragment extends BaseFragment<FragmentDetailOrderS
                     binding.imgSelectPayment.setImageDrawable(requireContext().getDrawable(R.drawable.ic_payment_money));
                 }
                 if (order.getPaymentMethods().equals("Sandbox")) {
-                    binding.tvOrderPaymentMethod.setText("Thanh toán khi nhận hàng");
-                    binding.imgSelectPayment.setImageDrawable(requireContext().getDrawable(R.drawable.ic_payment_money));
+                    binding.tvOrderPaymentMethod.setText("Thanh toán qua ZaloPay");
+                    binding.imgSelectPayment.setImageDrawable(requireContext().getDrawable(R.drawable.ic_zalo_pay));
                 }
                 if (order.getShippingMethod().equals("express")) {
                     binding.tvOrderShippingMethod.setText("Giao hàng nhanh");
@@ -196,33 +192,6 @@ public class DetailOrderStatusFragment extends BaseFragment<FragmentDetailOrderS
             }
         });
 
-    }
-
-    private void showHintOrderDialog() {
-        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("app_prefs", MODE_PRIVATE);
-        boolean isFirstRun = sharedPreferences.getBoolean("isFirstHintOrder", true);
-
-        if (isFirstRun) {
-            getHintOrderDialog();
-            sharedPreferences.edit().putBoolean("isFirstHintOrder", false).apply();
-        }
-    }
-
-    private void getHintOrderDialog() {
-        Dialog dialog = new Dialog(getContext());
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.setContentView(R.layout.hint_order_layout);
-        dialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.custom_dialog_background));
-
-        Button btnConfirm = dialog.findViewById(R.id.btn_hint_ok);
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
     }
 
     private void setDisableCancelOrder() {

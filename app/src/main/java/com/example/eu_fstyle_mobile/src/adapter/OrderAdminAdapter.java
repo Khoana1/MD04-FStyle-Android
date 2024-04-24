@@ -54,7 +54,7 @@ public class OrderAdminAdapter extends RecyclerView.Adapter<OrderAdminAdapter.Vi
             holder.binding.tvOrderStatus.setText("Đang giao hàng");
             holder.binding.tvOrderStatus.setTextColor(Color.parseColor("#FFA500"));
             holder.binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_trading);
-        } else if (orders.getStatus().equals("success")) {
+        } else if (orders.getStatus().equals("delivered")) {
             holder.binding.tvOrderStatus.setText("Đã giao hàng");
             holder.binding.tvOrderStatus.setTextColor(Color.parseColor("#FF0000"));
             holder.binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_success);

@@ -31,9 +31,11 @@ import java.util.List;
 
 public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implements AddressSelectionListener, PaymentProductAdapter.OnItemClickListener {
     public static final String CART = "CART";
+    public static final String PRODUCT_CART = "PRODUCT_CART";
     private AddressBottomSheetDialogFragment bottomSheet;
     private BottomSheetHinhthucvcBinding binding1;
     private Cart cart;
+    private ProductCart productCart;
     private String totalPayment;
     private String paymentMethod = "COD";
     private String paymentAddress;
@@ -52,16 +54,38 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implem
         return fragment;
     }
 
+    public static PaymentFragment newInstance(ProductCart productCart) {
+        PaymentFragment fragment = new PaymentFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(PRODUCT_CART, productCart);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initData();
-        cart = (Cart) getArguments().getSerializable(CART);
-        binding.tvDetailQuantumPayment.setText(cart.getTotalProduct().toString());
-        binding.tvTotalPayment.setText(cart.getTotalCart().toString() + " VNĐ");
-        getTotalPaymentDetail();
-        binding.rcvPayment.setAdapter(new PaymentProductAdapter(cart.getListProduct(), this));
+        productCart = (ProductCart) getArguments().getSerializable(PRODUCT_CART);
+        if (productCart != null) {
+            binding.tvDetailQuantumPayment.setText(productCart.getSoLuong().toString());
+            DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+            String formattedPrice = decimalFormat.format(productCart.getPrice());
+            binding.tvTotalPayment.setText(formattedPrice + " VNĐ");
+            List<ProductCart> productCarts = new ArrayList<>();
+            productCarts.add(productCart);
+            getTotalPaymentProductCartDetail();
+            binding.rcvPayment.setAdapter(new PaymentProductAdapter(productCarts, this));
+        } else {
+            cart = (Cart) getArguments().getSerializable(CART);
+            binding.tvDetailQuantumPayment.setText(cart.getTotalProduct().toString());
+            DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+            String formattedPrice = decimalFormat.format(cart.getTotalCart());
+            binding.tvTotalPayment.setText(formattedPrice + " VNĐ");
+            getTotalPaymentDetail();
+            binding.rcvPayment.setAdapter(new PaymentProductAdapter(cart.getListProduct(), this));
+        }
         binding.tvEditItemAddress.setOnClickListener(v -> {
             List<Address> addressList = new ArrayList<>();
             bottomSheet = new AddressBottomSheetDialogFragment(this, addressList);
@@ -81,14 +105,22 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implem
                 binding.tvTitleShip.setText("Nhanh");
                 binding.tvPriceShip.setText("15,000");
                 binding.tvTimeShip.setText("3 ngày");
-                getTotalPaymentDetail();
+                if (cart != null) {
+                    getTotalPaymentDetail();
+                } else {
+                    getTotalPaymentProductCartDetail();
+                }
                 dialog.dismiss();
             });
             binding1.constraintLayoutTietkiem.setOnClickListener(v1 -> {
                 binding.tvTitleShip.setText("Tiết kiệm");
                 binding.tvPriceShip.setText("5,000");
                 binding.tvTimeShip.setText("7 ngày");
-                getTotalPaymentDetail();
+                if (cart != null) {
+                    getTotalPaymentDetail();
+                } else {
+                    getTotalPaymentProductCartDetail();
+                }
                 dialog.dismiss();
             });
             dialog.show();
@@ -118,6 +150,7 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implem
                         }
                         Intent intent = new Intent(requireContext(), ConfirmPaymentActivity.class);
                         intent.putExtra(CART, cart);
+                        intent.putExtra(PRODUCT_CART, productCart);
                         intent.putExtra("PAYMENT_METHOD", paymentMethod);
                         intent.putExtra("TOTAL", totalPayment);
                         intent.putExtra("PAYMENT_ADDRESS", paymentAddress);
@@ -130,6 +163,7 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implem
 
         });
     }
+
 
     @Override
     protected FragmentPaymentBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
@@ -192,15 +226,24 @@ public class PaymentFragment extends BaseFragment<FragmentPaymentBinding> implem
     }
 
     private void getTotalPaymentDetail() {
-        String shippingFeeStr = binding.tvPriceShip.getText().toString().replaceAll("[^0-9]", "");
-        int shippingFee = Integer.parseInt(shippingFeeStr);
-        int totalCart = cart.getTotalCart().intValue();
-        int totalPayment = totalCart + shippingFee;
-        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        binding.tvTotalPaymentDetail.setText(decimalFormat.format(totalPayment) + " VNĐ");
-        this.totalPayment = String.valueOf(totalPayment);
+            String shippingFeeStr = binding.tvPriceShip.getText().toString().replaceAll("[^0-9]", "");
+            int shippingFee = Integer.parseInt(shippingFeeStr);
+            int totalCart = cart.getTotalCart().intValue();
+            int totalIntPayment = totalCart + shippingFee;
+            DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+            binding.tvTotalPaymentDetail.setText(decimalFormat.format(totalIntPayment) + " VNĐ");
+            totalPayment = String.valueOf(totalIntPayment);
     }
 
+    public void getTotalPaymentProductCartDetail() {
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+        String shippingFeeStr = binding.tvPriceShip.getText().toString().replaceAll("[^0-9]", "");
+        int shippingFee = Integer.parseInt(shippingFeeStr);
+        int totalCart = productCart.getPrice().intValue();
+        int totalIntPayment = totalCart + shippingFee;;
+        binding.tvTotalPaymentDetail.setText(decimalFormat.format(totalIntPayment) + " VNĐ");
+        totalPayment = String.valueOf(totalIntPayment);
+    }
 
     @Override
     public void onItemClick(ProductCart productCart) {
