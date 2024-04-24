@@ -72,9 +72,10 @@ public class MyOrderStatusAdapter extends RecyclerView.Adapter<MyOrderStatusAdap
         String formattedDate = outputFormat.format(date);
 
         holder.binding.tvOrderTime.setText(formattedDate);
-        holder.binding.tvOrderCustomerName.setText(orders.getIdUser());
+        holder.binding.tvOrderCustomerName.setText(orders.getCustomerName());
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        holder.binding.tvOrderTotalPrice.setText(decimalFormat.format(Integer.parseInt(orders.getTotalPrice())) + " VNĐ");
+        double totalPrice = Double.parseDouble(orders.getTotalPrice());
+        holder.binding.tvOrderTotalPrice.setText(decimalFormat.format(totalPrice) + " VNĐ");
         holder.itemView.setOnClickListener(v -> {
             onItemOrderClickListener.onOrderClick(ordersList.get(position).get_id());
         });

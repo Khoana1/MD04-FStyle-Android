@@ -130,8 +130,8 @@ public class DetailBillFragment extends BaseFragment<FragmentDetailBillBinding> 
                 binding.tvOrderTime.setText(formattedDate);
                 DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
                 double totalPrice = Double.parseDouble(order.getTotalPrice());
-                binding.tvOrderTotalPrice.setText(order.getTotalPrice() + " VNĐ");
-                binding.tvOrderConsigneeName.setText(order.getIdUser());
+                binding.tvOrderTotalPrice.setText(totalPrice + " VNĐ");
+                binding.tvOrderConsigneeName.setText(order.getCustomerName());
                 binding.tvOrderPhone.setText(order.getPhone());
                 binding.tvOrderAddress.setText(order.getAddress());
                 if (order.getPaymentMethods().equals("COD")) {
@@ -152,6 +152,8 @@ public class DetailBillFragment extends BaseFragment<FragmentDetailBillBinding> 
                 }
                 binding.rcvOrderProduct.setAdapter(new OrderAdminProductAdapter(order.getListProduct()));
                 binding.tvDetailOrderTotalPrice.setText(decimalFormat.format(totalPrice) + " VNĐ");
+                double productPrice = calculateProductPrice(order);
+                binding.tvOrderProductPrice.setText(decimalFormat.format(productPrice) + " VNĐ");
                 binding.btnChangeOrderStatus.setOnClickListener(v -> {
                     Dialog dialog = new Dialog(getContext());
                     DialogUpdateStatusOrderBinding dialogBinding = DialogUpdateStatusOrderBinding.inflate(LayoutInflater.from(getContext()));
@@ -334,5 +336,19 @@ public class DetailBillFragment extends BaseFragment<FragmentDetailBillBinding> 
         });
         dialog.show();
     }
+
+    private double calculateProductPrice(Orders order) {
+        double totalPrice = Double.parseDouble(order.getTotalPrice());
+        double shippingCost = 0.0;
+
+        if (order.getShippingMethod().equals("express")) {
+            shippingCost = 15000.0;
+        } else if (order.getShippingMethod().equals("standard")) {
+            shippingCost = 5000.0;
+        }
+
+        return totalPrice - shippingCost;
+    }
+
 
 }

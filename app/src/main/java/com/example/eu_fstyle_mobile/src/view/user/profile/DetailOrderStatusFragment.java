@@ -127,7 +127,7 @@ public class DetailOrderStatusFragment extends BaseFragment<FragmentDetailOrderS
                 DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
                 double totalPrice = Double.parseDouble(order.getTotalPrice());
                 binding.tvOrderTotalPrice.setText(decimalFormat.format(totalPrice) + " VNĐ");
-                binding.tvOrderConsigneeName.setText(order.getIdUser());
+                binding.tvOrderConsigneeName.setText(order.getCustomerName());
                 binding.tvOrderPhone.setText(order.getPhone());
                 binding.tvOrderAddress.setText(order.getAddress());
                 if (order.getPaymentMethods().equals("COD")) {
@@ -153,6 +153,8 @@ public class DetailOrderStatusFragment extends BaseFragment<FragmentDetailOrderS
                 } else {
                     setEnableCancelOrder();
                 }
+                double productPrice = calculateProductPrice(order);
+                binding.tvOrderProductPrice.setText(decimalFormat.format(productPrice) + " VNĐ");
                 binding.btnCancelOrder.setOnClickListener(v -> {
                     showDialog("Hủy đơn hàng", "Bạn có chắc chắn muốn hủy đơn hàng này không?", new Runnable() {
                         @Override
@@ -231,6 +233,19 @@ public class DetailOrderStatusFragment extends BaseFragment<FragmentDetailOrderS
     private void setEnableCancelOrder() {
         binding.btnCancelOrder.setEnabled(true);
         binding.btnCancelOrder.setAlpha(1f);
+    }
+
+    private double calculateProductPrice(Orders order) {
+        double totalPrice = Double.parseDouble(order.getTotalPrice());
+        double shippingCost = 0.0;
+
+        if (order.getShippingMethod().equals("express")) {
+            shippingCost = 15000.0;
+        } else if (order.getShippingMethod().equals("standard")) {
+            shippingCost = 5000.0;
+        }
+
+        return totalPrice - shippingCost;
     }
 
     @Override

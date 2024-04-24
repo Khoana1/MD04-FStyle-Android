@@ -28,10 +28,12 @@ public class Orders implements Serializable {
     private String status;
     @SerializedName("timeOrder")
     private String timeOrder;
+    @SerializedName("customerName")
+    private String customerName;
     @SerializedName("__v")
     private int __v;
 
-    public Orders(String _id, String address, List<ProductOrder> listProduct, String idUser, int quantity, String totalPrice, String phone, String paymentMethods, String shippingMethod, String status, String timeOrder, int __v) {
+    public Orders(String _id, String address, List<ProductOrder> listProduct, String idUser, int quantity, String totalPrice, String phone, String paymentMethods, String shippingMethod, String status, String timeOrder, String customerName, int __v) {
         this._id = _id;
         this.address = address;
         this.listProduct = listProduct;
@@ -43,6 +45,7 @@ public class Orders implements Serializable {
         this.shippingMethod = shippingMethod;
         this.status = status;
         this.timeOrder = timeOrder;
+        this.customerName = customerName;
         this.__v = __v;
     }
 
@@ -140,5 +143,13 @@ public class Orders implements Serializable {
 
     public void set__v(int __v) {
         this.__v = __v;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 }

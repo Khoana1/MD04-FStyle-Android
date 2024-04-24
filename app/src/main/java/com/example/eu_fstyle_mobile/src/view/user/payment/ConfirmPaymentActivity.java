@@ -117,7 +117,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                     showLoading100Dialog();
                     new Handler().postDelayed(() -> {
                         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-                        RequestCreateOrder requestCreateOrder = new RequestCreateOrder(paymentAddress, cart.getListProduct(), user.get_id(), user.getPhone(), "COD", shippingMethod, totalPayment, "pending");
+                        RequestCreateOrder requestCreateOrder = new RequestCreateOrder(paymentAddress, cart.getListProduct(), user.get_id(), user.getPhone(), "COD", shippingMethod, totalPayment, "pending", user.getName());
                         Call<Orders> call = apiService.createOrder(user.get_id(), requestCreateOrder);
                         call.enqueue(new Callback<Orders>() {
                             @Override
@@ -161,7 +161,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                                             showLoading100Dialog();
                                             new Handler().postDelayed(() -> {
                                                 ApiService apiService = ApiClient.getClient().create(ApiService.class);
-                                                RequestCreateOrder requestCreateOrder = new RequestCreateOrder(paymentAddress, cart.getListProduct(), user.get_id(), user.getPhone(), "Sandbox", shippingMethod, totalPayment, "pending");
+                                                RequestCreateOrder requestCreateOrder = new RequestCreateOrder(paymentAddress, cart.getListProduct(), user.get_id(), user.getPhone(), "Sandbox", shippingMethod, totalPayment, "pending", user.getName());
                                                 Call<Orders> call = apiService.createOrder(user.get_id(), requestCreateOrder);
                                                 call.enqueue(new Callback<Orders>() {
                                                     @Override

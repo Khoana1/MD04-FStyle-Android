@@ -72,7 +72,7 @@ public class OrderAdminAdapter extends RecyclerView.Adapter<OrderAdminAdapter.Vi
         String formattedDate = outputFormat.format(date);
 
         holder.binding.tvOrderTime.setText(formattedDate);
-        holder.binding.tvOrderCustomerName.setText(orders.getIdUser());
+        holder.binding.tvOrderCustomerName.setText(orders.getCustomerName());
         holder.binding.tvOrderTotalPrice.setText(orders.getTotalPrice() + " VNĐ");
         holder.itemView.setOnClickListener(v -> {
             onItemOrderClickListener.onOrderClick(ordersList.get(position).get_id());

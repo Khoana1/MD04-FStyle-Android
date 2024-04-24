@@ -13,8 +13,9 @@ public class RequestCreateOrder {
     private String shippingMethod;
     private String totalPrice;
     private String status;
+    private String customerName;
 
-    public RequestCreateOrder(String address, List<ProductCart> listProduct, String idUser, String phone, String paymentMethods, String shippingMethod, String totalPrice, String status) {
+    public RequestCreateOrder(String address, List<ProductCart> listProduct, String idUser, String phone, String paymentMethods, String shippingMethod, String totalPrice, String status, String customerName) {
         this.address = address;
         this.listProduct = listProduct;
         this.idUser = idUser;
@@ -23,6 +24,7 @@ public class RequestCreateOrder {
         this.shippingMethod = shippingMethod;
         this.totalPrice = totalPrice;
         this.status = status;
+        this.customerName = customerName;
     }
 
     public String getAddress() {
@@ -87,5 +89,13 @@ public class RequestCreateOrder {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 }

@@ -22,6 +22,8 @@ import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class OrderStatusFragment extends BaseFragment<FragmentOrderStatusBinding> implements MyOrderStatusAdapter.OnItemOrderClickListener {
@@ -46,7 +48,7 @@ public class OrderStatusFragment extends BaseFragment<FragmentOrderStatusBinding
 
     private void initView() {
         binding.icBack.setOnClickListener(v -> {
-           getActivity().onBackPressed();
+            getActivity().onBackPressed();
         });
         binding.rltFilterOrder.setVisibility(View.GONE);
         binding.tvCancelFilterOrder.setOnClickListener(v -> {
@@ -59,7 +61,7 @@ public class OrderStatusFragment extends BaseFragment<FragmentOrderStatusBinding
         orderStatusViewModel.getListOrder().observe(getViewLifecycleOwner(), new Observer<ListOrder>() {
             @Override
             public void onChanged(ListOrder listOrder) {
-                binding.rcvOrderStatus.setAdapter(new MyOrderStatusAdapter(listOrder.getOrders(), OrderStatusFragment.this));
+                updateOrder(listOrder.getOrders());
                 binding.icFilter.setOnClickListener(v -> {
                     BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity());
                     BottomSheetFilterOrderBinding bottomSheetFilterOrderBinding = BottomSheetFilterOrderBinding.inflate(LayoutInflater.from(getContext()));
@@ -76,9 +78,9 @@ public class OrderStatusFragment extends BaseFragment<FragmentOrderStatusBinding
                                 activeOrders.add(order);
                             }
                         }
-                        binding.rcvOrderStatus.setAdapter(new MyOrderStatusAdapter(activeOrders, OrderStatusFragment.this));
+                        updateOrder(activeOrders);
                         binding.rltFilterOrder.setVisibility(View.VISIBLE);
-                        binding.tvFilterOrder.setText("Lọc theo: Đơn hàng đã xác nhận");
+                        binding.tvFilterOrder.setText("Lọc theo: Đơn hàng Đã xác nhận");
                         bottomSheetDialog.dismiss();
                     });
                     bottomSheetFilterOrderBinding.tvOrderDeactive.setOnClickListener(v1 -> {
@@ -88,45 +90,71 @@ public class OrderStatusFragment extends BaseFragment<FragmentOrderStatusBinding
                                 cancelOrders.add(order);
                             }
                         }
-                        binding.rcvOrderStatus.setAdapter(new MyOrderStatusAdapter(cancelOrders, OrderStatusFragment.this));
+                        updateOrder(cancelOrders);
                         binding.rltFilterOrder.setVisibility(View.VISIBLE);
-                        binding.tvFilterOrder.setText("Lọc theo: Đơn hàng đã hủy");
+                        binding.tvFilterOrder.setText("Lọc theo: Đơn hàng Đã hủy");
                         bottomSheetDialog.dismiss();
                     });
                     bottomSheetFilterOrderBinding.tvOrderPending.setOnClickListener(v1 -> {
-                        List<Orders> cancelOrders = new ArrayList<>();
+                        List<Orders> pendingOrders = new ArrayList<>();
                         for (Orders order : listOrder.getOrders()) {
                             if (order.getStatus().equals("pending")) {
-                                cancelOrders.add(order);
+                                pendingOrders.add(order);
                             }
                         }
-                        binding.rcvOrderStatus.setAdapter(new MyOrderStatusAdapter(cancelOrders, OrderStatusFragment.this));
+                        updateOrder(pendingOrders);
                         binding.rltFilterOrder.setVisibility(View.VISIBLE);
-                        binding.tvFilterOrder.setText("Lọc theo: Đơn hàng chờ xác nhận");
+                        binding.tvFilterOrder.setText("Lọc theo: Đơn hàng Chờ xác nhận");
                         bottomSheetDialog.dismiss();
                     });
                     bottomSheetFilterOrderBinding.tvOrderTrading.setOnClickListener(v1 -> {
-                        List<Orders> cancelOrders = new ArrayList<>();
+                        List<Orders> tradingOrders = new ArrayList<>();
                         for (Orders order : listOrder.getOrders()) {
                             if (order.getStatus().equals("trading")) {
-                                cancelOrders.add(order);
+                                tradingOrders.add(order);
                             }
                         }
-                        binding.rcvOrderStatus.setAdapter(new MyOrderStatusAdapter(cancelOrders, OrderStatusFragment.this));
+                        updateOrder(tradingOrders);
                         binding.rltFilterOrder.setVisibility(View.VISIBLE);
-                        binding.tvFilterOrder.setText("Lọc theo: Đơn hàng đang giao");
+                        binding.tvFilterOrder.setText("Lọc theo: Đơn hàng Đang giao");
                         bottomSheetDialog.dismiss();
                     });
                     bottomSheetFilterOrderBinding.tvOrderDelivered.setOnClickListener(v1 -> {
-                        List<Orders> cancelOrders = new ArrayList<>();
+                        List<Orders> deliveredOrders = new ArrayList<>();
                         for (Orders order : listOrder.getOrders()) {
                             if (order.getStatus().equals("delivered")) {
-                                cancelOrders.add(order);
+                                deliveredOrders.add(order);
                             }
                         }
-                        binding.rcvOrderStatus.setAdapter(new MyOrderStatusAdapter(cancelOrders, OrderStatusFragment.this));
+                        updateOrder(deliveredOrders);
                         binding.rltFilterOrder.setVisibility(View.VISIBLE);
-                        binding.tvFilterOrder.setText("Lọc theo: Đơn hàng đã giao");
+                        binding.tvFilterOrder.setText("Lọc theo: Đơn hàng Đã giao");
+                        bottomSheetDialog.dismiss();
+                    });
+                    bottomSheetFilterOrderBinding.btnNew.setOnClickListener(v1 -> {
+                        List<Orders> sortedOrders = new ArrayList<>(listOrder.getOrders());
+                        Collections.sort(sortedOrders, new Comparator<Orders>() {
+                            @Override
+                            public int compare(Orders o1, Orders o2) {
+                                return o2.getTimeOrder().compareTo(o1.getTimeOrder());
+                            }
+                        });
+                        binding.rcvOrderStatus.setAdapter(new MyOrderStatusAdapter(sortedOrders, OrderStatusFragment.this));
+                        binding.rltFilterOrder.setVisibility(View.VISIBLE);
+                        binding.tvFilterOrder.setText("Lọc theo: Mới nhất → Cũ nhất");
+                        bottomSheetDialog.dismiss();
+                    });
+                    bottomSheetFilterOrderBinding.btnOld.setOnClickListener(v1 -> {
+                        List<Orders> sortedOrders = new ArrayList<>(listOrder.getOrders());
+                        Collections.sort(sortedOrders, new Comparator<Orders>() {
+                            @Override
+                            public int compare(Orders o1, Orders o2) {
+                                return o1.getTimeOrder().compareTo(o2.getTimeOrder());
+                            }
+                        });
+                        binding.rcvOrderStatus.setAdapter(new MyOrderStatusAdapter(sortedOrders, OrderStatusFragment.this));
+                        binding.rltFilterOrder.setVisibility(View.VISIBLE);
+                        binding.tvFilterOrder.setText("Lọc theo: Cũ nhất → Mới nhất");
                         bottomSheetDialog.dismiss();
                     });
                     bottomSheetDialog.show();
@@ -145,6 +173,17 @@ public class OrderStatusFragment extends BaseFragment<FragmentOrderStatusBinding
     @Override
     protected FragmentOrderStatusBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
         return FragmentOrderStatusBinding.inflate(inflater, container, false);
+    }
+
+    private void updateOrder(List<Orders> orders) {
+        if (orders.isEmpty()) {
+            binding.viewEmpty.setVisibility(View.VISIBLE);
+            binding.rcvOrderStatus.setVisibility(View.GONE);
+        } else {
+            binding.viewEmpty.setVisibility(View.GONE);
+            binding.rcvOrderStatus.setVisibility(View.VISIBLE);
+            binding.rcvOrderStatus.setAdapter(new MyOrderStatusAdapter(orders, OrderStatusFragment.this));
+        }
     }
 
     @Override
