@@ -71,6 +71,7 @@ public class ResultSearchFragment extends BaseFragment<FragmentResultSearchBindi
     private void getDataFilter() {
         titleFilter = getArguments().getString(TITLE_FILTER);
         if (titleFilter != null) {
+            binding.tvFilterTitle.setText("Lọc sản phẩm theo thể loại");
             binding.resultTitle.setText(titleFilter);
             idFilter = getArguments().getString(ID_FILTER);
             ArrayList<Product> products = (ArrayList<Product>) getArguments().getSerializable(LIST_FILTER);
