@@ -28,12 +28,18 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class ResultSearchFragment extends BaseFragment<FragmentResultSearchBinding> implements ProductHomeAdapter.onClickItem{
+public class ResultSearchFragment extends BaseFragment<FragmentResultSearchBinding> implements ProductHomeAdapter.onClickItem {
     FragmentResultSearchBinding binding;
     ArrayList<Product> arrayList;
     ProductHomeAdapter adapter;
     String title;
-    public static ResultSearchFragment newInstance(ArrayList<Product> list,String tilte){
+    private String titleFilter;
+    private String idFilter;
+    public static final String TITLE_FILTER = "TITLE_FILTER";
+    public static final String LIST_FILTER = "LIST_FILTER";
+    public static final String ID_FILTER = "ID_FILTER";
+
+    public static ResultSearchFragment newInstance(ArrayList<Product> list, String tilte) {
         ResultSearchFragment result = new ResultSearchFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("listResult", list);
@@ -41,14 +47,48 @@ public class ResultSearchFragment extends BaseFragment<FragmentResultSearchBindi
         result.setArguments(bundle);
         return result;
     }
+
+    public static ResultSearchFragment newInstance(String titleFilter, ArrayList<Product> listFilter, String idFilter) {
+        ResultSearchFragment result = new ResultSearchFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(LIST_FILTER, listFilter);
+        bundle.putString(TITLE_FILTER, titleFilter);
+        bundle.putString(ID_FILTER, idFilter);
+        result.setArguments(bundle);
+        return result;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        binding = FragmentResultSearchBinding.inflate(inflater,container,false);
+        binding = FragmentResultSearchBinding.inflate(inflater, container, false);
         getData();
+        getDataFilter();
         Back();
         return binding.getRoot();
+    }
+
+    private void getDataFilter() {
+        titleFilter = getArguments().getString(TITLE_FILTER);
+        if (titleFilter != null) {
+            binding.resultTitle.setText(titleFilter);
+            idFilter = getArguments().getString(ID_FILTER);
+            ArrayList<Product> products = (ArrayList<Product>) getArguments().getSerializable(LIST_FILTER);
+            ArrayList<Product> filteredProducts = new ArrayList<>();
+            for (Product product : products) {
+                if (product.getIdCategory().equals(idFilter)) {
+                    filteredProducts.add(product);
+                }
+            }
+            if (filteredProducts.isEmpty()) {
+                binding.viewEmpty.setVisibility(View.VISIBLE);
+                binding.recycleResultSearch.setVisibility(View.GONE);
+            } else {
+                adapter = new ProductHomeAdapter(getActivity(), filteredProducts, ResultSearchFragment.this);
+                binding.recycleResultSearch.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                binding.recycleResultSearch.setAdapter(adapter);
+            }
+        }
     }
 
     private void Back() {
@@ -57,16 +97,17 @@ public class ResultSearchFragment extends BaseFragment<FragmentResultSearchBindi
 
     @Override
     protected FragmentResultSearchBinding getFragmentBinding(LayoutInflater inflater, ViewGroup container) {
-        return FragmentResultSearchBinding.inflate(inflater,container,false);
+        return FragmentResultSearchBinding.inflate(inflater, container, false);
     }
 
     private void getData() {
         arrayList = (ArrayList<Product>) getArguments().getSerializable("listResult");
         title = getArguments().getString("title");
         binding.resultTitle.setText(title);
-        adapter = new ProductHomeAdapter(getActivity(),arrayList, ResultSearchFragment.this);
-        binding.recycleResultSearch.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        adapter = new ProductHomeAdapter(getActivity(), arrayList, ResultSearchFragment.this);
+        binding.recycleResultSearch.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         binding.recycleResultSearch.setAdapter(adapter);
+
     }
 
     @Override
@@ -79,7 +120,7 @@ public class ResultSearchFragment extends BaseFragment<FragmentResultSearchBindi
     public void onClickFavourite(Product product) {
         User user = UserPrefManager.getInstance(getActivity()).getUser();
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-        RequestCreateFavourite requestCreateFavourite = new RequestCreateFavourite(product.get_id(),product.getName(), product.getQuantity(), product.getPrice().toString(), product.getImage64()[0]);
+        RequestCreateFavourite requestCreateFavourite = new RequestCreateFavourite(product.get_id(), product.getName(), product.getQuantity(), product.getPrice().toString(), product.getImage64()[0]);
         Call<Product> call = apiService.createFavorite(user.get_id(), requestCreateFavourite);
         call.enqueue(new Callback<Product>() {
             @Override

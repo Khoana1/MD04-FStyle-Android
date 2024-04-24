@@ -8,10 +8,10 @@
 
     <ImageView
         android:id="@+id/img_payment_success"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/img_payment_fail" />
+        android:src="@drawable/order_fail" />
 
     <TextView
         android:id="@+id/tv_payment_success"

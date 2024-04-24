@@ -67,7 +67,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements ProductHomeAdapter.onClickItem {
+public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements ProductHomeAdapter.onClickItem, CategoryHomeAdapter.OnclickCategory {
     FragmentHomeBinding binding;
     CategoryFillerAdapter fillerAdapter;
     CategoriesViewModel categoriesViewModel;
@@ -248,15 +248,9 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
             @Override
             public void onChanged(ListCategories listCategories) {
                 listCategory = listCategories.getArrayList();
-                adapter = new CategoryHomeAdapter(getActivity(), listCategory);
+                adapter = new CategoryHomeAdapter(getActivity(), listCategory, HomeFragment.this);
                 binding.recycleCategoryHome.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
                 binding.recycleCategoryHome.setAdapter(adapter);
-                adapter.setOnclickCategory(new CategoryHomeAdapter.OnclickCategory() {
-                    @Override
-                    public void onclick() {
-                        openSearch();
-                    }
-                });
             }
         });
 
@@ -488,7 +482,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                         bottomSheetDialog.dismiss();
                         dialogSearch.dismiss();
                     } else {
-                        showAlertDialog("chưa đủ điều kiện áp dụng");
+                        showAlertDialog("Chưa đủ điều kiện áp dụng");
                     }
                 }
             });
@@ -655,13 +649,7 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
 
     @Override
     public void onClickCart(Product product) {
-        if (dialogSearch != null && dialogSearch.isShowing()) {
-            DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
-            openScreenHome(detailProductFragment, true);
-            dialogSearch.dismiss();
-        }
-        DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
-        openScreenHome(detailProductFragment, true);
+
     }
 
     private void getCartCountNumber() {
@@ -704,5 +692,11 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                 }
             }, 2000);
         }
+    }
+
+    @Override
+    public void onclick(String nameCategory, String idCategory) {
+        ResultSearchFragment resultSearchFragment = ResultSearchFragment.newInstance(nameCategory, listProduct, idCategory);
+        openScreenHome(resultSearchFragment, true);
     }
 }
