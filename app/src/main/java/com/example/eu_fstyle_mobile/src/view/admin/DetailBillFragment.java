@@ -107,7 +107,7 @@ public class DetailBillFragment extends BaseFragment<FragmentDetailBillBinding> 
                     binding.tvOrderStatus.setTextColor(Color.parseColor("#C67C4E"));
                     binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_pending);
                 } else if (order.getStatus().equals("trading")) {
-                    binding.tvOrderStatus.setText("Đang giao hàng");
+                    binding.tvOrderStatus.setText("Đang giao");
                     binding.tvOrderStatus.setTextColor(Color.parseColor("#FFA500"));
                     binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_trading);
                 } else if (order.getStatus().equals("success")) {
@@ -162,6 +162,44 @@ public class DetailBillFragment extends BaseFragment<FragmentDetailBillBinding> 
                 binding.btnChangeOrderStatus.setOnClickListener(v -> {
                     Dialog dialog = new Dialog(getContext());
                     DialogUpdateStatusOrderBinding dialogBinding = DialogUpdateStatusOrderBinding.inflate(LayoutInflater.from(getContext()));
+                    if (order.getStatus().equals("active")) {
+                        dialogBinding.tvOrderActive.setEnabled(false);
+                        dialogBinding.tvOrderActive.setAlpha(0.4f);
+                        dialogBinding.tvOrderPending.setEnabled(false);
+                        dialogBinding.tvOrderPending.setAlpha(0.4f);
+                        dialogBinding.tvOrderDelivered.setEnabled(false);
+                        dialogBinding.tvOrderDelivered.setAlpha(0.4f);
+                    }
+                    if (order.getStatus().equals("deactive")) {
+                        dialogBinding.tvOrderDelivered.setEnabled(false);
+                        dialogBinding.tvOrderDelivered.setAlpha(0.4f);
+                        dialogBinding.tvOrderActive.setEnabled(false);
+                        dialogBinding.tvOrderActive.setAlpha(0.4f);
+                        dialogBinding.tvOrderPending.setEnabled(false);
+                        dialogBinding.tvOrderPending.setAlpha(0.4f);
+                        dialogBinding.tvOrderTrading.setEnabled(false);
+                        dialogBinding.tvOrderTrading.setAlpha(0.4f);
+                        dialogBinding.tvOrderDelivered.setEnabled(false);
+                        dialogBinding.tvOrderDelivered.setAlpha(0.4f);
+                    }
+                    if (order.getStatus().equals("pending")) {
+                        dialogBinding.tvOrderPending.setEnabled(false);
+                        dialogBinding.tvOrderPending.setAlpha(0.4f);
+                        dialogBinding.tvOrderTrading.setEnabled(false);
+                        dialogBinding.tvOrderTrading.setAlpha(0.4f);
+                        dialogBinding.tvOrderDelivered.setEnabled(false);
+                        dialogBinding.tvOrderDelivered.setAlpha(0.4f);
+                    }
+                    if (order.getStatus().equals("trading")) {
+                        dialogBinding.tvOrderActive.setEnabled(false);
+                        dialogBinding.tvOrderActive.setAlpha(0.4f);
+                        dialogBinding.tvOrderPending.setEnabled(false);
+                        dialogBinding.tvOrderPending.setAlpha(0.4f);
+                        dialogBinding.tvOrderTrading.setEnabled(false);
+                        dialogBinding.tvOrderTrading.setAlpha(0.4f);
+                        dialogBinding.tvOrderDeactive.setEnabled(false);
+                        dialogBinding.tvOrderDeactive.setAlpha(0.4f);
+                    }
                     dialogBinding.tvOrderActive.setOnClickListener(v1 -> {
                         ApiService apiService = ApiClient.getClient().create(ApiService.class);
                         RequestUpdateStatus requestUpdateStatus = new RequestUpdateStatus("active");
@@ -174,6 +212,12 @@ public class DetailBillFragment extends BaseFragment<FragmentDetailBillBinding> 
                                     binding.tvOrderStatus.setText("Xác nhận");
                                     binding.tvOrderStatus.setTextColor(Color.parseColor("#00CC00"));
                                     binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_active);
+                                    dialogBinding.tvOrderActive.setEnabled(false);
+                                    dialogBinding.tvOrderActive.setAlpha(0.4f);
+                                    dialogBinding.tvOrderPending.setEnabled(false);
+                                    dialogBinding.tvOrderPending.setAlpha(0.4f);
+                                    dialogBinding.tvOrderDelivered.setEnabled(false);
+                                    dialogBinding.tvOrderDelivered.setAlpha(0.4f);
                                 } else {
                                     Toast.makeText(getActivity(), "Thay đổi trạng thái đơn hàng thất bại", Toast.LENGTH_SHORT).show();
                                 }
@@ -198,6 +242,16 @@ public class DetailBillFragment extends BaseFragment<FragmentDetailBillBinding> 
                                     binding.tvOrderStatus.setText("Đã hủy");
                                     binding.tvOrderStatus.setTextColor(Color.parseColor("#000000"));
                                     binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_deactive);
+                                    dialogBinding.tvOrderDelivered.setEnabled(false);
+                                    dialogBinding.tvOrderDelivered.setAlpha(0.4f);
+                                    dialogBinding.tvOrderActive.setEnabled(false);
+                                    dialogBinding.tvOrderActive.setAlpha(0.4f);
+                                    dialogBinding.tvOrderPending.setEnabled(false);
+                                    dialogBinding.tvOrderPending.setAlpha(0.4f);
+                                    dialogBinding.tvOrderTrading.setEnabled(false);
+                                    dialogBinding.tvOrderTrading.setAlpha(0.4f);
+                                    dialogBinding.tvOrderDelivered.setEnabled(false);
+                                    dialogBinding.tvOrderDelivered.setAlpha(0.4f);
                                 } else {
                                     Toast.makeText(getActivity(), "Thay đổi trạng thái đơn hàng thất bại", Toast.LENGTH_SHORT).show();
                                 }
@@ -222,6 +276,12 @@ public class DetailBillFragment extends BaseFragment<FragmentDetailBillBinding> 
                                     binding.tvOrderStatus.setText("Chờ xác nhận");
                                     binding.tvOrderStatus.setTextColor(Color.parseColor("#C67C4E"));
                                     binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_pending);
+                                    dialogBinding.tvOrderPending.setEnabled(false);
+                                    dialogBinding.tvOrderPending.setAlpha(0.4f);
+                                    dialogBinding.tvOrderTrading.setEnabled(false);
+                                    dialogBinding.tvOrderTrading.setAlpha(0.4f);
+                                    dialogBinding.tvOrderDelivered.setEnabled(false);
+                                    dialogBinding.tvOrderDelivered.setAlpha(0.4f);
                                 } else {
                                     Toast.makeText(getActivity(), "Thay đổi trạng thái đơn hàng thất bại", Toast.LENGTH_SHORT).show();
                                 }
@@ -246,6 +306,14 @@ public class DetailBillFragment extends BaseFragment<FragmentDetailBillBinding> 
                                     binding.tvOrderStatus.setText("Đang giao hàng");
                                     binding.tvOrderStatus.setTextColor(Color.parseColor("#FFA500"));
                                     binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_trading);
+                                    dialogBinding.tvOrderActive.setEnabled(false);
+                                    dialogBinding.tvOrderActive.setAlpha(0.4f);
+                                    dialogBinding.tvOrderPending.setEnabled(false);
+                                    dialogBinding.tvOrderPending.setAlpha(0.4f);
+                                    dialogBinding.tvOrderTrading.setEnabled(false);
+                                    dialogBinding.tvOrderTrading.setAlpha(0.4f);
+                                    dialogBinding.tvOrderDeactive.setEnabled(false);
+                                    dialogBinding.tvOrderDeactive.setAlpha(0.4f);
                                 } else {
                                     Toast.makeText(getActivity(), "Thay đổi trạng thái đơn hàng thất bại", Toast.LENGTH_SHORT).show();
                                 }
@@ -271,6 +339,7 @@ public class DetailBillFragment extends BaseFragment<FragmentDetailBillBinding> 
                                             binding.tvOrderStatus.setText("Đã giao hàng");
                                             binding.tvOrderStatus.setTextColor(Color.parseColor("#FF0000"));
                                             binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_success);
+                                            setDisableOrderButton();
                                         } else {
                                             Toast.makeText(getActivity(), "Thay đổi trạng thái đơn hàng thất bại", Toast.LENGTH_SHORT).show();
                                         }
@@ -363,5 +432,28 @@ public class DetailBillFragment extends BaseFragment<FragmentDetailBillBinding> 
     private void setEnableCancelButton() {
         binding.btnChangeOrderStatus.setEnabled(true);
         binding.btnChangeOrderStatus.setAlpha(1f);
+    }
+
+    private void setDialogBindingBasedOnStatus(String status, DialogUpdateStatusOrderBinding dialogBinding) {
+        boolean isActive = status.equals("active");
+        boolean isDeactive = status.equals("deactive");
+        boolean isPending = status.equals("pending");
+        boolean isTrading = status.equals("trading");
+        boolean isDelivered = status.equals("delivered");
+
+        dialogBinding.tvOrderActive.setEnabled(!isActive);
+        dialogBinding.tvOrderActive.setAlpha(isActive ? 0.4f : 1f);
+
+        dialogBinding.tvOrderPending.setEnabled(!(isActive || isDeactive || isPending));
+        dialogBinding.tvOrderPending.setAlpha((isActive || isDeactive || isPending) ? 0.4f : 1f);
+
+        dialogBinding.tvOrderTrading.setEnabled(!(isPending || isTrading));
+        dialogBinding.tvOrderTrading.setAlpha((isPending || isTrading) ? 0.4f : 1f);
+
+        dialogBinding.tvOrderDeactive.setEnabled(!(isTrading || isDelivered));
+        dialogBinding.tvOrderDeactive.setAlpha((isTrading || isDelivered) ? 0.4f : 1f);
+
+        dialogBinding.tvOrderDelivered.setEnabled(!isDelivered);
+        dialogBinding.tvOrderDelivered.setAlpha(isDelivered ? 0.4f : 1f);
     }
 }

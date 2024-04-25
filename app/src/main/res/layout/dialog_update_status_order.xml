@@ -58,7 +58,7 @@
         android:gravity="center_horizontal"
         android:paddingHorizontal="20dp"
         android:paddingVertical="5dp"
-        android:text="Đã hủy"
+        android:text="Hủy đơn hàng"
         android:textColor="@color/colorBlack"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -81,7 +81,7 @@
         android:gravity="center_horizontal"
         android:paddingHorizontal="20dp"
         android:paddingVertical="5dp"
-        android:text="Đang xử lý"
+        android:text="Chờ xác nhận"
         android:textColor="#C67C4E"
         android:textSize="18sp"
         android:textStyle="bold" />

@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.eu_fstyle_mobile.R;
+import com.example.eu_fstyle_mobile.databinding.DetailHistoryDialogBinding;
 import com.example.eu_fstyle_mobile.databinding.DialogUpdateStatusOrderBinding;
 import com.example.eu_fstyle_mobile.databinding.FragmentDetailOrderStatusBinding;
 import com.example.eu_fstyle_mobile.src.adapter.OrderAdminProductAdapter;
@@ -86,40 +87,79 @@ public class DetailOrderStatusFragment extends BaseFragment<FragmentDetailOrderS
                 Orders order = listOrderID.getOrder();
                 binding.tvOrderQuantum.setText(String.valueOf(order.getListProduct().size()));
                 binding.tvOrderId.setText(order.get_id());
+                String createDate = formatDate(order.getTimeOrder());
+                binding.tvOrderTime.setText(createDate);
                 if (order.getStatus().equals("active")) {
                     binding.tvOrderStatus.setText("Xác nhận");
                     binding.tvOrderStatus.setTextColor(Color.parseColor("#00CC00"));
                     binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_active);
+                    String activeData = formatDate(order.getTimeConfirm());
+                    binding.tvOrderHistory.setText(String.format(getString(R.string.tv_order_history_active),order.get_id(), activeData));
                 } else if (order.getStatus().equals("deactive")) {
                     binding.tvOrderStatus.setText("Đã hủy");
                     binding.tvOrderStatus.setTextColor(Color.parseColor("#000000"));
                     binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_deactive);
+                    String deactiveData = formatDate(order.getTimeCancel());
+                    binding.tvOrderHistory.setText(String.format(getString(R.string.tv_order_history_deactive),order.get_id(), deactiveData));
                 } else if (order.getStatus().equals("pending")) {
                     binding.tvOrderStatus.setText("Chờ xác nhận");
                     binding.tvOrderStatus.setTextColor(Color.parseColor("#C67C4E"));
                     binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_pending);
+                    binding.tvOrderHistory.setText(String.format(getString(R.string.tv_order_history_pending),order.get_id(),createDate));
                 } else if (order.getStatus().equals("trading")) {
-                    binding.tvOrderStatus.setText("Đang giao hàng");
+                    binding.tvOrderStatus.setText("Đang giao");
                     binding.tvOrderStatus.setTextColor(Color.parseColor("#FFA500"));
                     binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_trading);
-                } else if (order.getStatus().equals("success")) {
+                    String tradingData = formatDate(order.getTimeDelivery());
+                    binding.tvOrderHistory.setText(String.format(getString(R.string.tv_order_history_trading),order.get_id(), tradingData));
+                } else if (order.getStatus().equals("delivered")) {
                     binding.tvOrderStatus.setText("Đã giao hàng");
                     binding.tvOrderStatus.setTextColor(Color.parseColor("#FF0000"));
                     binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_success);
+                    String deliveredData = formatDate(order.getTimeSuccess());
+                    binding.tvOrderHistory.setText(String.format(getString(R.string.tv_order_history_delivered),order.get_id(), deliveredData));
                 }
-                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-                inputFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-                Date date = null;
-                try {
-                    date = inputFormat.parse(order.getTimeOrder());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                binding.btnOrderHistoryDetail.setOnClickListener(v -> {
+                    Dialog dialog = new Dialog(getActivity());
+                    DetailHistoryDialogBinding dialogBinding = DetailHistoryDialogBinding.inflate(getLayoutInflater());
+                    dialog.setContentView(dialogBinding.getRoot());
+                    dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    if (order.getTimeConfirm() != null) {
+                        String activeData = formatDate(order.getTimeConfirm());
+                        dialogBinding.tvHistoryActive.setText(activeData);
+                    } else {
+                        dialogBinding.tvHistoryActive.setText("Chưa xác nhận");
+                    }
 
-                SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
-                String formattedDate = outputFormat.format(date);
+                    dialogBinding.tvHistoryPending.setText(createDate);
 
-                binding.tvOrderTime.setText(formattedDate);
+                    if (order.getTimeDelivery() != null) {
+                        String tradingData = formatDate(order.getTimeDelivery());
+                        dialogBinding.tvHistoryTrading.setText(tradingData);
+                    } else {
+                        dialogBinding.tvHistoryTrading.setText("Chưa giao hàng");
+                    }
+
+                    if (order.getTimeSuccess() != null) {
+                        String deliveredData = formatDate(order.getTimeSuccess());
+                        dialogBinding.tvHistoryDelivered.setText(deliveredData);
+                    } else {
+                        dialogBinding.tvHistoryDelivered.setText("Chưa giao hàng");
+                    }
+
+                    if (order.getTimeCancel() != null) {
+                        String deactiveData = formatDate(order.getTimeCancel());
+                        dialogBinding.tvHistoryDeative.setText(deactiveData);
+                    } else {
+                        dialogBinding.tvHistoryDeative.setText("Chưa hủy");
+                    }
+
+                    dialogBinding.icClose.setOnClickListener(v1 -> {
+                        dialog.dismiss();
+                    });
+                    dialog.show();
+                });
                 DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
                 double totalPrice = Double.parseDouble(order.getTotalPrice());
                 binding.tvOrderTotalPrice.setText(decimalFormat.format(totalPrice) + " VNĐ");
@@ -215,6 +255,20 @@ public class DetailOrderStatusFragment extends BaseFragment<FragmentDetailOrderS
         }
 
         return totalPrice - shippingCost;
+    }
+
+    public String formatDate(String inputDate) {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+        inputFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date date = null;
+        try {
+            date = inputFormat.parse(inputDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
+        return outputFormat.format(date);
     }
 
     @Override
