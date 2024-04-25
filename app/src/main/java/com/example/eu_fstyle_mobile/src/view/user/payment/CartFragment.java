@@ -36,6 +36,7 @@ import com.example.eu_fstyle_mobile.src.model.ListProduct;
 import com.example.eu_fstyle_mobile.src.model.Product;
 import com.example.eu_fstyle_mobile.src.model.ProductCart;
 import com.example.eu_fstyle_mobile.src.model.User;
+import com.example.eu_fstyle_mobile.src.request.RequestCreateFavourite;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
 import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
 import com.example.eu_fstyle_mobile.src.view.user.home.DetailProductFragment;
@@ -46,6 +47,8 @@ import com.google.android.material.snackbar.Snackbar;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
@@ -53,7 +56,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CartFragment extends BaseFragment<FragmentCartBinding> implements CartAdapter.OnCartClickListener {
+public class CartFragment extends BaseFragment<FragmentCartBinding> implements CartAdapter.OnCartClickListener, ProductHomeAdapter.onClickItem {
     private CartAdapter cartAdapter;
 
     private ProductHomeAdapter mayBeLikeAdapter;
@@ -105,7 +108,19 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
             public void onResponse(Call<ListProduct> call, Response<ListProduct> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     ArrayList<Product> listProduct = response.body().getArrayList();
-                    mayBeLikeAdapter = new ProductHomeAdapter(getActivity(),listProduct,null);
+                    Collections.sort(listProduct, new Comparator<Product>() {
+                        @Override
+                        public int compare(Product p1, Product p2) {
+                            if (Integer.parseInt(p1.getQuantity()) > 0 && Integer.parseInt(p2.getQuantity()) == 0) {
+                                return -1;
+                            }
+                            if (Integer.parseInt(p1.getQuantity()) == 0 && Integer.parseInt(p2.getQuantity()) > 0) {
+                                return 1;
+                            }
+                            return 0;
+                        }
+                    });
+                    mayBeLikeAdapter = new ProductHomeAdapter(getActivity(),listProduct,CartFragment.this);
                     binding.rcvMaybeLike.setLayoutManager(new GridLayoutManager(getActivity(), 2));
                     binding.rcvMaybeLike.setAdapter(mayBeLikeAdapter);
                     mayBeLikeAdapter.setOnClickItem(new ProductHomeAdapter.onClickItem() {
@@ -117,11 +132,6 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
 
                         @Override
                         public void onClickFavourite(Product product) {
-
-                        }
-
-                        @Override
-                        public void onClickCart(Product product) {
 
                         }
                     });
@@ -482,5 +492,34 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
         builder.setMessage("Mã sản phẩm: " + productCart.getIdProduct() + "\nTên sản phẩm: " + productCart.getName() + "\nGiá sản phẩm: " + productCart.getPrice() + "\nSize: " + productCart.getSize() + "\nSố lượng: " + productCart.getSoLuong());
         builder.setPositiveButton("OK", null);
         builder.show();
+    }
+
+    @Override
+    public void onClick(Product product) {
+        DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
+        openScreenHome(detailProductFragment, true);
+    }
+
+    @Override
+    public void onClickFavourite(Product product) {
+        User user = UserPrefManager.getInstance(getActivity()).getUser();
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        RequestCreateFavourite requestCreateFavourite = new RequestCreateFavourite(product.get_id(), product.getName(), product.getQuantity(), product.getPrice().toString(), product.getImage64()[0]);
+        Call<Product> call = apiService.createFavorite(user.get_id(), requestCreateFavourite);
+        call.enqueue(new Callback<Product>() {
+            @Override
+            public void onResponse(Call<Product> call, Response<Product> response) {
+                if (response.isSuccessful()) {
+                    showSuccessDialog("Thêm vào yêu thích thành công");
+                } else {
+                    showAlertDialog("Thêm vào yêu thích thất bại");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Product> call, Throwable t) {
+                Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

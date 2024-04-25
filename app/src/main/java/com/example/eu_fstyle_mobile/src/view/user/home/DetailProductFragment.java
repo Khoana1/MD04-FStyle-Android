@@ -460,10 +460,4 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
             }
         });
     }
-
-    @Override
-    public void onClickCart(Product product) {
-        DetailProductFragment detailProductFragment = DetailProductFragment.newInstance(product);
-        openScreenHome(detailProductFragment, true);
-    }
 }

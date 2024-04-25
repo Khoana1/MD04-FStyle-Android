@@ -64,15 +64,11 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
         holder.txtName.setText(product.getName());
         if (Integer.parseInt(product.getQuantity()) == 0) {
             holder.imageView_sold_out.setVisibility(View.VISIBLE);
+            holder.itemView.setAlpha(0.5f);
         } else {
+            holder.itemView.setAlpha(1f);
             holder.imageView_sold_out.setVisibility(View.INVISIBLE);
         }
-        holder.btn_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickItem.onClickCart(product);
-            }
-        });
         holder.ll_favourite.setOnClickListener(v -> {
             onClickItem.onClickFavourite(product);
         });
@@ -96,8 +92,6 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
         void onClick(Product product);
 
         void onClickFavourite(Product product);
-
-        void onClickCart(Product product);
     }
     public class Viewholder extends RecyclerView.ViewHolder{
         ImageView imageView,imageView_sold_out;

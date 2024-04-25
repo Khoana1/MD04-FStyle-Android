@@ -64,8 +64,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Viewholder
         holder.txtName.setText(product.getName());
         if (Integer.parseInt(product.getQuantity()) == 0) {
             holder.imageView_sold_out.setVisibility(View.VISIBLE);
+            holder.itemView.setAlpha(0.5f);
         } else {
             holder.imageView_sold_out.setVisibility(View.INVISIBLE);
+            holder.itemView.setAlpha(1f);
         }
         holder.btn_add.setOnClickListener(new View.OnClickListener() {
             @Override

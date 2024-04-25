@@ -229,6 +229,18 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                     hideLoadingDialog();
                     listProduct = response.body().getArrayList();
                     Log.d("Huy", "onResponse: " + listProduct.get(0).getName());
+                    Collections.sort(listProduct, new Comparator<Product>() {
+                        @Override
+                        public int compare(Product p1, Product p2) {
+                            if (Integer.parseInt(p1.getQuantity()) > 0 && Integer.parseInt(p2.getQuantity()) == 0) {
+                                return -1;
+                            }
+                            if (Integer.parseInt(p1.getQuantity()) == 0 && Integer.parseInt(p2.getQuantity()) > 0) {
+                                return 1;
+                            }
+                            return 0;
+                        }
+                    });
                     productAdapter = new ProductHomeAdapter(getActivity(), listProduct, HomeFragment.this);
                     binding.recycleProductHame.setLayoutManager(new GridLayoutManager(getActivity(), 2));
                     binding.recycleProductHame.setAdapter(productAdapter);
@@ -645,11 +657,6 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
                 Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    @Override
-    public void onClickCart(Product product) {
-
     }
 
     private void getCartCountNumber() {
