@@ -271,6 +271,27 @@ public class OrderStatusFragment extends BaseFragment<FragmentOrderStatusBinding
                     public void afterTextChanged(Editable s) {
                     }
                 });
+                binding.searchDateEditText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        String searchText = s.toString();
+                        if (searchText.length() > 0) {
+                            binding.imgDeleteSearchDate.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.imgDeleteSearchDate.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
                 binding.icSwitch.setOnClickListener(v -> {
                     if (binding.llSearchOrder.getVisibility() == View.VISIBLE) {
                         binding.llSearchOrder.setVisibility(View.GONE);

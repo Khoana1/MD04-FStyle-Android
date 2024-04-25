@@ -3,6 +3,7 @@ package com.example.eu_fstyle_mobile.src.view.admin;
 import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -10,7 +11,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,16 +29,15 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentAddProductBinding;
+import com.example.eu_fstyle_mobile.databinding.NumberPickerDialogBinding;
 import com.example.eu_fstyle_mobile.src.adapter.CategorySpinnerAdapter;
 import com.example.eu_fstyle_mobile.src.adapter.ImageAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.Categories;
 import com.example.eu_fstyle_mobile.src.model.ListCategories;
 import com.example.eu_fstyle_mobile.src.model.Product;
-import com.example.eu_fstyle_mobile.src.model.User;
 import com.example.eu_fstyle_mobile.src.view.custom.CustomSpinner;
 import com.example.eu_fstyle_mobile.src.view.custom.NumberTextWatcherForThousand;
-import com.example.eu_fstyle_mobile.ultilties.AdminPreManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.ByteArrayOutputStream;
@@ -230,6 +229,30 @@ public class AddProductFragment extends BaseFragment<FragmentAddProductBinding> 
                 clearFocusEditText();
                 return false;
             }
+        });
+        binding.imgDeleteSize.setOnClickListener(v -> {
+            binding.edSzie.setText("");
+        });
+        binding.imgNumberPicker.setOnClickListener(v -> {
+            Dialog dialog = new Dialog(getActivity());
+            NumberPickerDialogBinding numberPickerDialogBinding = NumberPickerDialogBinding.inflate(getLayoutInflater());
+            dialog.setContentView(numberPickerDialogBinding.getRoot());
+            numberPickerDialogBinding.numberPicker.setMinValue(1);
+            numberPickerDialogBinding.numberPicker.setMaxValue(50);
+            numberPickerDialogBinding.numberPicker.setValue(35);
+            numberPickerDialogBinding.btnDone.setOnClickListener(v1 -> {
+                int selectedSize = numberPickerDialogBinding.numberPicker.getValue();
+
+                String currentText = binding.edSzie.getText().toString();
+
+                if (currentText.isEmpty()) {
+                    binding.edSzie.setText(String.valueOf(selectedSize));
+                } else {
+                    binding.edSzie.setText(currentText + "," + selectedSize);
+                }
+                dialog.dismiss();
+            });
+            dialog.show();
         });
     }
     private List<Integer> sizeArray(String[] listString){

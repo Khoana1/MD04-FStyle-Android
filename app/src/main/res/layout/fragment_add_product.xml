@@ -117,28 +117,53 @@
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/size_container"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            <LinearLayout
+                android:id="@+id/ll_size"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:helperText="Không được để trống"
-                android:layout_marginHorizontal="20dp"
+                android:orientation="horizontal"
                 android:layout_marginTop="10dp"
-                app:helperTextTextColor="#FF0000"
+                android:layout_marginHorizontal="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/llPriceSizeContainer">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edSzie"
-                    android:layout_width="match_parent"
+                app:layout_constraintTop_toBottomOf="@+id/llPriceSizeContainer"
+                >
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/size_container"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="Ví dụ: 37,38,39"
-                    android:lines="1" />
+                    android:layout_weight="1"
+                    app:helperText="Không được để trống"
+                    app:helperTextTextColor="#FF0000">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edSzie"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Ví dụ: 37,38,39"
+                        android:lines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/img_delete_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_delete_search" />
+
+                <ImageView
+                    android:id="@+id/img_number_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_number_black" />
+
+            </LinearLayout>
 
 
-            </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/colorContainer"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -150,7 +175,7 @@
                 app:helperTextTextColor="#FF0000"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/size_container">
+                app:layout_constraintTop_toBottomOf="@id/ll_size">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edtColor"
