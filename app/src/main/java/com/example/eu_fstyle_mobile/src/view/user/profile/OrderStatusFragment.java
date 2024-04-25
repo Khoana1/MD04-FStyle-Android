@@ -60,13 +60,31 @@ public class OrderStatusFragment extends BaseFragment<FragmentOrderStatusBinding
     }
 
     private void initView() {
+        binding.llSearch.setVisibility(View.VISIBLE);
         binding.icBack.setOnClickListener(v -> {
             getActivity().onBackPressed();
         });
         binding.rltFilterOrder.setVisibility(View.GONE);
         binding.tvCancelFilterOrder.setOnClickListener(v -> {
             binding.rltFilterOrder.setVisibility(View.GONE);
+            binding.llSearch.setVisibility(View.VISIBLE);
             orderStatusViewModel.getOrderByUserID(UserPrefManager.getInstance(getActivity()).getUser().get_id());
+            if (binding.llSearchDate.getVisibility() == View.VISIBLE) {
+                binding.llSearchDate.setVisibility(View.GONE);
+                binding.llSearchOrder.setVisibility(View.VISIBLE);
+            } else {
+                binding.llSearchOrder.setVisibility(View.VISIBLE);
+            }
+        });
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> {
+            binding.swipeRefreshLayout.setRefreshing(false);
+            binding.rltFilterOrder.setVisibility(View.GONE);
+            if (binding.llSearchDate.getVisibility() == View.VISIBLE) {
+                binding.llSearchDate.setVisibility(View.GONE);
+                binding.llSearchOrder.setVisibility(View.VISIBLE);
+            } else {
+                binding.llSearchOrder.setVisibility(View.VISIBLE);
+            }
         });
     }
 
@@ -80,8 +98,9 @@ public class OrderStatusFragment extends BaseFragment<FragmentOrderStatusBinding
                     BottomSheetFilterOrderBinding bottomSheetFilterOrderBinding = BottomSheetFilterOrderBinding.inflate(LayoutInflater.from(getContext()));
                     bottomSheetDialog.setContentView(bottomSheetFilterOrderBinding.getRoot());
                     bottomSheetFilterOrderBinding.tvOrderAll.setOnClickListener(v1 -> {
-                        binding.rcvOrderStatus.setAdapter(new MyOrderStatusAdapter(listOrder.getOrders(), OrderStatusFragment.this));
+                        updateOrder(listOrder.getOrders());
                         binding.rltFilterOrder.setVisibility(View.GONE);
+                        binding.llSearch.setVisibility(View.VISIBLE);
                         bottomSheetDialog.dismiss();
                     });
                     bottomSheetFilterOrderBinding.tvOrderActive.setOnClickListener(v1 -> {
@@ -94,6 +113,7 @@ public class OrderStatusFragment extends BaseFragment<FragmentOrderStatusBinding
                         updateOrder(activeOrders);
                         binding.rltFilterOrder.setVisibility(View.VISIBLE);
                         binding.tvFilterOrder.setText("Lọc theo: Đơn hàng Đã xác nhận");
+                        binding.llSearch.setVisibility(View.GONE);
                         bottomSheetDialog.dismiss();
                     });
                     bottomSheetFilterOrderBinding.tvOrderDeactive.setOnClickListener(v1 -> {
@@ -106,6 +126,7 @@ public class OrderStatusFragment extends BaseFragment<FragmentOrderStatusBinding
                         updateOrder(cancelOrders);
                         binding.rltFilterOrder.setVisibility(View.VISIBLE);
                         binding.tvFilterOrder.setText("Lọc theo: Đơn hàng Đã hủy");
+                        binding.llSearch.setVisibility(View.GONE);
                         bottomSheetDialog.dismiss();
                     });
                     bottomSheetFilterOrderBinding.tvOrderPending.setOnClickListener(v1 -> {
@@ -118,6 +139,7 @@ public class OrderStatusFragment extends BaseFragment<FragmentOrderStatusBinding
                         updateOrder(pendingOrders);
                         binding.rltFilterOrder.setVisibility(View.VISIBLE);
                         binding.tvFilterOrder.setText("Lọc theo: Đơn hàng Chờ xác nhận");
+                        binding.llSearch.setVisibility(View.GONE);
                         bottomSheetDialog.dismiss();
                     });
                     bottomSheetFilterOrderBinding.tvOrderTrading.setOnClickListener(v1 -> {
@@ -130,6 +152,7 @@ public class OrderStatusFragment extends BaseFragment<FragmentOrderStatusBinding
                         updateOrder(tradingOrders);
                         binding.rltFilterOrder.setVisibility(View.VISIBLE);
                         binding.tvFilterOrder.setText("Lọc theo: Đơn hàng Đang giao");
+                        binding.llSearch.setVisibility(View.GONE);
                         bottomSheetDialog.dismiss();
                     });
                     bottomSheetFilterOrderBinding.tvOrderDelivered.setOnClickListener(v1 -> {
@@ -142,6 +165,7 @@ public class OrderStatusFragment extends BaseFragment<FragmentOrderStatusBinding
                         updateOrder(deliveredOrders);
                         binding.rltFilterOrder.setVisibility(View.VISIBLE);
                         binding.tvFilterOrder.setText("Lọc theo: Đơn hàng Đã giao");
+                        binding.llSearch.setVisibility(View.GONE);
                         bottomSheetDialog.dismiss();
                     });
                     bottomSheetFilterOrderBinding.btnNew.setOnClickListener(v1 -> {
@@ -155,6 +179,7 @@ public class OrderStatusFragment extends BaseFragment<FragmentOrderStatusBinding
                         binding.rcvOrderStatus.setAdapter(new MyOrderStatusAdapter(sortedOrders, OrderStatusFragment.this));
                         binding.rltFilterOrder.setVisibility(View.VISIBLE);
                         binding.tvFilterOrder.setText("Lọc theo: Mới nhất → Cũ nhất");
+                        binding.llSearch.setVisibility(View.GONE);
                         bottomSheetDialog.dismiss();
                     });
                     bottomSheetFilterOrderBinding.btnOld.setOnClickListener(v1 -> {
@@ -168,6 +193,7 @@ public class OrderStatusFragment extends BaseFragment<FragmentOrderStatusBinding
                         binding.rcvOrderStatus.setAdapter(new MyOrderStatusAdapter(sortedOrders, OrderStatusFragment.this));
                         binding.rltFilterOrder.setVisibility(View.VISIBLE);
                         binding.tvFilterOrder.setText("Lọc theo: Cũ nhất → Mới nhất");
+                        binding.llSearch.setVisibility(View.GONE);
                         bottomSheetDialog.dismiss();
                     });
                     bottomSheetDialog.show();
