@@ -210,7 +210,7 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
         binding.detailTxtPhivanchuyen.setText(decimalFormat.format(15000));
         binding.tenDetail.setText(product.getName());
         binding.giaDetail.setText(decimalFormat.format(product.getPrice()) + " VNĐ");
-        binding.dabanDetail.setText("Kho: " + product.getQuantity());
+        binding.dabanDetail.setText("Đã bán: " + product.getSoldQuantity());
         binding.detailTxtMota.setText(product.getDescription());
         binding.detailTextview.setText("1" + "/" + product.getImage64().length);
         binding.textShowMore.setOnClickListener(v -> {

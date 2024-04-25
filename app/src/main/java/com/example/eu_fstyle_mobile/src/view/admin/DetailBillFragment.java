@@ -201,129 +201,154 @@ public class DetailBillFragment extends BaseFragment<FragmentDetailBillBinding> 
                         dialogBinding.tvOrderDeactive.setAlpha(0.4f);
                     }
                     dialogBinding.tvOrderActive.setOnClickListener(v1 -> {
-                        setDisableOrderButton();
-                        ApiService apiService = ApiClient.getClient().create(ApiService.class);
-                        RequestUpdateStatus requestUpdateStatus = new RequestUpdateStatus("active");
-                        Call<Orders> call = apiService.updateOrderStatus(order.get_id(), requestUpdateStatus);
-                        call.enqueue(new Callback<Orders>() {
+                        showDialog("Thay đổi trạng thái đơn hàng", "Bạn có muốn Xác nhận đơn hàng không ?", new Runnable() {
                             @Override
-                            public void onResponse(Call<Orders> call, Response<Orders> response) {
-                                if (response.isSuccessful()) {
-                                    Toast.makeText(getActivity(), "Đã thay đổi trạng thái đơn hàng thành công", Toast.LENGTH_SHORT).show();
-                                    binding.tvOrderStatus.setText("Xác nhận");
-                                    binding.tvOrderStatus.setTextColor(Color.parseColor("#00CC00"));
-                                    binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_active);
-                                } else {
-                                    Toast.makeText(getActivity(), "Thay đổi trạng thái đơn hàng thất bại", Toast.LENGTH_SHORT).show();
-                                }
-                            }
+                            public void run() {
+                                setDisableOrderButton();
+                                ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                                RequestUpdateStatus requestUpdateStatus = new RequestUpdateStatus("active");
+                                Call<Orders> call = apiService.updateOrderStatus(order.get_id(), requestUpdateStatus);
+                                call.enqueue(new Callback<Orders>() {
+                                    @Override
+                                    public void onResponse(Call<Orders> call, Response<Orders> response) {
+                                        if (response.isSuccessful()) {
+                                            Toast.makeText(getActivity(), "Đã thay đổi trạng thái đơn hàng thành công", Toast.LENGTH_SHORT).show();
+                                            binding.tvOrderStatus.setText("Xác nhận");
+                                            binding.tvOrderStatus.setTextColor(Color.parseColor("#00CC00"));
+                                            binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_active);
+                                        } else {
+                                            Toast.makeText(getActivity(), "Thay đổi trạng thái đơn hàng thất bại", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
 
-                            @Override
-                            public void onFailure(Call<Orders> call, Throwable t) {
-                                Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    @Override
+                                    public void onFailure(Call<Orders> call, Throwable t) {
+                                        Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                dialog.dismiss();
                             }
                         });
-                        dialog.dismiss();
                     });
                     dialogBinding.tvOrderDeactive.setOnClickListener(v1 -> {
-                        setDisableOrderButton();
-                        ApiService apiService = ApiClient.getClient().create(ApiService.class);
-                        RequestUpdateStatus requestUpdateStatus = new RequestUpdateStatus("deactive");
-                        Call<Orders> call = apiService.updateOrderStatus(order.get_id(), requestUpdateStatus);
-                        call.enqueue(new Callback<Orders>() {
+                        showDialog("Thay đổi trạng thái đơn hàng", "Bạn có muốn Hủy đơn hàng không ?", new Runnable() {
                             @Override
-                            public void onResponse(Call<Orders> call, Response<Orders> response) {
-                                if (response.isSuccessful()) {
-                                    Toast.makeText(getActivity(), "Đã thay đổi trạng thái đơn hàng thành công", Toast.LENGTH_SHORT).show();
-                                    binding.tvOrderStatus.setText("Đã hủy");
-                                    binding.tvOrderStatus.setTextColor(Color.parseColor("#000000"));
-                                    binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_deactive);
-                                } else {
-                                    Toast.makeText(getActivity(), "Thay đổi trạng thái đơn hàng thất bại", Toast.LENGTH_SHORT).show();
-                                }
-                            }
+                            public void run() {
+                                setDisableOrderButton();
+                                ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                                RequestUpdateStatus requestUpdateStatus = new RequestUpdateStatus("deactive");
+                                Call<Orders> call = apiService.updateOrderStatus(order.get_id(), requestUpdateStatus);
+                                call.enqueue(new Callback<Orders>() {
+                                    @Override
+                                    public void onResponse(Call<Orders> call, Response<Orders> response) {
+                                        if (response.isSuccessful()) {
+                                            Toast.makeText(getActivity(), "Đã thay đổi trạng thái đơn hàng thành công", Toast.LENGTH_SHORT).show();
+                                            binding.tvOrderStatus.setText("Đã hủy");
+                                            binding.tvOrderStatus.setTextColor(Color.parseColor("#000000"));
+                                            binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_deactive);
+                                        } else {
+                                            Toast.makeText(getActivity(), "Thay đổi trạng thái đơn hàng thất bại", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
 
-                            @Override
-                            public void onFailure(Call<Orders> call, Throwable t) {
-                                Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    @Override
+                                    public void onFailure(Call<Orders> call, Throwable t) {
+                                        Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                dialog.dismiss();
                             }
                         });
-                        dialog.dismiss();
                     });
                     dialogBinding.tvOrderPending.setOnClickListener(v1 -> {
-                        setDisableOrderButton();
-                        ApiService apiService = ApiClient.getClient().create(ApiService.class);
-                        RequestUpdateStatus requestUpdateStatus = new RequestUpdateStatus("pending");
-                        Call<Orders> call = apiService.updateOrderStatus(order.get_id(), requestUpdateStatus);
-                        call.enqueue(new Callback<Orders>() {
+                        showDialog("Thay đổi trạng thái đơn hàng", "Bạn có muốn đổi trạng thái Chờ xác nhận đơn hàng không ?", new Runnable() {
                             @Override
-                            public void onResponse(Call<Orders> call, Response<Orders> response) {
-                                if (response.isSuccessful()) {
-                                    Toast.makeText(getActivity(), "Đã thay đổi trạng thái đơn hàng thành công", Toast.LENGTH_SHORT).show();
-                                    binding.tvOrderStatus.setText("Chờ xác nhận");
-                                    binding.tvOrderStatus.setTextColor(Color.parseColor("#C67C4E"));
-                                    binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_pending);
-                                } else {
-                                    Toast.makeText(getActivity(), "Thay đổi trạng thái đơn hàng thất bại", Toast.LENGTH_SHORT).show();
-                                }
-                            }
+                            public void run() {
+                                setDisableOrderButton();
+                                ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                                RequestUpdateStatus requestUpdateStatus = new RequestUpdateStatus("pending");
+                                Call<Orders> call = apiService.updateOrderStatus(order.get_id(), requestUpdateStatus);
+                                call.enqueue(new Callback<Orders>() {
+                                    @Override
+                                    public void onResponse(Call<Orders> call, Response<Orders> response) {
+                                        if (response.isSuccessful()) {
+                                            Toast.makeText(getActivity(), "Đã thay đổi trạng thái đơn hàng thành công", Toast.LENGTH_SHORT).show();
+                                            binding.tvOrderStatus.setText("Chờ xác nhận");
+                                            binding.tvOrderStatus.setTextColor(Color.parseColor("#C67C4E"));
+                                            binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_pending);
+                                        } else {
+                                            Toast.makeText(getActivity(), "Thay đổi trạng thái đơn hàng thất bại", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
 
-                            @Override
-                            public void onFailure(Call<Orders> call, Throwable t) {
-                                Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    @Override
+                                    public void onFailure(Call<Orders> call, Throwable t) {
+                                        Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                dialog.dismiss();
                             }
                         });
-                        dialog.dismiss();
                     });
                     dialogBinding.tvOrderTrading.setOnClickListener(v1 -> {
-                        setDisableOrderButton();
-                        ApiService apiService = ApiClient.getClient().create(ApiService.class);
-                        RequestUpdateStatus requestUpdateStatus = new RequestUpdateStatus("trading");
-                        Call<Orders> call = apiService.updateOrderStatus(order.get_id(), requestUpdateStatus);
-                        call.enqueue(new Callback<Orders>() {
+                        showDialog("Thay đổi trạng thái đơn hàng", "Bạn có muốn đổi trạng thái Đang giao hàng không ?", new Runnable() {
                             @Override
-                            public void onResponse(Call<Orders> call, Response<Orders> response) {
-                                if (response.isSuccessful()) {
-                                    Toast.makeText(getActivity(), "Đã thay đổi trạng thái đơn hàng thành công", Toast.LENGTH_SHORT).show();
-                                    binding.tvOrderStatus.setText("Đang giao hàng");
-                                    binding.tvOrderStatus.setTextColor(Color.parseColor("#FFA500"));
-                                    binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_trading);
-                                } else {
-                                    Toast.makeText(getActivity(), "Thay đổi trạng thái đơn hàng thất bại", Toast.LENGTH_SHORT).show();
-                                }
-                            }
+                            public void run() {
+                                setDisableOrderButton();
+                                ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                                RequestUpdateStatus requestUpdateStatus = new RequestUpdateStatus("trading");
+                                Call<Orders> call = apiService.updateOrderStatus(order.get_id(), requestUpdateStatus);
+                                call.enqueue(new Callback<Orders>() {
+                                    @Override
+                                    public void onResponse(Call<Orders> call, Response<Orders> response) {
+                                        if (response.isSuccessful()) {
+                                            Toast.makeText(getActivity(), "Đã thay đổi trạng thái đơn hàng thành công", Toast.LENGTH_SHORT).show();
+                                            binding.tvOrderStatus.setText("Đang giao hàng");
+                                            binding.tvOrderStatus.setTextColor(Color.parseColor("#FFA500"));
+                                            binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_trading);
+                                        } else {
+                                            Toast.makeText(getActivity(), "Thay đổi trạng thái đơn hàng thất bại", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
 
-                            @Override
-                            public void onFailure(Call<Orders> call, Throwable t) {
-                                Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    @Override
+                                    public void onFailure(Call<Orders> call, Throwable t) {
+                                        Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                dialog.dismiss();
                             }
                         });
-                        dialog.dismiss();
                     });
                     dialogBinding.tvOrderDelivered.setOnClickListener(v1 -> {
-                        setDisableOrderButton();
-                        ApiService apiService = ApiClient.getClient().create(ApiService.class);
-                        RequestUpdateStatus requestUpdateStatus = new RequestUpdateStatus("delivered");
-                        Call<Orders> call = apiService.updateOrderStatus(order.get_id(), requestUpdateStatus);
-                        call.enqueue(new Callback<Orders>() {
+                        showDialog("Thay đổi trạng thái đơn hàng", "Bạn có muốn xác nhận Giao hàng thành công không ?", new Runnable() {
                             @Override
-                            public void onResponse(Call<Orders> call, Response<Orders> response) {
-                                if (response.isSuccessful()) {
-                                    Toast.makeText(getActivity(), "Đã thay đổi trạng thái đơn hàng thành công", Toast.LENGTH_SHORT).show();
-                                    binding.tvOrderStatus.setText("Đã giao hàng");
-                                    binding.tvOrderStatus.setTextColor(Color.parseColor("#FF0000"));
-                                    binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_success);
-                                } else {
-                                    Toast.makeText(getActivity(), "Thay đổi trạng thái đơn hàng thất bại", Toast.LENGTH_SHORT).show();
-                                }
-                            }
+                            public void run() {
+                                setDisableOrderButton();
+                                ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                                RequestUpdateStatus requestUpdateStatus = new RequestUpdateStatus("delivered");
+                                Call<Orders> call = apiService.updateOrderStatus(order.get_id(), requestUpdateStatus);
+                                call.enqueue(new Callback<Orders>() {
+                                    @Override
+                                    public void onResponse(Call<Orders> call, Response<Orders> response) {
+                                        if (response.isSuccessful()) {
+                                            Toast.makeText(getActivity(), "Đã thay đổi trạng thái đơn hàng thành công", Toast.LENGTH_SHORT).show();
+                                            binding.tvOrderStatus.setText("Đã giao hàng");
+                                            binding.tvOrderStatus.setTextColor(Color.parseColor("#FF0000"));
+                                            binding.tvOrderStatus.setBackgroundResource(R.drawable.bg_order_success);
+                                        } else {
+                                            Toast.makeText(getActivity(), "Thay đổi trạng thái đơn hàng thất bại", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
 
-                            @Override
-                            public void onFailure(Call<Orders> call, Throwable t) {
-                                Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    @Override
+                                    public void onFailure(Call<Orders> call, Throwable t) {
+                                        Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                dialog.dismiss();
                             }
                         });
-                        dialog.dismiss();
                     });
                     dialog.setContentView(dialogBinding.getRoot());
                     dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
