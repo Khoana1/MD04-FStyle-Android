@@ -46,15 +46,49 @@
             android:fontFamily="@font/inter_semi_bold"
             android:background="@color/colorButtonBrown" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcvFavourite"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:spanCount="2"
-            tools:listitem="@layout/item_favourite"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            />
+            >
+            <LinearLayout
+                android:id="@+id/view_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/ll_title"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:src="@drawable/ic_empty_favourite" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/inter_medium"
+                    android:layout_marginHorizontal="30dp"
+                    android:textAlignment="center"
+                    android:text="Không có sản phẩm nào được yêu thích hãy khám phá gian hàng Fstyle ngay thôi"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvFavourite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:spanCount="2"
+                tools:listitem="@layout/item_favourite"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                />
+        </FrameLayout>
+
+
 
     </LinearLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

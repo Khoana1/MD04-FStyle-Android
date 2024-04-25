@@ -54,8 +54,19 @@ public class MyFavouriteFragment extends BaseFragment<FragmentMyFavouriteBinding
             public void onChanged(Favourite favourite) {
                 if (favourite != null) {
                     List<ProductFavourite> productList = favourite.getListProduct();
+                    if (productList.isEmpty()) {
+                        binding.viewEmpty.setVisibility(View.VISIBLE);
+                        binding.rcvFavourite.setVisibility(View.GONE);
+                    } else {
+                        binding.viewEmpty.setVisibility(View.GONE);
+                        binding.rcvFavourite.setVisibility(View.VISIBLE);
+                    }
                     myFavouriteAdapter = new MyFavouriteAdapter(productList, MyFavouriteFragment.this);
                     binding.rcvFavourite.setAdapter(myFavouriteAdapter);
+                } else {
+                    binding.viewEmpty.setVisibility(View.VISIBLE);
+                    binding.rcvFavourite.setVisibility(View.GONE);
+                    Toast.makeText(getActivity(), "Lỗi lấy danh sách sản phẩm yêu thích", Toast.LENGTH_SHORT).show();
                 }
             }
         });
