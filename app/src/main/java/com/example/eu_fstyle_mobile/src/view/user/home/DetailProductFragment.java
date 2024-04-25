@@ -210,11 +210,7 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
         binding.detailTxtPhivanchuyen.setText(decimalFormat.format(15000));
         binding.tenDetail.setText(product.getName());
         binding.giaDetail.setText(decimalFormat.format(product.getPrice()) + " VNĐ");
-        if (product.getSoldQuantity() != null) {
-            binding.dabanDetail.setText("Đã bán: " + product.getSoldQuantity());
-        } else {
-            binding.dabanDetail.setText("Đã bán: 0");
-        }
+        binding.dabanDetail.setText("Kho: " + product.getQuantity());
         binding.detailTxtMota.setText(product.getDescription());
         binding.detailTextview.setText("1" + "/" + product.getImage64().length);
         binding.textShowMore.setOnClickListener(v -> {
@@ -414,6 +410,11 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
             public void onResponse(Call<Cart> call, Response<Cart> response) {
                 if (response.isSuccessful()) {
                     String numberCart = String.valueOf(response.body().getListProduct().size());
+                    if (numberCart.equals("0")) {
+                        binding.tvNumberCart.setVisibility(View.GONE);
+                    } else {
+                        binding.tvNumberCart.setVisibility(View.VISIBLE);
+                    }
                     binding.tvNumberCart.setText(numberCart);
                 }
             }

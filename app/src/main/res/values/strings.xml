@@ -50,4 +50,9 @@
     <string name="default_notification_channel_description">Chào mừng các bạn đến với kênh thông báo chính của FStyle - nơi cập nhật những giao dịch và ưu đãi độc quyền chỉ dành cho bạn!</string>
     <string name="default_notification_channel_id">primary_channel_id</string>
     <string name="content_size_shoe">Để đảm bảo bạn chọn đúng <b>kích thước giày</b>, hãy tham khảo bảng kích thước dưới đây. Hãy lưu ý rằng kích thước có thể thay đổi tùy theo thương hiệu và kiểu giày.</string>
+    <string name="tv_order_history_pending">Đơn hàng %s của Quý khách đã được tạo lúc <b>%s</b> và đang được <b>Chờ xác nhận</b>. Cảm ơn Quý khách đã mua hàng tại ứng dụng FStyle.</string>
+    <string name="tv_order_history_active">Đơn hàng %s của Quý khách đã được <b>Xác nhận</b> vào lúc <b>%s</b> và sẽ được đóng gói và vận chuyển cho Quý khách trong vài ngày tới. Cảm ơn Quý khách đã mua hàng tại ứng dụng FStyle.</string>
+    <string name="tv_order_history_deactive">Đơn hàng %s của Quý khách đã <b>Bị hủy</b> vào lúc <b>%s</b> do gặp sự cố. Cảm ơn Quý khách đã mua hàng tại ứng dụng FStyle. Hẹn gặp lại Quý khách trong thời gian sắp tới!</string>
+    <string name="tv_order_history_trading">Đơn hàng %s của Quý khách đã <b>Được bàn giao</b> cho bên vận chuyển vào lúc <b>%s</b>. Quý khách vui lòng nghe máy khi có nhân viên liên hệ giao hàng.</string>
+    <string name="tv_order_history_delivered">Đơn hàng %s của Quý khách đã được đối tác bên vận chuyển xác nhận <b>Giao thành công</b> vào lúc <b>%s</b>. Cảm ơn Quý khách đã mua hàng tại ứng dụng FStyle.</string>
 </resources>

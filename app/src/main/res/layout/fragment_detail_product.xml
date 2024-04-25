@@ -140,7 +140,8 @@
                     android:background="@drawable/bg_rounded_edit"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="1dp"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
+                    android:fontFamily="@font/inter_medium"
                     app:layout_constraintBottom_toBottomOf="@+id/viewpager_detail"
                     app:layout_constraintEnd_toEndOf="parent"
                     tools:text="1/5" />
@@ -156,8 +157,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
-                    android:textColor="#FF00"
-                    android:textSize="25dp"
+                    android:textColor="@color/colorRed"
+                    android:textSize="22sp"
+                    android:fontFamily="@font/inter_bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="500.000đ" />
@@ -168,8 +170,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/inter_bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/gia_detail"
                     tools:text="tên" />
@@ -181,7 +183,8 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
                     android:text="Đã bán 5"
-                    android:textSize="15sp"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/inter_medium"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ten_detail" />
@@ -212,7 +215,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Phí vận chuyển "
-                    android:textSize="18dp"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/inter_medium"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -222,8 +226,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#FF00"
-                    android:textSize="18dp"
-                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    tools:text="15.000"
+                    android:fontFamily="@font/inter_bold"
                     app:layout_constraintStart_toEndOf="@+id/textView4"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -232,8 +237,8 @@
                     android:layout_height="wrap_content"
                     android:text=" VNĐ"
                     android:textColor="#FF00"
-                    android:textSize="18dp"
-                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/inter_bold"
                     app:layout_constraintStart_toEndOf="@+id/detail_txt_phivanchuyen"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -242,7 +247,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Có hàng sau "
-                    android:textSize="18dp"
+                    android:fontFamily="@font/inter_medium"
+                    android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -251,8 +257,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="3 ngày"
-                    android:textSize="18dp"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/inter_bold"
+                    android:textSize="18sp"
                     app:layout_constraintStart_toEndOf="@+id/textView5"
                     app:layout_constraintTop_toBottomOf="@+id/detail_txt_phivanchuyen" />
 
@@ -261,7 +267,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Hình thức vận chuyển "
-                    android:textSize="18dp"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/inter_medium"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -270,8 +277,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nhanh"
-                    android:textSize="18dp"
-                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/inter_bold"
                     app:layout_constraintStart_toEndOf="@+id/textView6"
                     app:layout_constraintTop_toBottomOf="@+id/detail_txt_dateline" />
 
@@ -300,8 +307,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:text="Mô tả sản phẩm"
-                    android:textSize="18dp"
-                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/inter_bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -312,7 +319,8 @@
                     android:ellipsize="end"
                     android:maxLines="2"
                     android:paddingHorizontal="10dp"
-                    android:textSize="17dp"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/inter_medium"
                     app:layout_constraintTop_toBottomOf="@id/textView7"
                     tools:text="ádasdasdasda" />
 
@@ -322,7 +330,8 @@
                     android:layout_height="wrap_content"
                     android:text="Xem thêm"
                     android:textColor="@color/colorAccent"
-                    android:textSize="15dp"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/inter_medium"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/detail_txt_mota" />
@@ -343,8 +352,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:text="Những sản phẩm tương tự"
-                    android:textSize="18dp"
-                    android:textStyle="bold" />
+                    android:textSize="18sp"
+                    android:fontFamily="@font/inter_bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycle_sanphamtuongtu"
@@ -382,7 +391,8 @@
                     android:layout_height="wrap_content"
                     android:text="Tổng giá"
                     android:textColor="#9B9B9B"
-                    android:textSize="15dp"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/inter_regular"
                     android:textStyle="bold" />
 
                 <TextView
@@ -390,7 +400,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="500.000đ"
+                    tools:text="500.000đ"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/inter_semi_bold"
                     android:textColor="#FF0000" />
             </LinearLayout>
 
@@ -422,6 +434,7 @@
                     android:layout_height="wrap_content"
                     android:text="Thêm giỏ hàng"
                     android:textSize="12sp"
+                    android:fontFamily="@font/inter_medium"
                     android:gravity="center"
                     android:textColor="@color/colorWhite" />
             </LinearLayout>
@@ -433,7 +446,7 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:background="#FFA500"
+            android:background="@color/colorButtonBrown"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -442,7 +455,8 @@
                 android:layout_height="wrap_content"
                 android:text="Mua ngay"
                 android:textColor="#FFFFFF"
-                android:textSize="20sp" />
+                android:fontFamily="@font/inter_medium"
+                android:textSize="18sp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

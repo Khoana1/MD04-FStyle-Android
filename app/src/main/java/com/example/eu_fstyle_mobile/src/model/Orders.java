@@ -28,12 +28,20 @@ public class Orders implements Serializable {
     private String status;
     @SerializedName("timeOrder")
     private String timeOrder;
+    @SerializedName("timeConfirm")
+    private String timeConfirm;
+    @SerializedName("timeDelivery")
+    private String timeDelivery;
+    @SerializedName("timeCancel")
+    private String timeCancel;
+    @SerializedName("timeSuccess")
+    private String timeSuccess;
     @SerializedName("customerName")
     private String customerName;
     @SerializedName("__v")
     private int __v;
 
-    public Orders(String _id, String address, List<ProductOrder> listProduct, String idUser, int quantity, String totalPrice, String phone, String paymentMethods, String shippingMethod, String status, String timeOrder, String customerName, int __v) {
+    public Orders(String _id, String address, List<ProductOrder> listProduct, String idUser, int quantity, String totalPrice, String phone, String paymentMethods, String shippingMethod, String status, String timeOrder, String timeConfirm, String timeDelivery, String timeCancel, String timeSuccess, String customerName, int __v) {
         this._id = _id;
         this.address = address;
         this.listProduct = listProduct;
@@ -45,10 +53,13 @@ public class Orders implements Serializable {
         this.shippingMethod = shippingMethod;
         this.status = status;
         this.timeOrder = timeOrder;
+        this.timeConfirm = timeConfirm;
+        this.timeDelivery = timeDelivery;
+        this.timeCancel = timeCancel;
+        this.timeSuccess = timeSuccess;
         this.customerName = customerName;
         this.__v = __v;
     }
-
     public String get_id() {
         return _id;
     }
@@ -151,5 +162,37 @@ public class Orders implements Serializable {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    public String getTimeConfirm() {
+        return timeConfirm;
+    }
+
+    public void setTimeConfirm(String timeConfirm) {
+        this.timeConfirm = timeConfirm;
+    }
+
+    public String getTimeDelivery() {
+        return timeDelivery;
+    }
+
+    public void setTimeDelivery(String timeDelivery) {
+        this.timeDelivery = timeDelivery;
+    }
+
+    public String getTimeCancel() {
+        return timeCancel;
+    }
+
+    public void setTimeCancel(String timeCancel) {
+        this.timeCancel = timeCancel;
+    }
+
+    public String getTimeSuccess() {
+        return timeSuccess;
+    }
+
+    public void setTimeSuccess(String timeSuccess) {
+        this.timeSuccess = timeSuccess;
     }
 }

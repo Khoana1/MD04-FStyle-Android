@@ -660,9 +660,11 @@ public class HomeFragment extends BaseFragment<FragmentHomeBinding> implements P
             @Override
             public void onResponse(Call<Cart> call, Response<Cart> response) {
                 if (response.isSuccessful()) {
-                    int numberCart = response.body().getListProduct().size();
-                    if (numberCart == 0) {
-                        binding.tvNumberCart.setText("0");
+                    String numberCart = String.valueOf(response.body().getListProduct().size());
+                    if (numberCart.equals("0")) {
+                        binding.tvNumberCart.setVisibility(View.GONE);
+                    } else {
+                        binding.tvNumberCart.setVisibility(View.VISIBLE);
                     }
                     binding.tvNumberCart.setText(String.valueOf(numberCart));
                 }
