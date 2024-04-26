@@ -49,11 +49,10 @@
             android:id="@+id/item_btn_change_quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/item_btn_edit"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:src="@drawable/ic_change_quantity"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="10dp"
+            app:layout_constraintEnd_toStartOf="@id/item_btn_edit"
+            android:layout_marginRight="10dp"
             />
 
         <ImageView
