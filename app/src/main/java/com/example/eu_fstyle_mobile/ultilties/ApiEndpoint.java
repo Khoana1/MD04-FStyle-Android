@@ -13,6 +13,7 @@ public class ApiEndpoint {
     public static final String getAllProducts = "/api/products";
     public static final String getProductsById = "/api/get/productsById/{id}";
     public static final String createProduct = "/api/products";
+    public static final String updateQuantity = "/api/products/update/quantity/{id}";
     public static final String getCart = "/api/cart/{id}";
     public static final String createCart = "/api/add/product/cart/{id}";
     public static final String deleteCart = "/api/del/cart/{id}/{id_product}";

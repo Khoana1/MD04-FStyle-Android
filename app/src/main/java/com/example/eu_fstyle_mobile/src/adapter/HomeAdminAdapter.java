@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -50,12 +51,22 @@ public class HomeAdminAdapter extends RecyclerView.Adapter<HomeAdminAdapter.View
         }else {
             holder.binding.itemImageProductHome.setImageResource(R.drawable.icon_erro);
         }
+        if (Integer.parseInt(product.getQuantity()) == 0) {
+            holder.itemView.setAlpha(0.5f);
+        } else {
+            holder.itemView.setAlpha(1f);
+        }
         holder.binding.itemNameProductHome.setText(product.getName());
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         holder.binding.itemPriceProductHome.setText(decimalFormat.format(product.getPrice()) + "VNĐ");
         holder.binding.itemBtnEdit.setOnClickListener(v -> {
             if(onclickItem != null){
                 onclickItem.onClickUpdate(product);
+            }
+        });
+        holder.binding.itemBtnChangeQuantity.setOnClickListener(v -> {
+            if(onclickItem != null){
+                onclickItem.onChangeQuantity(product);
             }
         });
     }
@@ -66,7 +77,7 @@ public class HomeAdminAdapter extends RecyclerView.Adapter<HomeAdminAdapter.View
     }
     public interface OnclickItem{
         void onClickUpdate(Product product);
-        void onDelete(Product product);
+        void onChangeQuantity(Product product);
     }
     static class ViewHolder extends RecyclerView.ViewHolder {
         ItemProductAdminBinding binding;
