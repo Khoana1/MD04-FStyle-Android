@@ -13,14 +13,16 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.FragmentHomeAdminBinding;
 import com.example.eu_fstyle_mobile.src.adapter.HomeAdminAdapter;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.ListProduct;
 import com.example.eu_fstyle_mobile.src.model.Product;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
+import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class HomeAdminFragment extends BaseFragment<FragmentHomeAdminBinding> implements HomeAdminAdapter.OnclickItem{
@@ -66,6 +68,18 @@ public class HomeAdminFragment extends BaseFragment<FragmentHomeAdminBinding> im
             @Override
             public void onChanged(ListProduct listProduct) {
                 List<Product> productList = listProduct.getArrayList();
+                Collections.sort(productList, new Comparator<Product>() {
+                    @Override
+                    public int compare(Product p1, Product p2) {
+                        if (Integer.parseInt(p1.getQuantity()) > 0 && Integer.parseInt(p2.getQuantity()) == 0) {
+                            return -1;
+                        }
+                        if (Integer.parseInt(p1.getQuantity()) == 0 && Integer.parseInt(p2.getQuantity()) > 0) {
+                            return 1;
+                        }
+                        return 0;
+                    }
+                });
                 homeAdminAdapter = new HomeAdminAdapter(productList, HomeAdminFragment.this);
                 binding.rcvProductAdmin.setAdapter(homeAdminAdapter);
                 hideLoadingDialog();
@@ -112,7 +126,28 @@ public class HomeAdminFragment extends BaseFragment<FragmentHomeAdminBinding> im
     }
 
     @Override
-    public void onDelete(Product product) {
+    public void onChangeQuantity(Product product) {
+        showDialog("Thay đổi số lượng sản phẩm", "Bạn có muốn đổi số lượng sản phầm về 0 không ?", new Runnable() {
+            @Override
+            public void run() {
+                 ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                 retrofit2.Call<Product> call = apiService.updateQuantity(product.get_id());
+                 call.enqueue(new retrofit2.Callback<Product>() {
+                     @Override
+                     public void onResponse(retrofit2.Call<Product> call, retrofit2.Response<Product> response) {
+                         if(response.isSuccessful()){
+                             Toast.makeText(getActivity(), "Thay đổi số lượng sản phẩm thành công!", Toast.LENGTH_SHORT).show();
+                         }else {
+                             Toast.makeText(getActivity(), "Lỗi thay đổi số lượng sản phẩm! Thử lại sau. ", Toast.LENGTH_SHORT).show();
+                         }
+                     }
 
+                     @Override
+                     public void onFailure(retrofit2.Call<Product> call, Throwable t) {
+                         Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                     }
+                 });
+            }
+        });
     }
 }
