@@ -52,19 +52,21 @@ public class HomeAdminAdapter extends RecyclerView.Adapter<HomeAdminAdapter.View
             holder.binding.itemImageProductHome.setImageResource(R.drawable.icon_erro);
         }
         if (Integer.parseInt(product.getQuantity()) == 0) {
+            holder.binding.itemImageSoldOutProductHome.setVisibility(View.VISIBLE);
             holder.itemView.setAlpha(0.5f);
         } else {
             holder.itemView.setAlpha(1f);
+            holder.binding.itemImageSoldOutProductHome.setVisibility(View.INVISIBLE);
         }
         holder.binding.itemNameProductHome.setText(product.getName());
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
         holder.binding.itemPriceProductHome.setText(decimalFormat.format(product.getPrice()) + "VNĐ");
-        holder.binding.itemBtnEdit.setOnClickListener(v -> {
+        holder.binding.btnEdit.setOnClickListener(v -> {
             if(onclickItem != null){
                 onclickItem.onClickUpdate(product);
             }
         });
-        holder.binding.itemBtnChangeQuantity.setOnClickListener(v -> {
+        holder.binding.btnChangeQuantity.setOnClickListener(v -> {
             if(onclickItem != null){
                 onclickItem.onChangeQuantity(product);
             }
