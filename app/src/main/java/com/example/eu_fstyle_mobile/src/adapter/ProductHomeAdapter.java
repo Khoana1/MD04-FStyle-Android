@@ -62,7 +62,7 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
         DecimalFormat dcf = new DecimalFormat("###,###,###");
         holder.txtPrice.setText(dcf.format(product.getPrice())+" VNĐ");
         holder.txtName.setText(product.getName());
-        if (Integer.parseInt(product.getQuantity()) == 0) {
+        if (Integer.parseInt(product.getQuantity()) <= 0) {
             holder.imageView_sold_out.setVisibility(View.VISIBLE);
             holder.itemView.setAlpha(0.5f);
         } else {
@@ -73,7 +73,7 @@ public class ProductHomeAdapter extends RecyclerView.Adapter<ProductHomeAdapter.
             onClickItem.onClickFavourite(product);
         });
         holder.itemView.setOnClickListener(v -> {
-            if(Integer.parseInt(product.getQuantity())!= 0){
+            if(Integer.parseInt(product.getQuantity()) > 0){
                 if(onClickItem != null){
                     onClickItem.onClick(product);
                 }

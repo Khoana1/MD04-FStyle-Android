@@ -27,13 +27,13 @@
             android:id="@+id/tv_order_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
             android:background="@drawable/bg_order_active"
             android:fontFamily="@font/inter_medium"
             android:paddingHorizontal="20dp"
             android:paddingVertical="5dp"
             android:textColor="#00CC00"
-            android:textSize="12sp"
+            android:textSize="11sp"
             android:textStyle="bold"
             tools:text="Hoàn tất" />
     </LinearLayout>

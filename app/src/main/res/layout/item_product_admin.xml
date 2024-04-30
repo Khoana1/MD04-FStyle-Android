@@ -9,63 +9,74 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:padding="5dp">
+
         <ImageView
             android:id="@+id/item_image_product_home"
-            android:layout_width="match_parent"
+            android:layout_width="162dp"
             android:layout_height="162dp"
-            android:src="@drawable/giay1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/giay1" />
+
+        <ImageView
+            android:id="@+id/item_image_sold_out_product_home"
+            android:layout_width="162dp"
+            android:layout_height="162dp"
+            android:src="@drawable/icon_het_hang"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/item_name_product_home"
-            android:maxWidth="154dp"
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/btn_change_quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_regular"
-            android:textColor="@color/colorBlack"
-            android:textStyle="bold"
-            android:layout_marginVertical="5dp"
-            tools:text="Giày thể thao nam cao cấp màu đen "
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:background="@drawable/circle_icon_product"
+            android:src="@drawable/ic_change_quantity"
+            app:layout_constraintBottom_toBottomOf="@+id/item_image_sold_out_product_home"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+        <TextView
+            android:id="@+id/item_name_product_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/inter_medium"
+            android:maxWidth="154dp"
+            android:paddingLeft="3dp"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_image_product_home"
-            android:paddingLeft="3dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/item_image_sold_out_product_home"
+            tools:text="Giày thể thao nam cao cấp màu đen " />
+
         <TextView
             android:id="@+id/item_price_product_home"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="500.000 VNĐ"
-            android:fontFamily="@font/inter_bold"
-            android:textSize="14dp"
+            android:fontFamily="@font/inter_medium"
+            android:paddingLeft="3dp"
             android:textColor="@color/colorRed"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/item_name_product_home"
-            android:paddingLeft="3dp"/>
+            tools:text="500.000 VNĐ" />
+
 
         <ImageView
-            android:id="@+id/item_btn_change_quantity"
+            android:id="@+id/btn_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:src="@drawable/ic_change_quantity"
-            app:layout_constraintEnd_toStartOf="@id/item_btn_edit"
-            android:layout_marginRight="10dp"
-            />
-
-        <ImageView
-            android:id="@+id/item_btn_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:civ_border_color="@color/colorBlack"
+            android:layout_margin="5dp"
+            android:padding="5dp"
             android:src="@drawable/ic_edit_product"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_name_product_home"
-            android:layout_margin="5dp"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/item_name_product_home" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.cardview.widget.CardView>

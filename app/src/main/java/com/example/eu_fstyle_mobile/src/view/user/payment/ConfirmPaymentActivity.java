@@ -58,6 +58,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
     private User user;
     private RequestCreateOrder requestCreateOrder;
     ArrayList<ProductCart> productCarts;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,9 +91,9 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
             default:
                 break;
         }
-            DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-            double totalPaymentDouble = Double.parseDouble(totalPayment);
-            binding.tvTotalPrice.setText(decimalFormat.format(totalPaymentDouble) + " VNĐ");
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
+        double totalPaymentDouble = Double.parseDouble(totalPayment);
+        binding.tvTotalPrice.setText(decimalFormat.format(totalPaymentDouble) + " VNĐ");
         binding.tvPaymentAddress.setText(paymentAddress);
         binding.btnCreateOrder.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -123,12 +124,12 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                     showLoading100Dialog();
                     new Handler().postDelayed(() -> {
                         ApiService apiService = ApiClient.getClient().create(ApiService.class);
-                        if (productCart != null)  {
+                        if (productCart != null) {
                             productCarts = new ArrayList<>();
                             productCarts.add(productCart);
                             requestCreateOrder = new RequestCreateOrder(paymentAddress, productCarts, user.get_id(), user.getPhone(), "COD", shippingMethod, totalPayment, "pending", user.getName());
                         } else {
-                           requestCreateOrder = new RequestCreateOrder(paymentAddress, cart.getListProduct(), user.get_id(), user.getPhone(), "COD", shippingMethod, totalPayment, "pending", user.getName());
+                            requestCreateOrder = new RequestCreateOrder(paymentAddress, cart.getListProduct(), user.get_id(), user.getPhone(), "COD", shippingMethod, totalPayment, "pending", user.getName());
                         }
                         Call<Orders> call = apiService.createOrder(user.get_id(), requestCreateOrder);
                         call.enqueue(new Callback<Orders>() {
@@ -142,23 +143,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                                         startActivity(intent1);
                                         finish();
                                     } else {
-//                                        List<ProductCart> productCartList = cart.getListProduct();
-//                                        for (ProductCart productCart : productCartList) {
-//                                            Call<ListCart> callClear = apiService.clearCart(user.get_id(), productCart.getIdProduct());
-//                                            callClear.enqueue(new Callback<ListCart>() {
-//                                                @Override
-//                                                public void onResponse(Call<ListCart> call, Response<ListCart> response) {
-//                                                    if (response.isSuccessful()) {
-//                                                        Log.d("CLEAR CART", "Clear giỏ hàng thành công");
-//                                                    }
-//                                                }
-//
-//                                                @Override
-//                                                public void onFailure(Call<ListCart> call, Throwable t) {
-//                                                    Log.d("CLEAR CART", "Clear giỏ hàng thất bại: " + t.getMessage());
-//                                                }
-//                                            });
-//                                        }
+                                        clearCart();
                                         Intent intent1 = new Intent(ConfirmPaymentActivity.this, PaymentSuccessActivity.class);
                                         intent1.putExtra("TOTAL", totalPayment);
                                         startActivity(intent1);
@@ -197,12 +182,12 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                                             showLoading100Dialog();
                                             new Handler().postDelayed(() -> {
                                                 ApiService apiService = ApiClient.getClient().create(ApiService.class);
-                                                if (productCart != null)  {
+                                                if (productCart != null) {
                                                     productCarts = new ArrayList<>();
                                                     productCarts.add(productCart);
                                                     requestCreateOrder = new RequestCreateOrder(paymentAddress, productCarts, user.get_id(), user.getPhone(), "Sandbox", shippingMethod, totalPayment, "pending", user.getName());
                                                 } else {
-                                                    requestCreateOrder =  new RequestCreateOrder(paymentAddress, cart.getListProduct(), user.get_id(), user.getPhone(), "Sandbox", shippingMethod, totalPayment, "pending", user.getName());
+                                                    requestCreateOrder = new RequestCreateOrder(paymentAddress, cart.getListProduct(), user.get_id(), user.getPhone(), "Sandbox", shippingMethod, totalPayment, "pending", user.getName());
                                                 }
                                                 Call<Orders> call = apiService.createOrder(user.get_id(), requestCreateOrder);
                                                 call.enqueue(new Callback<Orders>() {
@@ -216,21 +201,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                                                                 startActivity(intent1);
                                                                 finish();
                                                             } else {
-//                                                                List<ProductCart> productCartList = cart.getListProduct();
-//                                                                Call<ListCart> callClear = apiService.clearCart(user.get_id(), productCartList.getIdProduct());
-//                                                                callClear.enqueue(new Callback<ListCart>() {
-//                                                                    @Override
-//                                                                    public void onResponse(Call<ListCart> call, Response<ListCart> response) {
-//                                                                        if (response.isSuccessful()) {
-//                                                                            Log.d("CLEAR CART", "Clear giỏ hàng thành công");
-//                                                                        }
-//                                                                    }
-//
-//                                                                    @Override
-//                                                                    public void onFailure(Call<ListCart> call, Throwable t) {
-//                                                                        Log.d("CLEAR CART", "Clear giỏ hàng thất bại: " + t.getMessage());
-//                                                                    }
-//                                                                });
+                                                                clearCart();
                                                                 Intent intent1 = new Intent(ConfirmPaymentActivity.this, PaymentSuccessActivity.class);
                                                                 intent1.putExtra("TOTAL", totalPayment);
                                                                 startActivity(intent1);
@@ -355,5 +326,23 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
             }
         });
         dialog.show();
+    }
+
+    private void clearCart() {
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        Call<ListCart> callClear = apiService.clearCart(user.get_id());
+        callClear.enqueue(new Callback<ListCart>() {
+            @Override
+            public void onResponse(Call<ListCart> call, Response<ListCart> response) {
+                if (response.isSuccessful()) {
+                    Log.d("CLEAR CART", "Clear giỏ hàng thành công");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ListCart> call, Throwable t) {
+                Log.d("CLEAR CART", "Clear giỏ hàng thất bại: " + t.getMessage());
+            }
+        });
     }
 }
