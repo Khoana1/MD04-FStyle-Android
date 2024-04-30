@@ -31,10 +31,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:text="Chi tiết hóa đơn"
                 android:fontFamily="@font/inter_semi_bold"
-                android:text="Chi tiết đơn hàng"
-                android:textColor="@color/colorWhite"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textColor="@color/colorWhite" />
+
+            <ImageView
+                android:id="@+id/ic_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_question_mark_24"
+                android:layout_alignParentEnd="true"
+                android:padding="20dp"
+                />
 
         </RelativeLayout>
 
