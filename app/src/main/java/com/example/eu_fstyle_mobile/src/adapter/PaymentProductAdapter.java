@@ -51,10 +51,8 @@ public class PaymentProductAdapter extends RecyclerView.Adapter<PaymentProductAd
             holder.binding.imgPayment.setImageResource(R.drawable.error_shoe);
         }
         String productName = productCart.getName();
-        if (productName.length() > 7) {
-            productName = productName.substring(0, 20) + "...";
-        } else {
-            productName = productCart.getName();
+        if (productName.length() > 13) {
+            productName = productName.substring(0, 13) + "...";
         }
         holder.binding.namePayment.setText(productName);
         holder.binding.sizePayment.setText(productCart.getSize());

@@ -67,6 +67,8 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
 
     Dialog cartDialog;
 
+    ArrayList<Product> listProduct = new ArrayList<>();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -82,9 +84,10 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
         User user = UserPrefManager.getInstance(getActivity()).getUser();
         cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
         cartViewModel.getCart(user.get_id());
-        observeViewModel();
         getDataMayBeLike();
+        observeViewModel();
         initListener();
+        checkProductAvailability();
     }
 
     private void showHintCartDialog() {
@@ -106,7 +109,7 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
             @Override
             public void onResponse(Call<ListProduct> call, Response<ListProduct> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    ArrayList<Product> listProduct = response.body().getArrayList();
+                   listProduct = response.body().getArrayList();
                     Collections.sort(listProduct, new Comparator<Product>() {
                         @Override
                         public int compare(Product p1, Product p2) {
@@ -139,7 +142,25 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
 
                         @Override
                         public void onClickFavourite(Product product) {
+                            User user = UserPrefManager.getInstance(getActivity()).getUser();
+                            ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                            RequestCreateFavourite requestCreateFavourite = new RequestCreateFavourite(product.get_id(), product.getName(), product.getQuantity(), product.getPrice().toString(), product.getImage64()[0]);
+                            Call<Product> call = apiService.createFavorite(user.get_id(), requestCreateFavourite);
+                            call.enqueue(new Callback<Product>() {
+                                @Override
+                                public void onResponse(Call<Product> call, Response<Product> response) {
+                                    if (response.isSuccessful()) {
+                                        showSuccessDialog("Thêm vào yêu thích thành công");
+                                    } else {
+                                        showAlertDialog("Thêm vào yêu thích thất bại");
+                                    }
+                                }
 
+                                @Override
+                                public void onFailure(Call<Product> call, Throwable t) {
+                                    Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
                     });
                     binding.rcvMaybeLike.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -175,6 +196,23 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
                 if (cart != null) {
                     hideLoadingDialog();
                     productCartList = cart.getListProduct();
+                    for (int i = 0; i < productCartList.size(); i++) {
+                        ProductCart productCart = productCartList.get(i);
+                        String cartProductId = productCart.getIdProduct();
+                        for (Product product : listProduct) {
+                            String productId = product.get_id();
+
+                            if (cartProductId.equals(productId)) {
+                                int quantity = Integer.parseInt(product.getQuantity());
+
+                                if (quantity <= 0) {
+                                    productCart.setIsOutOfStock(true);
+                                } else {
+                                    productCart.setIsOutOfStock(false);
+                                }
+                            }
+                        }
+                    }
                     cartAdapter = new CartAdapter(productCartList, CartFragment.this);
                     binding.rcvCart.setAdapter(cartAdapter);
                     int listSize = productCartList.size();
@@ -284,8 +322,19 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
                 binding.btnPayment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        PaymentFragment paymentFragment = PaymentFragment.newInstance(cart);
-                        openScreen(paymentFragment, true);
+                        boolean hasOutOfStockProduct = false;
+                        for (ProductCart productCart : productCartList) {
+                            if (productCart.getIsOutOfStock()) {
+                                hasOutOfStockProduct = true;
+                                break;
+                            }
+                        }
+                        if (hasOutOfStockProduct) {
+                            showAlertDialog("Giỏ hàng chứa sản phẩm đã hết hàng, vui lòng xóa sản phẩm khỏi giỏ hàng trước khi tiếp tục");
+                        } else {
+                            PaymentFragment paymentFragment = PaymentFragment.newInstance(cart);
+                            openScreen(paymentFragment, true);
+                        }
                     }
                 });
             }
@@ -525,6 +574,36 @@ public class CartFragment extends BaseFragment<FragmentCartBinding> implements C
 
             @Override
             public void onFailure(Call<Product> call, Throwable t) {
+                Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void checkProductAvailability() {
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        Call<ListProduct> call = apiService.getAllProducts();
+        call.enqueue(new Callback<ListProduct>() {
+            @Override
+            public void onResponse(Call<ListProduct> call, Response<ListProduct> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    listProduct = response.body().getArrayList();
+                    for (ProductCart productCart : productCartList) {
+                        for (Product product : listProduct) {
+                            if (productCart.getIdProduct().equals(product.get_id())) {
+                                if (Integer.parseInt(product.getQuantity()) <= 0) {
+                                    productCart.setIsOutOfStock(true);
+                                } else {
+                                    productCart.setIsOutOfStock(false);
+                                }
+                            }
+                        }
+                    }
+                    cartAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ListProduct> call, Throwable t) {
                 Toast.makeText(getActivity(), "Server error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

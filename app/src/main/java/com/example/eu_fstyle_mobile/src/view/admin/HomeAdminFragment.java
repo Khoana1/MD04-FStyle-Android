@@ -71,10 +71,18 @@ public class HomeAdminFragment extends BaseFragment<FragmentHomeAdminBinding> im
                 Collections.sort(productList, new Comparator<Product>() {
                     @Override
                     public int compare(Product p1, Product p2) {
-                        if (Integer.parseInt(p1.getQuantity()) > 0 && Integer.parseInt(p2.getQuantity()) == 0) {
+                        int quantity1 = 0;
+                        int quantity2 = 0;
+                        try {
+                            quantity1 = Integer.parseInt(p1.getQuantity());
+                            quantity2 = Integer.parseInt(p2.getQuantity());
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                        }
+                        if (quantity1 > 0 && quantity2 <= 0) {
                             return -1;
                         }
-                        if (Integer.parseInt(p1.getQuantity()) == 0 && Integer.parseInt(p2.getQuantity()) > 0) {
+                        if (quantity1 <= 0 && quantity2 > 0) {
                             return 1;
                         }
                         return 0;

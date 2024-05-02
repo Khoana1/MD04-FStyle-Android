@@ -3,9 +3,9 @@ package com.example.eu_fstyle_mobile.src.adapter;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.text.TextUtils;
 import android.util.Base64;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.ItemCartProductBinding;
-import com.example.eu_fstyle_mobile.src.model.Address;
 import com.example.eu_fstyle_mobile.src.model.ProductCart;
 import com.squareup.picasso.Picasso;
 
@@ -53,11 +52,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             holder.binding.imageCart.setImageResource(R.drawable.error_shoe);
         }
         String productName = productCart.getName();
-        if (productName.length() > 7) {
+        if (productName.length() > 13) {
             productName = productName.substring(0, 13) + "...";
-        } else {
-            productName = productCart.getName();
         }
+        holder.binding.nameCart.setMaxLines(1);
+        holder.binding.nameCart.setText(productName);
         holder.binding.nameCart.setMaxLines(1);
         holder.binding.nameCart.setText(productName);
         holder.binding.sizeCart.setText("Size: "+productCart.getSize());
@@ -81,6 +80,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
         holder.itemView.setOnClickListener(v -> onCartClickListener.onItemCartClick(productCart));
 
+        if (productCart.getIsOutOfStock()) {
+            holder.binding.priceCart.setText("Sản phẩm của bạn đã hết! Vui lòng xóa sản phẩm");
+            holder.binding.rltCountCart.setVisibility(View.GONE);
+            holder.itemView.setAlpha(0.5f);
+        } else {
+            holder.binding.rltCountCart.setVisibility(View.VISIBLE);
+            holder.itemView.setAlpha(1f);
+        }
 
     }
 

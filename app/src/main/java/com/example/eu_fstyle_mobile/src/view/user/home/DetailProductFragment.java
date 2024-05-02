@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
@@ -51,7 +49,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -336,26 +333,30 @@ public class DetailProductFragment extends BaseFragment<FragmentDetailProductBin
             } else {
                 switch (orderCheck) {
                     case 1:
-                        User user = UserPrefManager.getInstance(getActivity()).getUser();
-                        ApiService apiService = ApiClient.getClient().create(ApiService.class);
-                        RequestCreateCart requestCreateCart = new RequestCreateCart(product.get_id(), product.getName(), binding1.itemBtnGiatri.getText().toString(), size, product.getPrice(), product.getImage64()[0]);
-                        Call<Product> call = apiService.createCart(user.get_id(), requestCreateCart);
-                        call.enqueue(new Callback<Product>() {
-                            @Override
-                            public void onResponse(Call<Product> call, Response<Product> response) {
-                                Toast.makeText(getActivity(), "Thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
-                                getCartCountNumber();
-                            }
+                        if (Integer.parseInt(product.getQuantity()) < Integer.parseInt(binding1.itemBtnGiatri.getText().toString())) {
+                            showAlertDialog("Số lượng sản phẩm trong kho không đủ! Vui lòng thử lại");
+                        } else {
+                            User user = UserPrefManager.getInstance(getActivity()).getUser();
+                            ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                            RequestCreateCart requestCreateCart = new RequestCreateCart(product.get_id(), product.getName(), binding1.itemBtnGiatri.getText().toString(), size, product.getPrice(), product.getImage64()[0]);
+                            Call<Product> call = apiService.createCart(user.get_id(), requestCreateCart);
+                            call.enqueue(new Callback<Product>() {
+                                @Override
+                                public void onResponse(Call<Product> call, Response<Product> response) {
+                                    Toast.makeText(getActivity(), "Thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
+                                    getCartCountNumber();
+                                }
 
-                            @Override
-                            public void onFailure(Call<Product> call, Throwable t) {
-                                Toast.makeText(getActivity(), "Thêm vào giỏ hàng thất bại, thử lại sau", Toast.LENGTH_SHORT).show();
+                                @Override
+                                public void onFailure(Call<Product> call, Throwable t) {
+                                    Toast.makeText(getActivity(), "Thêm vào giỏ hàng thất bại, thử lại sau", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            if (orderCheck == 1 || orderCheck == 2) {
+                                orderCheck = 0;
                             }
-                        });
-                        if (orderCheck == 1 || orderCheck == 2) {
-                            orderCheck = 0;
+                            bottomSheetDialog.dismiss();
                         }
-                        bottomSheetDialog.dismiss();
                         break;
                     case 2:
                         ProductCart productCart = new ProductCart(
