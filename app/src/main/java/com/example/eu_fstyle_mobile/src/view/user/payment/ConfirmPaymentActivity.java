@@ -1,19 +1,12 @@
 package com.example.eu_fstyle_mobile.src.view.user.payment;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +14,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.eu_fstyle_mobile.MainActivity;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.eu_fstyle_mobile.R;
 import com.example.eu_fstyle_mobile.databinding.ActivityConfirmPaymentBinding;
 import com.example.eu_fstyle_mobile.src.dialog.Loading100Dialog;
@@ -40,7 +35,6 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -232,7 +226,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
 
                         @Override
                         public void onPaymentCanceled(String zpTransToken, String appTransID) {
-                            showAlertDialog(String.format("Người dùng từ chối thanh toán\nMã giao dịch: %s", zpTransToken), new Runnable() {
+                            showAlertDialog(String.format("Găp lỗi khi thực hiện thanh toán\nMã giao dịch: %s", zpTransToken), new Runnable() {
                                 @Override
                                 public void run() {
                                     Toast.makeText(ConfirmPaymentActivity.this, "Vui lòng thử lại sau !!!", Toast.LENGTH_SHORT).show();

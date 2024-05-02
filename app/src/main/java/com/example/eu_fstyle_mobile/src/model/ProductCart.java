@@ -18,6 +18,8 @@ public class  ProductCart implements Serializable {
     @SerializedName("imageDefault")
     private String imageDefault;
 
+    private boolean isOutOfStock;
+
     public ProductCart(String idProduct, String name, Number soLuong, Number price, String size, String imageDefault) {
         this.idProduct = idProduct;
         this.name = name;
@@ -73,5 +75,13 @@ public class  ProductCart implements Serializable {
 
     public void setImageDefault(String imageDefault) {
         this.imageDefault = imageDefault;
+    }
+
+    public boolean getIsOutOfStock() {
+        return isOutOfStock;
+    }
+
+    public void setIsOutOfStock(boolean isOutOfStock) {
+        this.isOutOfStock = isOutOfStock;
     }
 }

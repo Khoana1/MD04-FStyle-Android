@@ -51,7 +51,7 @@ public class HomeAdminAdapter extends RecyclerView.Adapter<HomeAdminAdapter.View
         }else {
             holder.binding.itemImageProductHome.setImageResource(R.drawable.icon_erro);
         }
-        if (Integer.parseInt(product.getQuantity()) == 0) {
+        if (Integer.parseInt(product.getQuantity()) <= 0) {
             holder.binding.itemImageSoldOutProductHome.setVisibility(View.VISIBLE);
             holder.itemView.setAlpha(0.5f);
         } else {

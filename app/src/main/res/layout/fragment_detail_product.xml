@@ -401,7 +401,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     tools:text="500.000đ"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     android:fontFamily="@font/inter_semi_bold"
                     android:textColor="#FF0000" />
             </LinearLayout>

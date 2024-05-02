@@ -1,36 +1,22 @@
 package com.example.eu_fstyle_mobile.src.view.user.register;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.eu_fstyle_mobile.databinding.FragmentRegisterBinding;
 import com.example.eu_fstyle_mobile.src.base.BaseFragment;
 import com.example.eu_fstyle_mobile.src.model.User;
-import com.example.eu_fstyle_mobile.src.request.RequestCreateUser;
-import com.example.eu_fstyle_mobile.src.retrofit.ApiClient;
-import com.example.eu_fstyle_mobile.src.retrofit.ApiService;
 import com.example.eu_fstyle_mobile.src.view.user.login.LoginFragment;
-import com.example.eu_fstyle_mobile.src.view.user.login.LoginViewModel;
-import com.example.eu_fstyle_mobile.src.view.user.register.RegisterViewModel;
-import com.example.eu_fstyle_mobile.ultilties.UserPrefManager;
 
 import java.util.regex.Pattern;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class RegisterFragment extends BaseFragment<FragmentRegisterBinding> {
     private String email;
