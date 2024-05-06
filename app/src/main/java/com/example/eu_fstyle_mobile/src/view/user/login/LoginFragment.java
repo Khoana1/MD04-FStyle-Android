@@ -125,9 +125,14 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                             Intent intent = new Intent(getActivity(), AdminActivity.class);
                             startActivity(intent);
                         } else {
-                            hideLoginLoadingAnimation();
-                            Toast.makeText(getActivity(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                            openScreenHome(new HomeFragment(), false);
+                            if (user.getLocked().equals(false)) {
+                                hideLoginLoadingAnimation();
+                                showAlertDialog("Tài khoản của bạn đã bị khóa vui lòng liên hệ số điện thoại 0123456789 để được hỗ trợ!");
+                            } else {
+                                hideLoginLoadingAnimation();
+                                Toast.makeText(getActivity(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                openScreenHome(new HomeFragment(), false);
+                            }
                         }
 
                     }

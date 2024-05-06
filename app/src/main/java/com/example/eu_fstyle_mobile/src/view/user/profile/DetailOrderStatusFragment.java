@@ -67,7 +67,6 @@ public class DetailOrderStatusFragment extends BaseFragment<FragmentDetailOrderS
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        showHintOrderDialog();
         detailBillViewModel = new ViewModelProvider(this).get(DetailBillViewModel.class);
         orders = getArguments().getString(ORDERS);
         detailBillViewModel.getOrderID(orders);
@@ -75,23 +74,10 @@ public class DetailOrderStatusFragment extends BaseFragment<FragmentDetailOrderS
         initView();
     }
 
-    private void showHintOrderDialog() {
-        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("app_prefs", MODE_PRIVATE);
-        boolean isFirstRun = sharedPreferences.getBoolean("isFirstHintOrderStatus", true);
-
-        if (isFirstRun) {
-            getHintOrderDialog();
-            sharedPreferences.edit().putBoolean("isFirstHintOrderStatus", false).apply();
-        }
-    }
-
 
     private void initView() {
         binding.icBack.setOnClickListener(v -> {
             requireActivity().onBackPressed();
-        });
-        binding.icHint.setOnClickListener(v -> {
-            getHintOrderDialog();
         });
     }
 
@@ -270,23 +256,6 @@ public class DetailOrderStatusFragment extends BaseFragment<FragmentDetailOrderS
         }
 
         return totalPrice - shippingCost;
-    }
-
-    private void getHintOrderDialog() {
-        Dialog dialog = new Dialog(getContext());
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.setContentView(R.layout.hint_order_layout);
-        dialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.custom_dialog_background));
-
-        Button btnConfirm = dialog.findViewById(R.id.btn_hint_ok);
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
     }
 
     public String formatDate(String inputDate) {

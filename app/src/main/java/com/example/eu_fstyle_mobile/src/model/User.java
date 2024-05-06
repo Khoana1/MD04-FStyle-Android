@@ -24,7 +24,10 @@ public class User implements Serializable {
     @SerializedName("isAdmin")
     private Boolean isAdmin;
 
-    public User(String _id, String name, String email, String password, String tokenDevice, String avatar, String phone, String consigneeName, Boolean isAdmin) {
+    @SerializedName("isLocked")
+    private Boolean isLocked;
+
+    public User(String _id, String name, String email, String password, String tokenDevice, String avatar, String phone, String consigneeName, Boolean isAdmin, Boolean isLocked) {
         this._id = _id;
         this.name = name;
         this.email = email;
@@ -34,6 +37,7 @@ public class User implements Serializable {
         this.phone = phone;
         this.consigneeName = consigneeName;
         this.isAdmin = isAdmin;
+        this.isLocked = isLocked;
     }
 
     public String get_id() {
@@ -108,4 +112,11 @@ public class User implements Serializable {
         isAdmin = admin;
     }
 
+    public Boolean getLocked() {
+        return isLocked;
+    }
+
+    public void setLocked(Boolean locked) {
+        isLocked = locked;
+    }
 }
